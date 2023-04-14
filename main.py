@@ -362,6 +362,7 @@ async def getInvoiceMasterInvoiceDetailStream(
                         LBRatio, InvoiceWKDetailDictData["FeeAmount"]
                     ),
                     "Difference": 0,
+                    "Status": "",
                 }
                 InvoiceDetailDictDataList.append(InvoiceDetailDictData)
     else:
@@ -408,6 +409,7 @@ async def getInvoiceMasterInvoiceDetailStream(
                 "FeeAmountPre": InvoiceWKDetailDictData["FeeAmount"],
                 "FeeAmountPost": InvoiceWKDetailDictData["FeeAmount"],
                 "Difference": 0,
+                "Status": "",
             }
             InvoiceDetailDictDataList.append(InvoiceDetailDictData)
 
@@ -435,6 +437,7 @@ async def addInvoiceMasterAndInvoiceDetail(
 
     # add InvoiceDetail data to database
     for InvoiceDetailDictData in InvoiceDetailDictDataList:
+        InvoiceDetailDictData["Status"] = "TO_MERGE"
         InvoiceDetailPydanticData = InvoiceDetailSchema(**InvoiceDetailDictData)
         await InvoiceDetailApp.addInvoiceDetail(request, InvoiceDetailPydanticData, db)
 

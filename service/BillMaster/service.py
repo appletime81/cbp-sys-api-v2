@@ -21,80 +21,47 @@ router = APIRouter()
 async def getInvoiceMasterAndInvoiceDetail(
     request: Request, urlCondition: str, db: Session = Depends(get_db)
 ):
+    """
+    urlCondition: for InvoiceDetail
+    """
     crudInvoiceMaster = CRUD(db, InvoiceMasterDBModel)
     crudInvoiceDetail = CRUD(db, InvoiceDetailDBModel)
-    getResult = []
+    table_name = "InvoiceMaster"
+    getResult = list()
+    BillMilestone = None
     if "BillMilestone" in urlCondition:
-        newUrlCondition, BillMilestone = re_search_url_condition_value(
+        urlCondition, BillMilestone = re_search_url_condition_value(
             urlCondition, "BillMilestone"
         )
-        dictCondition = convert_url_condition_to_dict(newUrlCondition)
-        InvoiceMasterDataList = crudInvoiceMaster.get_with_condition(dictCondition)
-        for InvoiceMasterData in InvoiceMasterDataList:
-            InvoiceDetailDataList = crudInvoiceDetail.get_with_condition(
-                {"InvMasterID": InvoiceMasterData.InvMasterID}
-            )
-            checkBillMilestone = list(
-                filter(
-                    lambda x: x.BillMilestone == BillMilestone, InvoiceDetailDataList
-                )
-            )
-            if checkBillMilestone:
-                getResult.append(
-                    {
-                        "InvoiceMaster": InvoiceMasterData,
-                        "InvoiceDetail": InvoiceDetailDataList,
-                    }
-                )
+
+    # urlCondition: all
+    if urlCondition == "all":
+        InvoiceMasterDataList = crudInvoiceMaster.get_with_condition(
+            {"Status": "TO_MERGE"}
+        )
+    # if have time condition
+    elif "start" in urlCondition and "end" in urlCondition:
+        dictCondition = convert_url_condition_to_dict(urlCondition)
+        sqlCondition = convert_dict_to_sql_condition(dictCondition, table_name)
+        InvoiceMasterDataList = crudInvoiceMaster.get_all_by_sql(sqlCondition)
     else:
         dictCondition = convert_url_condition_to_dict(urlCondition)
         InvoiceMasterDataList = crudInvoiceMaster.get_with_condition(dictCondition)
-        for InvoiceMasterData in InvoiceMasterDataList:
-            InvoiceDetailDataList = crudInvoiceDetail.get_with_condition(
-                {"InvMasterID": InvoiceMasterData.InvMasterID}
-            )
-            getResult.append(
-                {
-                    "InvoiceMaster": InvoiceMasterData,
-                    "InvoiceDetail": InvoiceDetailDataList,
-                }
-            )
+
+    for InvoiceMasterData in InvoiceMasterDataList:
+        InvoiceDetailDataList = crudInvoiceDetail.get_with_condition(
+            {"InvMasterID": InvoiceMasterData.InvMasterID}
+        )
+        getResult += [InvoiceDetailData for InvoiceDetailData in InvoiceDetailDataList]
+
+    if BillMilestone:
+        getResult = list(filter(lambda x: x.BillMilestone == BillMilestone, getResult))
+
+    getResult = sorted(
+        getResult, key=lambda x: (x.PartyName, x.SubmarineCable, x.WorkTitle)
+    )
 
     return getResult
-
-
-# 檢查合併帳單的PartyName、SubmarineCable、WorkTitle是否相同
-@router.post("/checkInitBillMaster&BillDetail")
-async def checkInitBillMasterAndBillDetail(
-    request: Request, db: Session = Depends(get_db)
-):
-    """
-    {
-        "InvoiceMaster": [
-            {...},
-            {...},
-            {...}
-        ]
-    }
-    """
-    request_data = await request.json()
-    PartyList = []
-    SubmarineCableList = []
-    WorkTitleList = []
-    InvoiceMasterDictDataList = request_data["InvoiceMaster"]
-    for InvoiceMasterDictData in InvoiceMasterDictDataList:
-        PartyList.append(InvoiceMasterDictData["PartyName"])
-        SubmarineCableList.append(InvoiceMasterDictData["SubmarineCable"])
-        WorkTitleList.append(InvoiceMasterDictData["WorkTitle"])
-
-    alert_msg = {}
-    if len(set(PartyList)) > 1:
-        alert_msg["PartyName"] = "PartyName is not unique"
-    if len(set(SubmarineCableList)) > 1:
-        alert_msg["SubmarineCable"] = "SubmarineCable is not unique"
-    if len(set(WorkTitleList)) > 1:
-        alert_msg["WorkTitle"] = "WorkTitle is not unique"
-    return alert_msg
 
 
 # 待抵扣階段(for 點擊合併帳單button後，初始化帳單及帳單明細，顯示預覽畫面)

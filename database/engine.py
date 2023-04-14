@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 config = configparser.ConfigParser()
 
 # read section
-section = "wsl-test"
+section = "wsl-test-2"
 config.read("dbinfo.ini")
 user = config[section]["user"]
 pwd = config[section]["pwd"]

@@ -169,3 +169,10 @@ def convert_number_to_string(numbers: List[str]):
     result = "{:,}".format(int(integer_part))
     result += f".{decimal_part}"
     return result
+
+
+if __name__ == "__main__":
+    url = "123=123&BillMilestone=BM9a"
+    urlCondition, BillMilestone = re_search_url_condition_value(url, "BillMilestone")
+    print(urlCondition)
+    print(BillMilestone)

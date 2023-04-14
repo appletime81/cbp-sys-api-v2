@@ -1,0 +1,40 @@
+{
+    "InvoiceWKMaster": {
+      "InvoiceNo": "DT0170168-1",
+      "SupplierName": "NEC",
+      "SubmarineCable": "SJC2",
+      "WorkTitle": "Construction",
+      "ContractType": "SC",
+      "IssueDate": "2022-09-09 00:00:00",
+      "DueDate": "2022-11-08 00:00:00",
+      "PartyName": "",
+      "Status": "TEMPORARY",
+      "IsPro": 0,
+      "IsRecharge": 0,
+      "IsLiability": 1,
+      "TotalAmount": 5582012.72,
+      "CreateDate": "2023-01-13 00:00:00"
+    },
+    "InvoiceWKDetail": [
+      {
+        "BillMilestone": "BM9a",
+        "FeeAmount": 1288822.32,
+        "FeeItem": "BM9a Sea cable manufactured (except 8.5km spare cable))- Equipment"
+      },
+      {
+        "BillMilestone": "BM9a",
+        "FeeAmount": 1178227.94,
+        "FeeItem": "BM9a Sea cable manufactured (except 8.5km spare cable))- Service"
+      },
+      {
+        "BillMilestone": "BM12",
+        "FeeAmount": 1627300.92,
+        "FeeItem": "BM12 Branching Units (100%)-Equipment"
+      },
+      {
+        "BillMilestone": "BM12",
+        "FeeAmount": 1487661.54,
+        "FeeItem": "BM12 Branching Units (100%)-Service"
+      }
+    ]
+  }

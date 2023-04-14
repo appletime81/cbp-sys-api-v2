@@ -90,6 +90,7 @@ class InvoiceDetailDBModel(Base):
     FeeAmountPost = Column(Float)
     Difference = Column(Float)
     Difference = Column(Float)
+    Status = Column(String(20))
 
 
 class BillMasterDBModel(Base):
