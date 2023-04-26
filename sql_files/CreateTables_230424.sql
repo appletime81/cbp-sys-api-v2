@@ -9,9 +9,9 @@ CREATE TABLE InvoiceWKMaster
     IssueDate      datetime       DEFAULT NULL,
     DueDate        datetime       DEFAULT NULL,
     PartyName      varchar(100)   DEFAULT NULL,
-    IsPro          tinyint(1) DEFAULT NULL,
-    IsRecharge     tinyint(1) DEFAULT NULL,
-    IsLiability    tinyint(1) DEFAULT NULL,
+    IsPro          tinyint(1)     DEFAULT NULL,
+    IsRecharge     tinyint(1)     DEFAULT NULL,
+    IsLiability    tinyint(1)     DEFAULT NULL,
     TotalAmount    decimal(12, 2) DEFAULT NULL,
     PaidAmount     decimal(12, 2) DEFAULT NULL,
     CreateDate     datetime       DEFAULT NULL,
@@ -47,8 +47,7 @@ CREATE TABLE InvoiceMaster
     ContractType   varchar(20)  DEFAULT NULL,
     IssueDate      datetime     DEFAULT NULL,
     DueDate        datetime     DEFAULT NULL,
-    IsPro          tinyint(1) DEFAULT NULL,
-    Status         varchar(20)  DEFAULT NULL,
+    IsPro          tinyint(1)   DEFAULT NULL,
     PRIMARY KEY (InvMasterID)
 );
 
@@ -69,6 +68,7 @@ CREATE TABLE InvoiceDetail
     LBRatio        decimal(13, 10) DEFAULT NULL,
     FeeAmountPost  decimal(12, 2)  DEFAULT NULL,
     Difference     decimal(3, 2)   DEFAULT NULL,
+    Status         varchar(20)     DEFAULT NULL,
     PRIMARY KEY (InvDetailID)
 );
 
@@ -86,7 +86,7 @@ CREATE TABLE BillMaster
     FeeAmountSum      decimal(12, 2) DEFAULT NULL,
     ReceivedAmountSum decimal(12, 2) DEFAULT NULL,
     BankFees          decimal(12, 2) DEFAULT NULL,
-    IsPro             tinyint(1) DEFAULT NULL,
+    IsPro             tinyint(1)     DEFAULT NULL,
     Status            varchar(20)    DEFAULT NULL,
     URI               varchar(128),
     PRIMARY KEY (BillMasterID)
@@ -461,6 +461,14 @@ CREATE TABLE Corporates
     BranchAddress  varchar(512) DEFAULT NULL,
     PRIMARY KEY (CorpID)
 );
+
+/* Water Bill */
+CREATE TABLE WaterBill
+(
+    WBID              INT AUTO_INCREMENT PRIMARY KEY,
+    InvoiceDetailList JSON NOT NULL
+);
+
 
 /* Liability Data */
 insert into Liability (SubmarineCable, WorkTitle, BillMilestone, PartyName, LBRatio, CreateDate, ModifyNote, EndDate)

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Float
+from sqlalchemy import Column, Integer, String, Boolean, Float, JSON
 from .engine import Base
 
 
@@ -68,7 +68,6 @@ class InvoiceMasterDBModel(Base):
     ContractType = Column(String(20))
     IssueDate = Column(String(20))
     DueDate = Column(String(20))
-    Status = Column(String(20))
     IsPro = Column(Boolean)
 
 
@@ -90,6 +89,7 @@ class InvoiceDetailDBModel(Base):
     FeeAmountPost = Column(Float)
     Difference = Column(Float)
     Difference = Column(Float)
+    Status = Column(String(20))
 
 
 class BillMasterDBModel(Base):
@@ -549,3 +549,17 @@ class UsersDBModel(Base):
     DFax = Column(String(20))
     Company = Column(String(256))
     Address = Column(String(256))
+
+
+class WaterBillDBModel(Base):
+    """
+    CREATE TABLE WaterBill
+    (
+        WBID              INT AUTO_INCREMENT PRIMARY KEY,
+        InvoiceDetailList JSON NOT NULL
+    );
+    """
+
+    __tablename__ = "WaterBill"
+    WBID = Column(Integer, primary_key=True, index=True)
+    InvoiceDetailList = Column(JSON)
