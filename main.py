@@ -39,10 +39,12 @@ from service.UploadFile.app import router as UploadFileRouter
 from service.Users.app import router as UsersRouter
 from service.Payment.app import router as PaymentRouter
 from utils.utils import *
+from utils.log import *
 from utils.orm_pydantic_convert import *
 
 # import logic service function
 from service.BillMaster.service import router as BillMasterServiceRouter
+from service.Users.service import router as UsersServiceRouter
 
 app = FastAPI()
 
@@ -70,6 +72,7 @@ app.include_router(
 )
 app.include_router(UploadFileRouter, prefix=ROOT_URL, tags=["ReceiveFile"])
 app.include_router(UsersRouter, prefix=ROOT_URL, tags=["Users"])
+app.include_router(UsersServiceRouter, prefix=ROOT_URL, tags=["UsersService"])
 app.include_router(BillMasterServiceRouter, prefix=ROOT_URL, tags=["BillMasterService"])
 app.include_router(PaymentRouter, prefix=ROOT_URL, tags=["Payment"])
 
@@ -84,6 +87,25 @@ app.add_middleware(
 
 
 # ------------------------------ InvoiceWKMaster and InvoiceWKDetail and InvoiceMaster and InvoiceDetail ------------------------------
+# for InvoiceWKMaster
+@app.post(f"{ROOT_URL}/checkInvoiceNo")
+async def checkInoviceNo(request: Request, db: Session = Depends(get_db)):
+    """
+    input:
+    {"InvoiceNo": "1234567890"}
+    """
+    crudInvoiceWKMaster = CRUD(db, InvoiceWKMasterDBModel)
+    InvoiceNo = (await request.json())["InvoiceNo"]
+
+    InvoiceWKMasterData = crudInvoiceWKMaster.get_with_condition(
+        {"InvoiceNo": InvoiceNo}
+    )
+    if InvoiceWKMasterData:
+        return {"message": "InvoiceNo already exist", "isExist": True}
+    else:
+        return {"message": "InvoiceNo not exist", "isExist": False}
+
+
 @app.post(f"{ROOT_URL}/generateInvoiceWKMaster&InvoiceWKDetail")
 async def generateInvoiceWKMasterInvoiceWKDetailInvoiceMasterInvoiceDetail(
     request: Request,
@@ -102,8 +124,16 @@ async def generateInvoiceWKMasterInvoiceWKDetailInvoiceMasterInvoiceDetail(
     # covert InvoiceWKMasterDictData to Pydantic model
     InvoiceWKMasterSchemaData = InvoiceWKMasterSchema(**InvoiceWKMasterDictData)
 
-    # save InvoiceWKMaster to db
     crud = CRUD(db, InvoiceWKMasterDBModel)
+
+    # check if InvoiceNo is existed
+    isInvoiced = crud.get_with_condition(
+        {"InvoiceNo": InvoiceWKMasterSchemaData.InvoiceNo}
+    )
+    if isInvoiced:
+        return {"message": "InvoiceNo already exist"}
+
+    # save InvoiceWKMaster to db
     addResponse = crud.create(InvoiceWKMasterSchemaData)
     print("-" * 25 + " addResponse " + "-" * 25)
     print(addResponse.WKMasterID)
@@ -132,7 +162,9 @@ async def generateInvoiceWKMasterInvoiceWKDetailInvoiceMasterInvoiceDetail(
         # save InvoiceWKDetail to db
         crud = CRUD(db, InvoiceWKDetailDBModel)
         crud.create(InvoiceWKDetailSchemaData)
-
+    record_log(
+        f"{user_name} created InvoiceWKMaster, the InvoiceNo is {InvoiceWKMasterDictData['InvoiceNo']}"
+    )
     return {"message": "success"}
 
 
@@ -301,9 +333,8 @@ async def getInvoiceMasterInvoiceDetailStream(
         )  # remove duplicates
         # LiabilityDataFrameData.to_csv("LiabilityDataFrameData.csv", index=False)
         # get all PartyName
-        PartyNameList = list(
-            set([LiabilityData.PartyName for LiabilityData in LiabilityDataList])
-        )
+        PartyNameList = [LiabilityData.PartyName for LiabilityData in LiabilityDataList]
+        PartyNameList = sorted(set(PartyNameList), key=PartyNameList.index)
 
         InvoiceMasterDictDataList = []
         for i, PartyName in enumerate(PartyNameList):
@@ -362,7 +393,6 @@ async def getInvoiceMasterInvoiceDetailStream(
                         LBRatio, InvoiceWKDetailDictData["FeeAmount"]
                     ),
                     "Difference": 0,
-                    "Status": "",
                 }
                 InvoiceDetailDictDataList.append(InvoiceDetailDictData)
     else:
@@ -405,11 +435,12 @@ async def getInvoiceMasterInvoiceDetailStream(
                 "WorkTitle": WorkTitle,
                 "BillMilestone": InvoiceWKDetailDictData["BillMilestone"],
                 "FeeItem": InvoiceWKDetailDictData["FeeItem"],
-                "LBRatio": 1,
+                "LBRatio": 100,
                 "FeeAmountPre": InvoiceWKDetailDictData["FeeAmount"],
-                "FeeAmountPost": InvoiceWKDetailDictData["FeeAmount"],
+                "FeeAmountPost": cal_fee_amount_post(
+                    100, InvoiceWKDetailDictData["FeeAmount"]
+                ),
                 "Difference": 0,
-                "Status": "",
             }
             InvoiceDetailDictDataList.append(InvoiceDetailDictData)
 
@@ -428,16 +459,19 @@ async def addInvoiceMasterAndInvoiceDetail(
     request_data = await request.json()
     InvoiceMasterDictDataList = request_data["InvoiceMaster"]
     InvoiceDetailDictDataList = request_data["InvoiceDetail"]
+    pprint(InvoiceMasterDictDataList)
+    pprint(InvoiceDetailDictDataList)
 
     # add InvoiceMaster data to database
     for InvoiceMasterDictData in InvoiceMasterDictDataList:
         InvoiceMasterDictData["Status"] = "TO_MERGE"
         InvoiceMasterPydanticData = InvoiceMasterSchema(**InvoiceMasterDictData)
         await InvoiceMasterApp.addInvoiceMaster(request, InvoiceMasterPydanticData, db)
+        record_log(f"{user_name} add InvoiceMaster {InvoiceMasterDictData}")
 
     # add InvoiceDetail data to database
     for InvoiceDetailDictData in InvoiceDetailDictDataList:
-        InvoiceDetailDictData["Status"] = "TO_MERGE"
+        InvoiceDetailDictData["FeeAmountPost"] += InvoiceDetailDictData["Difference"]
         InvoiceDetailPydanticData = InvoiceDetailSchema(**InvoiceDetailDictData)
         await InvoiceDetailApp.addInvoiceDetail(request, InvoiceDetailPydanticData, db)
 
@@ -498,6 +532,9 @@ async def batchAddLiability(request: Request, db: Session = Depends(get_db)):
         LiabilityDictData["CreateDate"] = convert_time_to_str(datetime.now())
         LiabilityPydanticData = LiabilitySchema(**LiabilityDictData)
         crud.create(LiabilityPydanticData)
+
+    # 紀錄使用者操作log
+    record_log(f"{user_name} add Liability: {LiabilityDictDataList}")
     return {"message": "success add Liability"}
 
 

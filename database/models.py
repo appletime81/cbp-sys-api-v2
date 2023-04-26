@@ -90,7 +90,6 @@ class InvoiceDetailDBModel(Base):
     FeeAmountPost = Column(Float)
     Difference = Column(Float)
     Difference = Column(Float)
-    Status = Column(String(20))
 
 
 class BillMasterDBModel(Base):
@@ -119,6 +118,7 @@ class BillMasterDBModel(Base):
     BillingNo = Column(String(20))
     PONo = Column(String(20))
     SubmarineCable = Column(String(10))
+    SupplierName = Column(String(100))
     WorkTitle = Column(String(50))
     PartyName = Column(String(100))
     IssueDate = Column(String(20))
@@ -150,14 +150,12 @@ class BillDetailDBModel(Base):
     ReceivedAmount  decimal(12, 2),
     OverAmount      decimal(12, 2),
     ShortAmount     decimal(12, 2),
-    BankFees        decimal(12, 2),
+    ToCBAmount      decimal(12, 2),
     ShortOverReason varchar(128),
     WriteOffDate    datetime,
     ReceiveDate     datetime,
     Note            varchar(128),
-    ToCB            varchar(10),
-    Status          varchar(20),
-    PRIMARY KEY (BillDetailID)
+    Status          varchar(20)
     """
 
     __tablename__ = "BillDetail"
@@ -178,12 +176,26 @@ class BillDetailDBModel(Base):
     ReceivedAmount = Column(Float)
     OverAmount = Column(Float)
     ShortAmount = Column(Float)
+    ToCBAmount = Column(Float)
     ShortOverReason = Column(String(128))
     WriteOffDate = Column(String(20))
     ReceiveDate = Column(String(20))
     Note = Column(String(128))
-    ToCBAmount = Column(Float)
     Status = Column(String(20))
+
+
+class CollectStatementDBModel(Base):
+    __tablename__ = "CollectStatement"
+    CollectID = Column(Integer, primary_key=True, index=True)
+    BillingNo = Column(String(64))
+    PartyName = Column(String(100))
+    SubmarineCable = Column(String(10))
+    WorkTitle = Column(String(50))
+    FeeAmount = Column(Float)
+    ReceivedAmountSum = Column(Float)
+    BankFee = Column(Float)
+    ReceiveDate = Column(String(20))
+    Note = Column(String(128))
 
 
 class LiabilityDBModel(Base):
@@ -527,7 +539,6 @@ class UsersDBModel(Base):
     __tablename__ = "Users"
     UserID = Column(String(16), primary_key=True, index=True)
     UserName = Column(String(16))
-    PCode = Column(String(16))
     Email = Column(String(128))
     Tel = Column(String(20))
     Fax = Column(String(20))

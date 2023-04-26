@@ -1,0 +1,60 @@
+# cbp 自行架設
+
+
+## Database
+```shell
+[aws]
+user = cbpadmin
+pwd = cbpadmin1234
+url = cbp-db.cgvyrqh9y1km.ap-northeast-1.rds.amazonaws.com
+port = 3306
+db_name = cbp_db
+```
+
+## EC2 Info
+* Name: cbp_dev
+* Public IPV4: 13.114.73.92
+* pem content:
+```shell
+-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEAneEI0OJkXnIEzYzHfwIIv+jByRpmCMjRz4uLBgBwzRRH3wCo
+Mu36qMXwVxnjd0lXid+UZX8MWwhpvUbra7yaMqqfMcrv57kgOfkmlVhlaHHvhcPX
+jhTr8tK4MGo+0kYrl/auXXeYIrupXt5zD2iE0/JFj/pzESq2s9wCFlN/a/39Qr/1
+sw+oEwFlx1GLazHiWV3MtGGX/CZ2Vk8go09qcQkpnZEeo9xnyPUV/2qpDkjw8qca
+lJ8T/OLgR16m2+1SN/qk3+LcoGZz3iA35zhXnQsqnsYmNgmYLGQy7o+RH8qDr75t
+Qav8FtZNUgDwxfJI8DVHjn9H3Vqa795OZ6KwjwIDAQABAoIBAC97RGl+DO2SoPso
+wb7i37rHx7AxrkoqC1+9+fu+Gi6zUMIysmNOyzoC/btUX+K6PgeLJFg6E381UofI
+Unk+aamfQu14uRoZxSVqVz5HLYhx67VxJtzmUeffk+GLsoUO8YFsgRg/JZQcmF2d
+zUDvEDOmA2G/0udwzy3clwwb5JCXg5TPCmS7ZGBzwU2CVywhMOWfyYz97kOCiS1X
+S+j4GmYnS+BY0kIPWtsVpeacke+1zMQpm5wWDgdGmgYFtyt09CdyO4Y+84haaEGX
+My0GBu00yE8NVkD1BByFetC5Gi31JzQ9+Y+NgrOcqNeTh1dDh04965Fj+kGkCntl
+tX3eoJECgYEA0RMuxlSyFDXSl/Sz1BBflYT3ukVwqJhi0TqzP5T8ij57Zy4OCuUo
+y/+r7LEns/lpm0QGD7vdt6Lh0tYy4cayvOA1Y9VGZqaWV2sDGw9fBuGxsPIPn7IU
+BjE/C3ltDIiBhFKgUKtmpRwVFpu/jRyuAMwyIkHa2pS2BfQcOtgIU+sCgYEAwVBK
+JjOpphoEuZixWIID+uoohJ3cmuUXdnSSpCMhgJmbbD/p6S8Hmuxfq5ns6mAhVdAB
+FL9us5cD3fl/+IBhhwZG1spqqp0TuHCF6yWbfdZX0a+MjmHwdwX07JDaXngsfGxZ
+wbNnGyqp/BRdMsnvH3bWADAMQpvrkxgskbWHAO0CgYBr8Wd45kl6vb8YzTH7DukK
+nTf5Z9iecu6x74iUDyvDhDbaMqD1ZxMFH993uI8zEFZB34DxpqD2KpZE8GocvyWQ
+9oEaJgbPALsmLw3PbsQ1HVlMbe07GgnUmKBgIDT4/5E+7BnxDE1WeYU5wvfGt0Pv
+DX3kyfNgXt8Le9kHWHoUOQKBgBqoBKGB7DnQSqiBCqtmuj/GPDIVRo9BWdvmtTXW
+9k6yX8EsiwexiX3ubD7Qad/jw5T+qrd+sjgnccwRFHli0o/46JnDrbO7FzYOphjH
+xcozXUa3y0zy6mKvOpfIXaQ7M/8wPaw9HdGcL3ZoJHXVbJjNHTNHbNlegLx2z+aD
+vor9AoGBAK7/F53lZHodLjF+rh2gSLptZ3qNxjdhN9Zq6rNJwiOMHgWZRczZFvDe
+65B2BzYYuoXhTKo7iGP+6H6iIrqRMN+Z04T0O3fxC2W52y9dM+8wVXzXdrBHIoPY
+8KYDD9RT1GNNKmnX3yOID2DCxlW35yRyc+6WKn5OaUM2Ij5Ks6hL
+-----END RSA PRIVATE KEY-----
+```
+
+## 架設教學
+1. FastAPI: https://lcalcagni.medium.com/deploy-your-fastapi-to-aws-ec2-using-nginx-aa8aa0d85ec7
+2. React: https://plainenglish.io/blog/hosting-a-react-app-to-ec2-using-nginx-with-ssl-certificate-6575b58ea8a8
+3. React: https://www.digitalocean.com/community/tutorials/how-to-deploy-a-react-application-with-nginx-on-ubuntu-20-04
+4. React: https://www.bilibili.com/video/BV1EV411d7Bw/
+
+
+## Install Nodejs 18
+```shell
+sudo apt update && sudo apt upgrade
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt-get install nodejs
+```

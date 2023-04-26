@@ -24,22 +24,8 @@ async def getParties(
     else:
         dictCondition = convert_url_condition_to_dict_ignore_date(urlCondition)
         PartiesDataList = crud.get_with_condition(dictCondition)
-    newPartiesDataList = []
 
-    # get unique PartyName
-    for i, PartiesData in enumerate(PartiesDataList):
-        if i == 0:
-            newPartiesDataList.append(PartiesData)
-        else:
-            filter_result = list(
-                filter(
-                    lambda x: x.PartyName == PartiesData.PartyName, newPartiesDataList
-                )
-            )
-            if not filter_result:
-                newPartiesDataList.append(PartiesData)
-
-    return newPartiesDataList
+    return PartiesDataList
 
 
 @router.post("/Parties", status_code=status.HTTP_201_CREATED)
@@ -75,6 +61,21 @@ async def updateParties(
     newPartiesData = crud.update(PartiesData, PartiesDictData)
 
     return {"message": "Party successfully updated", "newPartiesData": newPartiesData}
+
+
+@router.get("/dropdownmenuParties")
+async def dropdownmenuParties(
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    crud = CRUD(db, PartiesDBModel)
+    PartyDataList = crud.get_all()
+    newPartyDataList = []
+
+    for PartyData in PartyDataList:
+        if PartyData.PartyName not in newPartyDataList:
+            newPartyDataList.append(PartyData.PartyName)
+    return newPartyDataList
 
 
 # ---------------------------------------------------------------------

@@ -5,8 +5,8 @@ from typing import List, Dict
 TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
-def convert_time_to_str(datetime_data):
-    return datetime_data.strftime(TIME_FORMAT)
+def convert_time_to_str(datetime_data, time_format=TIME_FORMAT):
+    return datetime_data.strftime(time_format)
 
 
 def str_time_convert_to_int(str_time):
@@ -150,29 +150,9 @@ def re_search_url_condition_value(urlCondition: str, conditionKey: str):
     return urlCondition, value
 
 
-def bill_detail_status(FeeAmount, ReceivedAmount, BankFees):
-    if FeeAmount == (ReceivedAmount + BankFees):
-        return "HANDLE_FEE"
-    if ReceivedAmount > FeeAmount:
-        return "OVER"
-    elif ReceivedAmount == FeeAmount:
-        return "OK"
-    elif ReceivedAmount < FeeAmount:
-        return "PARTIAL"
-    elif ReceivedAmount == 0 and BankFees == 0:
-        return "INCOMPLETE"
-
-
 def convert_number_to_string(numbers: List[str]):
     decimal_part = numbers[1]
     integer_part = numbers[0]
     result = "{:,}".format(int(integer_part))
     result += f".{decimal_part}"
     return result
-
-
-if __name__ == "__main__":
-    url = "123=123&BillMilestone=BM9a"
-    urlCondition, BillMilestone = re_search_url_condition_value(url, "BillMilestone")
-    print(urlCondition)
-    print(BillMilestone)

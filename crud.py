@@ -9,6 +9,8 @@ from database.engine import engine
 from database.models import *
 from schemas import *
 
+user_name = "Eva Change"
+
 
 class CRUD:
     def __init__(self, db: Session, model):

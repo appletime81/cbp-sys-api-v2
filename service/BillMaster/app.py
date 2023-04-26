@@ -4,6 +4,7 @@ from get_db import get_db
 from sqlalchemy.orm import Session
 from utils.utils import *
 from utils.orm_pydantic_convert import *
+from utils.log import *
 from copy import deepcopy
 import os
 from fastapi.responses import FileResponse
@@ -204,6 +205,10 @@ async def updateBillMaster(
                 InvoiceWKMasterData, orm_to_dict(newInvoiceWKMasterData)
             )
             newInvoiceWKMasterDataList.append(newInvoiceWKMasterData)
+
+        record_log(
+            f"{user_name} update BillMaster, BillMasterID: {BillMasterID} to {Status}"
+        )
 
         return {
             "message": "update success",

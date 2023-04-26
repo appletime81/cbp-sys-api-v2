@@ -1,0 +1,9 @@
+fastapi==0.95.1
+uvicorn[standard]
+SQLAlchemy==2.0.10
+pandas==2.0.0
+openpyxl==3.1.2
+docxtpl==0.16.6
+PyMySQL==1.0.3
+SQLAlchemy==2.0.10
+python-multipart==0.0.6

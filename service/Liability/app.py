@@ -4,6 +4,7 @@ from get_db import get_db
 from sqlalchemy.orm import Session
 from utils.utils import *
 from utils.orm_pydantic_convert import *
+from utils.log import *
 from copy import deepcopy
 
 router = APIRouter()
@@ -19,6 +20,7 @@ async def getLiability(
 ):
     crud = CRUD(db, LiabilityDBModel)
     table_name = "Liability"
+    origLiabilityCondition = deepcopy(LiabilityCondition)
 
     EndBool = "Init"
     if "End" in LiabilityCondition:
@@ -34,9 +36,35 @@ async def getLiability(
         LiabilityCondition = convert_url_condition_to_dict(LiabilityCondition)
         sql_condition = convert_dict_to_sql_condition(LiabilityCondition, table_name)
         LiabilityDataList = crud.get_all_by_sql(sql_condition)
+        LiabilityDictDataList = [
+            orm_to_dict(LiabilityData) for LiabilityData in LiabilityDataList
+        ]
+        for i, LiabilityDictData in enumerate(LiabilityDictDataList):
+            if LiabilityDictData["EndDate"] == "NaT":
+                LiabilityDictDataList[i]["EndDate"] = None
+        pprint(LiabilityDictDataList)
     else:
         LiabilityCondition = convert_url_condition_to_dict(LiabilityCondition)
         LiabilityDataList = crud.get_with_condition(LiabilityCondition)
+
+    if EndBool != "Init" and "start" in origLiabilityCondition:
+        # 篩選沒終止的資料
+        if EndBool:
+            LiabilityDictDataList = [
+                LiabilityDictData
+                for LiabilityDictData in LiabilityDictDataList
+                if LiabilityDictData["EndDate"]
+            ]
+        # 篩選有終止的資料
+        if not EndBool:
+            LiabilityDictDataList = [
+                LiabilityDictData
+                for LiabilityDictData in LiabilityDictDataList
+                if not LiabilityDictData["EndDate"]
+            ]
+        return LiabilityDictDataList
+    elif EndBool == "Init" and "start" in origLiabilityCondition:
+        return LiabilityDictDataList
 
     if EndBool != "Init":
         # 篩選沒終止的資料
@@ -81,24 +109,16 @@ async def updateLiability(
 ):
     LiabilityDictData = await request.json()
     LBRawID = LiabilityDictData.get("LBRawID")
+    Note = LiabilityDictData.get("Note")
     ModifyNote = LiabilityDictData.get("ModifyNote")
     crud = CRUD(db, LiabilityDBModel)
     LiabilityData = crud.get_with_condition({"LBRawID": LBRawID})[0]
 
-    LiabilityDataList = crud.get_with_condition(
-        {
-            "BillMilestone": LiabilityData.BillMilestone,
-            "WorkTitle": LiabilityData.WorkTitle,
-            "SubmarineCable": LiabilityData.SubmarineCable,
-        }
-    )
-
     # update LiabilityData
-    for LiabilityData in LiabilityDataList:
-        LiabilityDictData = orm_to_dict(deepcopy(LiabilityData))
-        LiabilityDictData["EndDate"] = convert_time_to_str(datetime.now())
-        LiabilityDictData["ModifyNote"] = ModifyNote
-        crud.update(LiabilityData, LiabilityDictData)
+    LiabilityDictData = orm_to_dict(deepcopy(LiabilityData))
+    LiabilityDictData["Note"] = Note
+    LiabilityDictData["ModifyNote"] = ModifyNote
+    crud.update(LiabilityData, LiabilityDictData)
 
     return {"message": "Liability successfully updated"}
 
@@ -110,25 +130,45 @@ async def deleteLiability(
 ):
     LiabilityDictData = await request.json()
     LBRawID = LiabilityDictData.get("LBRawID")
+    ModifyNote = LiabilityDictData.get("ModifyNote")
+    EndDate = convert_time_to_str(datetime.now())
     crud = CRUD(db, LiabilityDBModel)
-    crud.remove(LBRawID)
-    return {"message": "Liability successfully deleted"}
+    LiabilityData = crud.get_with_condition({"LBRawID": LBRawID})[0]
+    LiabilityDataList = crud.get_with_condition(
+        {
+            "BillMilestone": LiabilityData.BillMilestone,
+            "WorkTitle": LiabilityData.WorkTitle,
+            "SubmarineCable": LiabilityData.SubmarineCable,
+        }
+    )
+
+    # terminate LiabilityData
+    for LiabilityData in LiabilityDataList:
+        LiabilityDictData = orm_to_dict(deepcopy(LiabilityData))
+        LiabilityDictData["EndDate"] = EndDate
+        LiabilityDictData["ModifyNote"] = ModifyNote
+        crud.update(LiabilityData, LiabilityDictData)
+        record_log(
+            f"{user_name} terminate LiabilityData, LBRawID: {LiabilityData.LBRawID}"
+        )
+
+    return {"message": "Liability successfully terminated"}
 
 
 # for dropdown list
 # 會員名稱
-@router.get("/dropdownmenuParties")
-async def getDropdownMenuParties(
-    request: Request,
-    db: Session = Depends(get_db),
-):
-    crud = CRUD(db, LiabilityDBModel)
-    LiabilityDataList = crud.get_all()
-    PartyNameList = []
-    for LiabilityData in LiabilityDataList:
-        PartyNameList.append(LiabilityData.PartyName)
-    PartyNameList = list(set(PartyNameList))
-    return PartyNameList
+# @router.get("/dropdownmenuParties")
+# async def getDropdownMenuParties(
+#     request: Request,
+#     db: Session = Depends(get_db),
+# ):
+#     crud = CRUD(db, LiabilityDBModel)
+#     LiabilityDataList = crud.get_all()
+#     PartyNameList = []
+#     for LiabilityData in LiabilityDataList:
+#         PartyNameList.append(LiabilityData.PartyName)
+#     PartyNameList = list(set(PartyNameList))
+#     return PartyNameList
 
 
 # 記帳段號(BillMilestone)
@@ -138,10 +178,14 @@ async def getDropdownMenuBillMilestone(
     db: Session = Depends(get_db),
 ):
     crud = CRUD(db, LiabilityDBModel)
-    BillMilestoneList = crud.get_all_distinct(LiabilityDBModel.BillMilestone)
+    LiabilityDataList = crud.get_all()
     BillMilestoneList = [
-        BillMilestone.BillMilestone for BillMilestone in BillMilestoneList
+        # if LiabilityData.EndDate have value, then put it into list
+        LiabilityData.BillMilestone
+        for LiabilityData in LiabilityDataList
+        if not LiabilityData.EndDate
     ]
+    BillMilestoneList = list(set(BillMilestoneList))
     return BillMilestoneList
 
 

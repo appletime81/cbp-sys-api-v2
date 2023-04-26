@@ -32,7 +32,7 @@ class InvoiceWKMasterSchema(BaseModel):
     ContractType: str
     IssueDate: datetime
     DueDate: datetime
-    PartyName: str
+    PartyName: Optional[str]
     IsPro: bool
     IsRecharge: bool
     IsLiability: bool
@@ -86,7 +86,6 @@ class InvoiceDetailSchema(BaseModel):
     LBRatio: float
     FeeAmountPost: float
     Difference: float
-    Status: str
 
 
 class BillMasterSchema(BaseModel):
@@ -107,6 +106,7 @@ class BillMasterSchema(BaseModel):
     BillingNo: str
     PONo: Optional[str]
     PartyName: str
+    SupplierName: Optional[str]
     SubmarineCable: str
     WorkTitle: str
     IssueDate: datetime
@@ -143,6 +143,19 @@ class BillDetailSchema(BaseModel):
     Note: Optional[str]
     ToCBAmount: Optional[float]
     Status: str
+
+
+class CollectStatementSchema(BaseModel):
+    CollectID: Optional[int]
+    BillingNo: str
+    PartyName: str
+    SubmarineCable: str
+    WorkTitle: str
+    FeeAmount: float
+    ReceivedAmountSum: float
+    BankFee: float
+    ReceiveDate: datetime
+    Note: Optional[str]
 
 
 class LiabilitySchema(BaseModel):
@@ -423,7 +436,6 @@ class UsersSchema(BaseModel):
     UserID: Optional[str]
     UserName: Optional[str]
     UserCName: Optional[str]
-    PCode: Optional[str]
     Email: Optional[str]
     Tel: Optional[str]
     Fax: Optional[str]
@@ -459,3 +471,8 @@ class DownloadBillDraftSchema(BaseModel):
     DueDate: str
     WorkTitle: str
     InvoiceName: str
+
+
+class LoginSchema(BaseModel):
+    username: str
+    password: str

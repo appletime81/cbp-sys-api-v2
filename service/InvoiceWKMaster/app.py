@@ -3,6 +3,7 @@ from crud import *
 from get_db import get_db
 from sqlalchemy.orm import Session
 from utils.utils import *
+from utils.log import *
 from utils.orm_pydantic_convert import orm_to_pydantic
 from copy import deepcopy
 
@@ -62,6 +63,7 @@ async def deleteInvoiceWKMaster(
     print("WKMasterID: ", request_data.get("WKMasterID"))
     crud = CRUD(db, InvoiceWKMasterDBModel)
     crud.remove({"WKMasterID": request_data.get("WKMasterID")})
+    record_log(f"{user_name} delete InvoiceWKMaster: {request_data.get('WKMasterID')}")
     return {"message": "InvoiceWKMaster successfully deleted"}
 
 
@@ -77,5 +79,7 @@ async def updateInvoiceWKMasterStatusAndInvoiceMasterStatus(
     )
     for InvoiceWKMasterData in InvoiceWKMasterDataList:
         crud.update(InvoiceWKMasterData, update_dict_condition)
+
+    record_log(f"{user_name} update InvoiceWKMaster: {update_dict_condition}")
 
     return {"message": "InvoiceWKMaster status successfully updated"}

@@ -26,21 +26,32 @@ async def getBillMilestone(
         BillMilestoneCondition
     )
 
-    crudLiability = CRUD(db, LiabilityDBModel)
-    LiabilityDataList = crudLiability.get_with_condition(BillMilestoneDictCondition)
-    LiabilityDictDataList = [
-        orm_to_dict(LiabilityData) for LiabilityData in LiabilityDataList
-    ]
-    BillMilestoneDictDataList = list(
-        set(
-            [
-                LiabilityDictData["BillMilestone"]
-                for LiabilityDictData in LiabilityDictDataList
-            ]
-        )
+    end_condition = (
+        BillMilestoneDictCondition.pop("End")
+        if "End" in BillMilestoneDictCondition
+        else None
     )
 
-    return BillMilestoneDictDataList
+    crudLiability = CRUD(db, LiabilityDBModel)
+    LiabilityDataList = crudLiability.get_with_condition(BillMilestoneDictCondition)
+    LiabilityDataList = [LiabilityData for LiabilityData in LiabilityDataList]
+    if not end_condition:
+        LiabilityDictDataList = [
+            orm_to_dict(LiabilityData)
+            for LiabilityData in LiabilityDataList
+            if not LiabilityData.EndDate
+        ]
+        BillMilestoneDictDataList = list(
+            set(
+                [
+                    LiabilityDictData["BillMilestone"]
+                    for LiabilityDictData in LiabilityDictDataList
+                ]
+            )
+        )
+        return BillMilestoneDictDataList
+    else:
+        return []
 
 
 # ---------------------------------------------------------------------------

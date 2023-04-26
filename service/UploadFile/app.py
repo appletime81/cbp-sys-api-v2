@@ -7,6 +7,7 @@ from get_db import get_db
 from sqlalchemy.orm import Session
 from utils.utils import *
 from utils.orm_pydantic_convert import *
+from utils.log import *
 from copy import deepcopy
 
 router = APIRouter()
@@ -59,6 +60,9 @@ async def uploadSignedBillMaster(
     newBillMasterData = crudBillMaster.update(
         BillMasterData, orm_to_dict(newBillMasterData)
     )
+
+    record_log(f"{user_name} upload signed bill master, BillMasterID: {BillMasterID}")
+
     return {
         "message": "success",
         "file_name": file.filename,

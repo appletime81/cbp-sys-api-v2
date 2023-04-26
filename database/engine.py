@@ -4,12 +4,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-
 # read ini file
 config = configparser.ConfigParser()
 
 # read section
-section = "wsl-test-2"
+section = "wsl-test"
 config.read("dbinfo.ini")
 user = config[section]["user"]
 pwd = config[section]["pwd"]
