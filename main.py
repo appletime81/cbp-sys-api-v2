@@ -38,7 +38,6 @@ from service.SuppliersByContract.app import router as SuppliersByContractRouter
 from service.UploadFile.app import router as UploadFileRouter
 from service.Users.app import router as UsersRouter
 from service.Payment.app import router as PaymentRouter
-from service.WaterBill.app import router as WaterBillRouter
 from utils.utils import *
 from utils.log import *
 from utils.orm_pydantic_convert import *
@@ -76,7 +75,6 @@ app.include_router(UsersRouter, prefix=ROOT_URL, tags=["Users"])
 app.include_router(UsersServiceRouter, prefix=ROOT_URL, tags=["UsersService"])
 app.include_router(BillMasterServiceRouter, prefix=ROOT_URL, tags=["BillMasterService"])
 app.include_router(PaymentRouter, prefix=ROOT_URL, tags=["Payment"])
-app.include_router(WaterBillRouter, prefix=ROOT_URL, tags=["WaterBill"])
 
 # allow middlewares
 app.add_middleware(
@@ -170,6 +168,105 @@ async def generateInvoiceWKMasterInvoiceWKDetailInvoiceMasterInvoiceDetail(
     return {"message": "success"}
 
 
+# @app.get(ROOT_URL + "/getInvoiceWKMaster&InvoiceWKDetail/{urlCondition}")
+# async def searchInvoiceWKMaster(
+#     request: Request,
+#     urlCondition: str,
+#     db: Session = Depends(get_db),
+# ):
+#     getResult = []
+#
+#     # init CRUD
+#     crudInvoiceWKMaster = CRUD(db, InvoiceWKMasterDBModel)
+#     crudInvoiceWKDetail = CRUD(db, InvoiceWKDetailDBModel)
+#
+#     # get query condition
+#     if urlCondition == "all":
+#         InvoiceWKMasterDataList = crudInvoiceWKMaster.get_all()
+#         InvoiceWKDetailDataList = crudInvoiceWKDetail.get_all()
+#         for InvoiceWKMasterData in InvoiceWKMasterDataList:
+#             getResult.append(
+#                 {
+#                     "InvoiceWKMaster": InvoiceWKMasterData,
+#                     "InvoiceWKDetail": list(
+#                         filter(
+#                             lambda x: x.WKMasterID == InvoiceWKMasterData.WKMasterID,
+#                             InvoiceWKDetailDataList,
+#                         )
+#                     ),
+#                 }
+#             )
+#         return getResult
+#     else:
+#         dictCondition = convert_url_condition_to_dict(urlCondition)
+#
+#     date_condition = dict(filter(lambda x: "Date" in x[0], dictCondition.items()))
+#     status_condition = dict(filter(lambda x: "Status" in x[0], dictCondition.items()))
+#     newDictCondition = dict(
+#         filter(
+#             lambda x: "Date" not in x[0] and "Status" not in x[0], dictCondition.items()
+#         )
+#     )
+#
+#     # -------------------------- get data from db --------------------------
+#     # get InvoiceWKDetail data from db
+#     InvoiceWKDetailDataList = crudInvoiceWKDetail.get_with_condition(newDictCondition)
+#     WKMasterIDList = [
+#         InvoiceWKDetailData.WKMasterID
+#         for InvoiceWKDetailData in InvoiceWKDetailDataList
+#     ]
+#     WKMasterIDList = list(set(WKMasterIDList))
+#
+#     # get InvoiceWKMaster data from db
+#     InvoiceWKMasterDataList = crudInvoiceWKMaster.get_value_if_in_a_list(
+#         InvoiceWKMasterDBModel.WKMasterID, WKMasterIDList
+#     )
+#
+#     if status_condition:
+#         if isinstance(status_condition["Status"], str):
+#             InvoiceWKMasterDataList = [
+#                 InvoiceWKMasterData
+#                 for InvoiceWKMasterData in InvoiceWKMasterDataList
+#                 if InvoiceWKMasterData.Status == status_condition["Status"]
+#             ]
+#         else:
+#             InvoiceWKMasterDataList = [
+#                 InvoiceWKMasterData
+#                 for InvoiceWKMasterData in InvoiceWKMasterDataList
+#                 if InvoiceWKMasterData.Status in status_condition["Status"]
+#             ]
+#
+#     if date_condition:
+#         key = list(date_condition.keys())[0]
+#         col_name = key.replace("range", "")
+#         if date_condition[key]["gte"] == date_condition[key]["lte"]:
+#             date_condition[key]["gte"] = date_condition[key]["gte"][:10] + " 23:59:59"
+#         InvoiceWKMasterDataList = [
+#             InvoiceWKMasterData
+#             for InvoiceWKMasterData in InvoiceWKMasterDataList
+#             if str_time_convert_to_int(date_condition[key]["gte"])
+#             <= str_time_convert_to_int(orm_to_dict(InvoiceWKMasterData)[col_name])
+#             <= str_time_convert_to_int(date_condition[key]["lte"])
+#         ]
+#
+#     # generate result
+#     for InvoiceWKMasterData in InvoiceWKMasterDataList:
+#         tempInvoiceWKDetailDataList = list(
+#             filter(
+#                 lambda x: x.WKMasterID == InvoiceWKMasterData.WKMasterID,
+#                 InvoiceWKDetailDataList,
+#             )
+#         )
+#         getResult.append(
+#             {
+#                 "InvoiceWKMaster": InvoiceWKMasterData,
+#                 "InvoiceWKDetail": tempInvoiceWKDetailDataList,
+#             }
+#         )
+#
+#     return getResult
+
+
 @app.get(ROOT_URL + "/getInvoiceWKMaster&InvoiceWKDetail/{urlCondition}")
 async def searchInvoiceWKMaster(
     request: Request,
@@ -178,6 +275,9 @@ async def searchInvoiceWKMaster(
 ):
     getResult = []
 
+    # table name
+    table_name = "InvoiceWKMaster"
+
     # init CRUD
     crudInvoiceWKMaster = CRUD(db, InvoiceWKMasterDBModel)
     crudInvoiceWKDetail = CRUD(db, InvoiceWKDetailDBModel)
@@ -185,87 +285,42 @@ async def searchInvoiceWKMaster(
     # get query condition
     if urlCondition == "all":
         InvoiceWKMasterDataList = crudInvoiceWKMaster.get_all()
-        InvoiceWKDetailDataList = crudInvoiceWKDetail.get_all()
-        for InvoiceWKMasterData in InvoiceWKMasterDataList:
-            getResult.append(
-                {
-                    "InvoiceWKMaster": InvoiceWKMasterData,
-                    "InvoiceWKDetail": list(
-                        filter(
-                            lambda x: x.WKMasterID == InvoiceWKMasterData.WKMasterID,
-                            InvoiceWKDetailDataList,
-                        )
-                    ),
-                }
-            )
-        return getResult
+    elif (
+        "start" in urlCondition
+        and "end" in urlCondition
+        and "InvoiceNo" in urlCondition
+    ):
+        dictCondition = convert_url_condition_to_dict(urlCondition)
+        InvoiceNo = dictCondition.pop("InvoiceNo")
+        sqlCondition = convert_dict_to_sql_condition(dictCondition, table_name)
+        InvoiceWKMasterDataList = crudInvoiceWKMaster.get_all_by_sql_with_like(
+            sqlCondition, "InvoiceNo", InvoiceNo
+        )
+    elif (
+        "InvoiceNo" in urlCondition
+        and "start" not in urlCondition
+        and "end" not in urlCondition
+    ):
+        dictCondition = convert_url_condition_to_dict_ignore_date(urlCondition)
+        InvoiceNo = dictCondition.pop("InvoiceNo")
+        InvoiceWKMasterDataList = crudInvoiceWKMaster.get_with_condition_and_like(
+            dictCondition, InvoiceWKMasterDBModel.InvoiceNo, InvoiceNo
+        )
     else:
         dictCondition = convert_url_condition_to_dict(urlCondition)
+        InvoiceWKMasterDataList = crudInvoiceWKMaster.get_with_condition(dictCondition)
 
-    date_condition = dict(filter(lambda x: "Date" in x[0], dictCondition.items()))
-    status_condition = dict(filter(lambda x: "Status" in x[0], dictCondition.items()))
-    newDictCondition = dict(
-        filter(
-            lambda x: "Date" not in x[0] and "Status" not in x[0], dictCondition.items()
-        )
-    )
-
-    # -------------------------- get data from db --------------------------
-    # get InvoiceWKDetail data from db
-    InvoiceWKDetailDataList = crudInvoiceWKDetail.get_with_condition(newDictCondition)
-    WKMasterIDList = [
-        InvoiceWKDetailData.WKMasterID
-        for InvoiceWKDetailData in InvoiceWKDetailDataList
-    ]
-    WKMasterIDList = list(set(WKMasterIDList))
-
-    # get InvoiceWKMaster data from db
-    InvoiceWKMasterDataList = crudInvoiceWKMaster.get_value_if_in_a_list(
-        InvoiceWKMasterDBModel.WKMasterID, WKMasterIDList
-    )
-
-    if status_condition:
-        if isinstance(status_condition["Status"], str):
-            InvoiceWKMasterDataList = [
-                InvoiceWKMasterData
-                for InvoiceWKMasterData in InvoiceWKMasterDataList
-                if InvoiceWKMasterData.Status == status_condition["Status"]
-            ]
-        else:
-            InvoiceWKMasterDataList = [
-                InvoiceWKMasterData
-                for InvoiceWKMasterData in InvoiceWKMasterDataList
-                if InvoiceWKMasterData.Status in status_condition["Status"]
-            ]
-
-    if date_condition:
-        key = list(date_condition.keys())[0]
-        col_name = key.replace("range", "")
-        if date_condition[key]["gte"] == date_condition[key]["lte"]:
-            date_condition[key]["gte"] = date_condition[key]["gte"][:10] + " 23:59:59"
-        InvoiceWKMasterDataList = [
-            InvoiceWKMasterData
-            for InvoiceWKMasterData in InvoiceWKMasterDataList
-            if str_time_convert_to_int(date_condition[key]["gte"])
-            <= str_time_convert_to_int(orm_to_dict(InvoiceWKMasterData)[col_name])
-            <= str_time_convert_to_int(date_condition[key]["lte"])
-        ]
-
-    # generate result
+    # get InvoiceWKDetail append to getResult
     for InvoiceWKMasterData in InvoiceWKMasterDataList:
-        tempInvoiceWKDetailDataList = list(
-            filter(
-                lambda x: x.WKMasterID == InvoiceWKMasterData.WKMasterID,
-                InvoiceWKDetailDataList,
-            )
+        InvoiceWKDetailDataList = crudInvoiceWKDetail.get_with_condition(
+            {"WKMasterID": InvoiceWKMasterData.WKMasterID}
         )
         getResult.append(
             {
                 "InvoiceWKMaster": InvoiceWKMasterData,
-                "InvoiceWKDetail": tempInvoiceWKDetailDataList,
+                "InvoiceWKDetail": InvoiceWKDetailDataList,
             }
         )
-
     return getResult
 
 

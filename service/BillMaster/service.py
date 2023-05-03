@@ -26,12 +26,15 @@ async def getInvoiceMasterAndInvoiceDetail(
 ):
     crudInvoiceMaster = CRUD(db, InvoiceMasterDBModel)
     crudInvoiceDetail = CRUD(db, InvoiceDetailDBModel)
+    InvoiceNo = None
     getResult = []
     if "BillMilestone" in urlCondition:
         newUrlCondition, BillMilestone = re_search_url_condition_value(
             urlCondition, "BillMilestone"
         )
         dictCondition = convert_url_condition_to_dict(newUrlCondition)
+        if "InvoiceNo" in dictCondition:
+            InvoiceNo = dictCondition.pop("InvoiceNo")
         InvoiceMasterDataList = crudInvoiceMaster.get_with_condition(dictCondition)
         for InvoiceMasterData in InvoiceMasterDataList:
             InvoiceDetailDataList = crudInvoiceDetail.get_with_condition(
@@ -42,27 +45,43 @@ async def getInvoiceMasterAndInvoiceDetail(
                     lambda x: x.BillMilestone == BillMilestone, InvoiceDetailDataList
                 )
             )
+            InvoiceDetailDictDataList = [
+                orm_to_dict(InvoiceDetailData)
+                for InvoiceDetailData in InvoiceDetailDataList
+            ]
             if checkBillMilestone:
                 getResult.append(
                     {
-                        "InvoiceMaster": InvoiceMasterData,
-                        "InvoiceDetail": InvoiceDetailDataList,
+                        "InvoiceMaster": orm_to_dict(InvoiceMasterData),
+                        "InvoiceDetail": InvoiceDetailDictDataList,
                     }
                 )
     else:
         dictCondition = convert_url_condition_to_dict(urlCondition)
+        if "InvoiceNo" in dictCondition:
+            InvoiceNo = dictCondition.pop("InvoiceNo")
         InvoiceMasterDataList = crudInvoiceMaster.get_with_condition(dictCondition)
         for InvoiceMasterData in InvoiceMasterDataList:
             InvoiceDetailDataList = crudInvoiceDetail.get_with_condition(
                 {"InvMasterID": InvoiceMasterData.InvMasterID}
             )
+            InvoiceDetailDictDataList = [
+                orm_to_dict(InvoiceDetailData)
+                for InvoiceDetailData in InvoiceDetailDataList
+            ]
             getResult.append(
                 {
-                    "InvoiceMaster": InvoiceMasterData,
-                    "InvoiceDetail": InvoiceDetailDataList,
+                    "InvoiceMaster": orm_to_dict(InvoiceMasterData),
+                    "InvoiceDetail": InvoiceDetailDictDataList,
                 }
             )
 
+    if InvoiceNo:
+        getResult = [
+            getResult[i]
+            for i in range(len(getResult))
+            if InvoiceNo in getResult[i]["InvoiceMaster"]["InvoiceNo"]
+        ]
     return getResult
 
 
@@ -102,6 +121,46 @@ async def checkInitBillMasterAndBillDetail(
     return alert_msg
 
 
+async def checkInitBillMasterAndBillDetailFunc(request_data):
+    """
+    {
+        "InvoiceMaster": [
+            {...},
+            {...},
+            {...}
+        ]
+    }
+    """
+    PartyList = []
+    SubmarineCableList = []
+    WorkTitleList = []
+    InvoiceMasterDictDataList = request_data["InvoiceMaster"]
+    for InvoiceMasterDictData in InvoiceMasterDictDataList:
+        PartyList.append(InvoiceMasterDictData["PartyName"])
+        SubmarineCableList.append(InvoiceMasterDictData["SubmarineCable"])
+        WorkTitleList.append(InvoiceMasterDictData["WorkTitle"])
+
+    alert_msg = {}
+    if len(set(PartyList)) > 1:
+        alert_msg["PartyName"] = "PartyName is not unique"
+        record_log(
+            f"{user_name} chose the InvoiceMasters, the PartyName is not unique."
+        )
+    if len(set(SubmarineCableList)) > 1:
+        alert_msg["SubmarineCable"] = "SubmarineCable is not unique"
+        record_log(
+            f"{user_name} chose the InvoiceMasters, the SubmarineCable is not unique."
+        )
+    if len(set(WorkTitleList)) > 1:
+        alert_msg["WorkTitle"] = "WorkTitle is not unique"
+        record_log(
+            f"{user_name} chose the InvoiceMasters, the WorkTitle is not unique."
+        )
+    if not alert_msg:
+        alert_msg["isUnique"] = True
+    return alert_msg
+
+
 # 待抵扣階段(for 點擊合併帳單button後，初始化帳單及帳單明細，顯示預覽畫面)
 @router.post("/getBillMaster&BillDetailStream")
 async def initBillMasterAndBillDetail(request: Request, db: Session = Depends(get_db)):
@@ -128,6 +187,19 @@ async def initBillMasterAndBillDetail(request: Request, db: Session = Depends(ge
     InvoiceMasterDataList = crudInvoiceMaster.get_value_if_in_a_list(
         InvoiceMasterDBModel.InvMasterID, InvoiceMasterIdList
     )
+
+    # check PartName or SubmarineCable or WorkTitle is not unique
+    try:
+        _ = await checkInitBillMasterAndBillDetailFunc(
+            {
+                "InvoiceMaster": [
+                    orm_to_dict(InvoiceMasterData)
+                    for InvoiceMasterData in InvoiceMasterDataList
+                ]
+            }
+        )
+    except Exception as e:
+        print(e)
 
     InvoiceDetailDataList = crudInvoiceDetail.get_value_if_in_a_list(
         InvoiceDetailDBModel.InvMasterID, InvoiceMasterIdList
@@ -214,7 +286,7 @@ async def initBillMasterAndBillDetail(request: Request, db: Session = Depends(ge
             "WriteOffDate": None,
             "ReceiveDate": None,
             "Note": None,
-            "ToCBAmount": None,
+            "ToCBAmount": 0,
             "Status": "INCOMPLETE",
         }
         # BillDetailData = crudBillDetail.create(BillDetailSchema(**BillDetailDictData))
@@ -301,8 +373,10 @@ async def generateInitBillMasterAndBillDetail(
 # 查詢帳單主檔&帳單明細檔
 @router.get("/getBillMaster&BillDetail/{urlCondition}")
 async def getBillMasterAndBillDetail(urlCondition: str, db: Session = Depends(get_db)):
+    print(urlCondition)
     crudBillMaster = CRUD(db, BillMasterDBModel)
     crudBillDetail = CRUD(db, BillDetailDBModel)
+    BillingNo = None
     table_name = "BillMaster"
     getResult = []
     if urlCondition == "all":
@@ -319,6 +393,8 @@ async def getBillMasterAndBillDetail(urlCondition: str, db: Session = Depends(ge
             )
     elif "start" in urlCondition and "end" in urlCondition:
         dictCondition = convert_url_condition_to_dict(urlCondition)
+        if "BillingNo" in urlCondition:
+            BillingNo = dictCondition.pop("BillingNo")
         sqlCondition = convert_dict_to_sql_condition(dictCondition, table_name)
         BillMasterDataList = crudBillMaster.get_all_by_sql(sqlCondition)
         for BillMasterData in BillMasterDataList:
@@ -333,6 +409,8 @@ async def getBillMasterAndBillDetail(urlCondition: str, db: Session = Depends(ge
             )
     else:
         dictCondition = convert_url_condition_to_dict(urlCondition)
+        if "BillingNo" in urlCondition:
+            BillingNo = dictCondition.pop("BillingNo")
         BillMasterDataList = crudBillMaster.get_with_condition(dictCondition)
         for BillMasterData in BillMasterDataList:
             BillDetailDataList = crudBillDetail.get_with_condition(
@@ -344,6 +422,7 @@ async def getBillMasterAndBillDetail(urlCondition: str, db: Session = Depends(ge
                     "BillDetail": BillDetailDataList,
                 }
             )
+
     return getResult
 
 
@@ -1618,7 +1697,7 @@ async def billWriteOff(request: Request, db: Session = Depends(get_db)):
     BillMasterDictData = (await request.json())["BillMaster"]
     BillDetailDictDataList = (await request.json())["BillDetail"]
 
-    CollectStatmentDictData = {
+    CollectStatementDictData = {
         "BillingNo": BillMasterDictData["BillingNo"],
         "PartyName": BillMasterDictData["PartyName"],
         "SubmarineCable": BillMasterDictData["SubmarineCable"],
@@ -1646,8 +1725,8 @@ async def billWriteOff(request: Request, db: Session = Depends(get_db)):
         )[0]
 
         # 本次帳單收款紀錄實收累加
-        CollectStatmentDictData["ReceivedAmountSum"] = (
-            CollectStatmentDictData["ReceivedAmountSum"]
+        CollectStatementDictData["ReceivedAmountSum"] = (
+            CollectStatementDictData["ReceivedAmountSum"]
             + BillDetailDictData["ReceivedAmount"]
         )
 
@@ -1774,8 +1853,9 @@ async def billWriteOff(request: Request, db: Session = Depends(get_db)):
 
     # 寫入本次收款紀錄
     # covert CollectStatementDict to Pydantic model
-    CollectStatementSchemaData = CollectStatementSchema(**CollectStatmentDictData)
-    crudCollectStatement.create(CollectStatementSchemaData)
+    if CollectStatementDictData["ReceivedAmountSum"] > 0:
+        CollectStatementSchemaData = CollectStatementSchema(**CollectStatementDictData)
+        crudCollectStatement.create(CollectStatementSchemaData)
 
     # DB帳單主檔舊資訊
     oldBillMasterData = crudBillMaster.get_with_condition(

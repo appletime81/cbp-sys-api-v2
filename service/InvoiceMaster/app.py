@@ -19,17 +19,32 @@ async def getInvoiceMaster(
     table_name = "InvoiceMaster"
     if InvoiceMasterCondition == "all":
         InvoiceMasterDataList = crud.get_all()
-    elif "start" in InvoiceMasterCondition or "end" in InvoiceMasterCondition:
-        InvoiceMasterCondition = convert_url_condition_to_dict(InvoiceMasterCondition)
-        sql_condition = convert_dict_to_sql_condition(
-            InvoiceMasterCondition, table_name
+    elif (
+        "start" in InvoiceMasterCondition
+        and "end" in InvoiceMasterCondition
+        and "InvoiceNo" in InvoiceMasterCondition
+    ):
+        dictCondition = convert_url_condition_to_dict(InvoiceMasterCondition)
+        InvoiceNo = dictCondition.pop("InvoiceNo")
+        sqlCondition = convert_dict_to_sql_condition(dictCondition, table_name)
+        InvoiceMasterDataList = crud.get_all_by_sql_with_like(
+            sqlCondition, "InvoiceNo", InvoiceNo
         )
-
-        # get all InvoiceMaster by sql
-        InvoiceMasterDataList = crud.get_all_by_sql(sql_condition)
+    elif (
+        "InvoiceNo" in InvoiceMasterCondition
+        and "start" not in InvoiceMasterCondition
+        and "end" not in InvoiceMasterCondition
+    ):
+        dictCondition = convert_url_condition_to_dict_ignore_date(
+            InvoiceMasterCondition
+        )
+        InvoiceNo = dictCondition.pop("InvoiceNo")
+        InvoiceMasterDataList = InvoiceMasterCondition.get_with_condition_and_like(
+            dictCondition, InvoiceWKMasterDBModel.InvoiceNo, InvoiceNo
+        )
     else:
-        InvoiceMasterCondition = convert_url_condition_to_dict(InvoiceMasterCondition)
-        InvoiceMasterDataList = crud.get_with_condition(InvoiceMasterCondition)
+        dictCondition = convert_url_condition_to_dict(InvoiceMasterCondition)
+        InvoiceMasterDataList = crud.get_with_condition(dictCondition)
     return InvoiceMasterDataList
 
 

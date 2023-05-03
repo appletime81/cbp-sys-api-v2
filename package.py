@@ -1,48 +1,49 @@
+import shutil
+import subprocess
 import os
+import re
 
 
 def main():
     # remove backend folder
-    os.system("rm -rf backend")
+    shutil.rmtree("backend", ignore_errors=True)
 
-    # mkdir
+    # create backend folder
     os.mkdir("backend")
 
-    # copy images folder to backend
-    os.system("cp -r images backend")
+    # copy required folders and files to backend
+    dirs_to_copy = ["images", "templates", "database", "service", "utils"]
+    for dir in dirs_to_copy:
+        shutil.copytree(dir, f"backend/{dir}")
 
-    # copy templates folder to backend
-    os.system("cp -r templates backend")
+    files_to_copy = [
+        "main.py",
+        "get_db.py",
+        "schemas.py",
+        "crud.py",
+        "delete_pycache.py",
+        "start.sh",
+    ]
+    for file in files_to_copy:
+        shutil.copy(file, "backend")
 
-    # copy database folder to backend
-    os.system("cp -r database backend")
+    subprocess.run(["cp", "./dbinfo.ini", "./backend"], check=True)
+    subprocess.run(["cp", "./userinfo.ini", "./backend"], check=True)
 
-    # copy service folder to backend
-    os.system("cp -r service backend")
+    with open("./backend/database/engine.py", "r") as f:
+        # read all content
+        content = f.read()
 
-    # copy utils folder to backend
-    os.system("cp -r utils backend")
+    res = re.search(r'section = "\S+"', content).group()
+    findTargetStr = res.split("=")[1].replace('"', "").strip()
 
-    # copy main.py to backend
-    os.system("cp main.py backend")
+    targetStr = "aws"  # database name
+    content = content.replace(findTargetStr, targetStr)
 
-    # copy get_db.py to backend
-    os.system("cp get_db.py backend")
+    with open("./backend/database/engine.py", "w") as f:
+        f.write(content)
 
-    # copy schemas.py to backend
-    os.system("cp schemas.py backend")
-
-    # copy crud.py to backend
-    os.system("cp crud.py backend")
-
-    # copy delete_pycache.py to backend
-    os.system("cp delete_pycache.py backend")
-
-    # copy start.sh to backend
-    os.system("cp start.sh backend")
-
-    # copy *.ini to backend
-    os.system("cp *.ini backend")
+    os.system("cd ./backend && tar -zcvf ./backend.tar.gz .")
 
 
 if __name__ == "__main__":

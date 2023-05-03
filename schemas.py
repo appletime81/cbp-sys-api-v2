@@ -1,6 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional
 
 
 class InvoiceWKMasterSchema(BaseModel):
@@ -66,6 +66,7 @@ class InvoiceMasterSchema(BaseModel):
     ContractType: str
     IssueDate: datetime
     DueDate: datetime
+    Status: str
     IsPro: bool
 
 
@@ -85,7 +86,6 @@ class InvoiceDetailSchema(BaseModel):
     LBRatio: float
     FeeAmountPost: float
     Difference: float
-    Status: str
 
 
 class BillMasterSchema(BaseModel):
@@ -476,8 +476,3 @@ class DownloadBillDraftSchema(BaseModel):
 class LoginSchema(BaseModel):
     username: str
     password: str
-
-
-class WaterBillSchema(BaseModel):
-    WBID: Optional[int]
-    InvoiceDetailList: List[InvoiceDetailSchema]

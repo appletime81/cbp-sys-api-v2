@@ -20,6 +20,19 @@ class CRUD:
     def get_with_condition(self, filter_condition: dict):
         return self.db.query(self.model).filter_by(**filter_condition).all()
 
+    def get_with_condition_and_like(
+        self, filter_condition: dict, col_name=None, like_condition_value=None
+    ):
+        if col_name and like_condition_value:
+            return (
+                self.db.query(self.model)
+                .filter_by(**filter_condition)
+                .filter(col_name.like(f"%{like_condition_value}%"))
+                .all()
+            )
+        else:
+            return self.db.query(self.model).filter_by(**filter_condition).all()
+
     def get_value_if_in_a_list(self, value, list_of_values):
         return self.db.query(self.model).filter(value.in_(list_of_values)).all()
 
@@ -33,6 +46,19 @@ class CRUD:
         print(sql)
         with engine.begin() as conn:
             df = pd.read_sql_query(sql=text(f"""{sql}"""), con=conn)
+        getResult = [
+            self.model(**row_dict) for row_dict in df.to_dict(orient="records")
+        ]
+        return getResult
+
+    def get_all_by_sql_with_like(
+        self, sql: str, col_name=None, like_condition_value=None
+    ):
+        print(sql)
+        with engine.begin() as conn:
+            df = pd.read_sql_query(sql=text(f"""{sql}"""), con=conn)
+        if col_name and like_condition_value:
+            df = df[df[col_name].str.contains(like_condition_value, na=False)]
         getResult = [
             self.model(**row_dict) for row_dict in df.to_dict(orient="records")
         ]
