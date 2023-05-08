@@ -30,11 +30,12 @@ async def getInvoiceMasterAndInvoiceDetail(
     BillMilestone = None
     getResult = []
 
-    dictCondition = convert_url_condition_to_dict(urlCondition)
-    if "BillMilestone" in dictCondition:
-        BillMilestone = dictCondition.pop("BillMilestone")
-    if "InvoiceNo" in dictCondition:
-        InvoiceNo = dictCondition.pop("InvoiceNo")
+    if urlCondition != "all":
+        dictCondition = convert_url_condition_to_dict(urlCondition)
+        if "BillMilestone" in dictCondition:
+            BillMilestone = dictCondition.pop("BillMilestone")
+        if "InvoiceNo" in dictCondition:
+            InvoiceNo = dictCondition.pop("InvoiceNo")
 
     if urlCondition == "all":
         InvoiceMasterDataList = crudInvoiceMaster.get_all()

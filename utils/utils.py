@@ -38,7 +38,7 @@ def convert_url_condition_to_dict(url_condition):
             key = key.replace("end", "range")
             # covert YYYYMMDDHHMMSS to YYYY-MM-DD HH:MM:SS
             value = value[:4] + "-" + value[4:6] + "-" + value[6:8] + " " + "00:00:00"
-            dict_condition[key].update({"lte": value})
+            dict_condition[key].update(**{"lte": value})
         else:
             if value == "true":
                 value = True
