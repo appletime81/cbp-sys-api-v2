@@ -1,6 +1,7 @@
 import re
 import pandas as pd
 from typing import List, Dict
+import urllib3
 
 TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
@@ -24,7 +25,8 @@ def convert_dict_data_date_to_normal_str(dict_data: Dict):
 
 def convert_url_condition_to_dict(url_condition):
     dict_condition = {}
-    list_ = url_condition.split("&")
+    print("url_condition", f"?{url_condition}")
+    list_ = urllib3.util.parse_url(f"?{url_condition}").query.split("&")
     for sub_condition in list_:
         key, value = sub_condition.split("=")
         if "start" in key:
@@ -130,18 +132,17 @@ def dflist_to_df(list_data: List[pd.DataFrame]):
 
 
 def re_search_url_condition_value(urlCondition: str, conditionKey: str):
-    if f"{conditionKey}=" in urlCondition:
-        if re.findall(rf"{conditionKey}=(\S+)&", urlCondition):
-            value = re.findall(rf"{conditionKey}=(\S+)&", urlCondition)[0]
-            urlCondition = urlCondition.replace(f"{conditionKey}={value}&", "")
-        elif re.findall(rf"{conditionKey}=(\S+)", urlCondition):
-            value = re.findall(rf"{conditionKey}=(\S+)", urlCondition)[0]
-            urlCondition = urlCondition.replace(f"{conditionKey}={value}", "")
+    urlConditionList = urllib3.util.parse_url(f"?{urlCondition}").query.split("&")
+    for condition in urlConditionList:
+        if condition.startswith(conditionKey):
+            value = urlConditionList.pop(urlConditionList.index(condition))
 
-    if not urlCondition:
+    value = value.replace(f"{conditionKey}=", "")
+
+    if not urlConditionList:
         urlCondition = "all"
-    if urlCondition[-1] == "&":
-        urlCondition = urlCondition[:-1]
+    if urlConditionList:
+        urlCondition = "&".join(urlConditionList)
     if value == "false":
         value = False
     if value == "true":
@@ -156,3 +157,11 @@ def convert_number_to_string(numbers: List[str]):
     result = "{:,}".format(int(integer_part))
     result += f".{decimal_part}"
     return result
+
+
+if __name__ == "__main__":
+    a = "BillMilestone=2022.B_BM0"
+    urlList, value = re_search_url_condition_value(a, "BillMilestone")
+    print(urlList)
+    print(value)
+    print("&".join(urlList))

@@ -27,61 +27,57 @@ async def getInvoiceMasterAndInvoiceDetail(
     crudInvoiceMaster = CRUD(db, InvoiceMasterDBModel)
     crudInvoiceDetail = CRUD(db, InvoiceDetailDBModel)
     InvoiceNo = None
+    BillMilestone = None
     getResult = []
-    if "BillMilestone" in urlCondition:
-        newUrlCondition, BillMilestone = re_search_url_condition_value(
-            urlCondition, "BillMilestone"
-        )
-        dictCondition = convert_url_condition_to_dict(newUrlCondition)
-        if "InvoiceNo" in dictCondition:
-            InvoiceNo = dictCondition.pop("InvoiceNo")
-        InvoiceMasterDataList = crudInvoiceMaster.get_with_condition(dictCondition)
-        for InvoiceMasterData in InvoiceMasterDataList:
-            InvoiceDetailDataList = crudInvoiceDetail.get_with_condition(
-                {"InvMasterID": InvoiceMasterData.InvMasterID}
-            )
-            checkBillMilestone = list(
-                filter(
-                    lambda x: x.BillMilestone == BillMilestone, InvoiceDetailDataList
-                )
-            )
-            InvoiceDetailDictDataList = [
-                orm_to_dict(InvoiceDetailData)
-                for InvoiceDetailData in InvoiceDetailDataList
-            ]
-            if checkBillMilestone:
-                getResult.append(
-                    {
-                        "InvoiceMaster": orm_to_dict(InvoiceMasterData),
-                        "InvoiceDetail": InvoiceDetailDictDataList,
-                    }
-                )
-    else:
-        dictCondition = convert_url_condition_to_dict(urlCondition)
-        if "InvoiceNo" in dictCondition:
-            InvoiceNo = dictCondition.pop("InvoiceNo")
-        InvoiceMasterDataList = crudInvoiceMaster.get_with_condition(dictCondition)
-        for InvoiceMasterData in InvoiceMasterDataList:
-            InvoiceDetailDataList = crudInvoiceDetail.get_with_condition(
-                {"InvMasterID": InvoiceMasterData.InvMasterID}
-            )
-            InvoiceDetailDictDataList = [
-                orm_to_dict(InvoiceDetailData)
-                for InvoiceDetailData in InvoiceDetailDataList
-            ]
-            getResult.append(
-                {
-                    "InvoiceMaster": orm_to_dict(InvoiceMasterData),
-                    "InvoiceDetail": InvoiceDetailDictDataList,
-                }
-            )
 
+    dictCondition = convert_url_condition_to_dict(urlCondition)
+    if "BillMilestone" in dictCondition:
+        BillMilestone = dictCondition.pop("BillMilestone")
+    if "InvoiceNo" in dictCondition:
+        InvoiceNo = dictCondition.pop("InvoiceNo")
+
+    if urlCondition == "all":
+        InvoiceMasterDataList = crudInvoiceMaster.get_all()
+    elif "start" in urlCondition or "end" in urlCondition:
+        sqlCondition = convert_dict_to_sql_condition(dictCondition, "InvoiceMaster")
+        InvoiceMasterDataList = crudInvoiceMaster.get_all_by_sql(sqlCondition)
+    else:
+        InvoiceMasterDataList = crudInvoiceMaster.get_with_condition(dictCondition)
+    print(len(InvoiceMasterDataList))
+    print("InvoiceNo:", InvoiceNo)
+    print("BillMilestone:", BillMilestone)
     if InvoiceNo:
-        getResult = [
-            getResult[i]
-            for i in range(len(getResult))
-            if InvoiceNo in getResult[i]["InvoiceMaster"]["InvoiceNo"]
+        InvoiceMasterDataList = [
+            InvoiceMasterData
+            for InvoiceMasterData in InvoiceMasterDataList
+            if InvoiceNo in InvoiceMasterData.InvoiceNo
         ]
+    print(len(InvoiceMasterDataList))
+
+    if BillMilestone:
+        InvoiceMasterDataList = [
+            InvoiceMasterData
+            for InvoiceMasterData in InvoiceMasterDataList
+            if crudInvoiceDetail.get_with_condition({"BillMilestone": BillMilestone})
+        ]
+    print(len(InvoiceMasterDataList))
+
+    for InvoiceMasterData in InvoiceMasterDataList:
+        InvoiceMasterDictData = orm_to_dict(InvoiceMasterData)
+        InvoiceDetailDataList = crudInvoiceDetail.get_with_condition(
+            {"InvMasterID": InvoiceMasterDictData["InvMasterID"]}
+        )
+        InvoiceDetailDictDataList = [
+            orm_to_dict(InvoiceDetailData)
+            for InvoiceDetailData in InvoiceDetailDataList
+        ]
+        getResult.append(
+            {
+                "InvoiceMaster": InvoiceMasterDictData,
+                "InvoiceDetail": InvoiceDetailDictDataList,
+            }
+        )
+
     return getResult
 
 
@@ -1880,6 +1876,12 @@ async def billWriteOff(request: Request, db: Session = Depends(get_db)):
 
     # 更新帳單主檔資訊
     newBillMasterData = crudBillMaster.update(oldBillMasterData, BillMasterDictData)
+
+    # record log
+    record_log(
+        f"{user_name} writes off {BillMasterDictData['BillingNo']} successfully.",
+    )
+
     return
 
 

@@ -282,6 +282,12 @@ async def searchInvoiceWKMaster(
     crudInvoiceWKMaster = CRUD(db, InvoiceWKMasterDBModel)
     crudInvoiceWKDetail = CRUD(db, InvoiceWKDetailDBModel)
 
+    BillMilestone = None
+    if "BillMilestone" in urlCondition:
+        urlCondition, BillMilestone = re_search_url_condition_value(
+            urlCondition, "BillMilestone"
+        )
+
     # get query condition
     if urlCondition == "all":
         InvoiceWKMasterDataList = crudInvoiceWKMaster.get_all()
@@ -321,6 +327,16 @@ async def searchInvoiceWKMaster(
                 "InvoiceWKDetail": InvoiceWKDetailDataList,
             }
         )
+
+    if BillMilestone:
+        newGetResult = []
+        for element in getResult:
+            for InvoiceWKDetailData in element["InvoiceWKDetail"]:
+                if InvoiceWKDetailData.BillMilestone == BillMilestone:
+                    newGetResult.append(element)
+                    break
+        return newGetResult
+
     return getResult
 
 

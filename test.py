@@ -1,11 +1,7 @@
-import json
-from pprint import pprint
+import re
+import urllib3
 
-# load file test1.json
-with open("test1.json") as f:
-    data = json.load(f)
 
-# print data
-InvoiceDetailList = data["InvoiceDetail"]
-pprint(InvoiceDetailList)
-print(sum([InvoiceDetail["FeeAmountPost"] for InvoiceDetail in InvoiceDetailList]))
+url = "?startIssueDate=20230425&BillMilestone=BM9a&InvoiceNo=g.sj!?8&endIssueDate=20230425"
+
+print(urllib3.util.parse_url(url).query.split("&"))
