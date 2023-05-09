@@ -86,6 +86,7 @@ class InvoiceDetailSchema(BaseModel):
     LBRatio: float
     FeeAmountPost: float
     Difference: float
+    Status: str
 
 
 class BillMasterSchema(BaseModel):
