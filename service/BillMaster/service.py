@@ -95,7 +95,9 @@ async def getInvoiceMasterAndInvoiceDetail(
         InvoiceDetailDataList = crudInvoiceDetail.get_all()
     elif "InvoiceNo" in urlCondition:
         InvoiceNo = dictCondition.pop("InvoiceNo")
-        InvoiceDetailDataList = crudInvoiceDetail.get_with_condition_and_like(dictCondition, InvoiceDetailDBModel.InvoiceNo, InvoiceNo)
+        InvoiceDetailDataList = crudInvoiceDetail.get_with_condition_and_like(
+            dictCondition, InvoiceDetailDBModel.InvoiceNo, InvoiceNo
+        )
     else:
         InvoiceDetailDataList = crudInvoiceDetail.get_with_condition(dictCondition)
 
@@ -138,24 +140,40 @@ async def checkInitBillMasterAndBillDetail(
     return alert_msg
 
 
-async def checkInitBillMasterAndBillDetailFunc(request_data):
+async def checkInitBillMasterAndBillDetailFunc(request_data, db):
     """
     {
-        "InvoiceMaster": [
+        "InvoiceDetail": [
             {...},
             {...},
             {...}
         ]
     }
     """
+    crudInvoiceMaster = CRUD(db, InvoiceMasterDBModel)
+
     PartyList = []
     SubmarineCableList = []
     WorkTitleList = []
-    InvoiceMasterDictDataList = request_data["InvoiceMaster"]
-    for InvoiceMasterDictData in InvoiceMasterDictDataList:
-        PartyList.append(InvoiceMasterDictData["PartyName"])
-        SubmarineCableList.append(InvoiceMasterDictData["SubmarineCable"])
-        WorkTitleList.append(InvoiceMasterDictData["WorkTitle"])
+    IsPro = []
+    InvoiceDetailDictDataList = request_data["InvoiceDetail"]
+
+    InvoiceMasterDataList = crudInvoiceMaster.get_value_if_in_a_list(
+        InvoiceMasterDBModel.InvMasterID,
+        list(
+            set(
+                [
+                    InvoiceDetailDictData["InvMasterID"]
+                    for InvoiceDetailDictData in InvoiceDetailDictDataList
+                ]
+            )
+        ),
+    )
+
+    for InvoiceDetailDictData in InvoiceDetailDictDataList:
+        PartyList.append(InvoiceDetailDictData["PartyName"])
+        SubmarineCableList.append(InvoiceDetailDictData["SubmarineCable"])
+        WorkTitleList.append(InvoiceDetailDictData["WorkTitle"])
 
     alert_msg = {}
     if len(set(PartyList)) > 1:
@@ -316,144 +334,208 @@ async def checkInitBillMasterAndBillDetailFunc(request_data):
 #     }
 
 
+# @router.post("/getBillMaster&BillDetailStream")
+# async def initBillMasterAndBillDetail(request: Request, db: Session = Depends(get_db)):
+#     """
+#     {
+#         "InvoiceMaster": [
+#             {...},
+#             {...},
+#             {...}
+#         ]
+#     }
+#     """
+#     request_data = await request.json()
+#     InvoiceMasterIdList = [
+#         InvoiceMasterDictData["InvMasterID"]
+#         for InvoiceMasterDictData in request_data["InvoiceMaster"]
+#     ]
+#
+#     crudInvoiceDetail = CRUD(db, InvoiceDetailDBModel)
+#     crudInvoiceMaster = CRUD(db, InvoiceMasterDBModel)
+#     crudBillMaster = CRUD(db, BillMasterDBModel)
+#     crudBillDetail = CRUD(db, BillDetailDBModel)
+#
+#     InvoiceMasterDataList = crudInvoiceMaster.get_value_if_in_a_list(
+#         InvoiceMasterDBModel.InvMasterID, InvoiceMasterIdList
+#     )
+#
+#     # check PartName or SubmarineCable or WorkTitle is not unique
+#     try:
+#         _ = await checkInitBillMasterAndBillDetailFunc(
+#             {
+#                 "InvoiceMaster": [
+#                     orm_to_dict(InvoiceMasterData)
+#                     for InvoiceMasterData in InvoiceMasterDataList
+#                 ]
+#             }
+#         )
+#     except Exception as e:
+#         print(e)
+#
+#     InvoiceDetailDataList = crudInvoiceDetail.get_value_if_in_a_list(
+#         InvoiceDetailDBModel.InvMasterID, InvoiceMasterIdList
+#     )
+#     InvoiceDetailDataList = list(
+#         filter(
+#             lambda x: x.PartyName == InvoiceMasterDataList[0].PartyName,
+#             InvoiceDetailDataList,
+#         )
+#     )
+#
+#     BillingNo = f"{InvoiceMasterDataList[0].SubmarineCable}-{InvoiceMasterDataList[0].WorkTitle}-CBP-{InvoiceMasterDataList[0].PartyName}-{convert_time_to_str(datetime.now()).replace('-', '').replace(' ', '').replace(':', '')[2:-2]}"
+#
+#     # change InvoiceMaster status to "MERGED"
+#     for InvoiceMasterData in InvoiceMasterDataList:
+#         InvoiceMasterDictData = orm_to_dict(InvoiceMasterData)
+#         InvoiceMasterDictData["Status"] = "MERGED"
+#
+#     # cal FeeAmountSum
+#     FeeAmountSum = 0
+#     for InvoiceDetailData in InvoiceDetailDataList:
+#         FeeAmountSum += InvoiceDetailData.FeeAmountPost
+#
+#     # init BillMaster
+#     BillMasterDictData = {
+#         "BillingNo": BillingNo,
+#         "SubmarineCable": InvoiceMasterDataList[0].SubmarineCable,
+#         "WorkTitle": InvoiceMasterDataList[0].WorkTitle,
+#         "PartyName": InvoiceMasterDataList[0].PartyName,
+#         "IssueDate": convert_time_to_str(datetime.now()),
+#         "DueDate": None,
+#         "FeeAmountSum": FeeAmountSum,
+#         "ReceivedAmountSum": 0,
+#         "IsPro": InvoiceMasterDataList[0].IsPro,
+#         "Status": "INITIAL",
+#     }
+#
+#     # init BillDetail
+#     BillDetailDataList = []
+#     for InvoiceDetailData in InvoiceDetailDataList:
+#         """
+#         BillDetailData keys:
+#         BillDetailID
+#         BillMasterID
+#         WKMasterID
+#         InvDetailID
+#         PartyName
+#         SupplierName
+#         SubmarineCable
+#         WorkTitle
+#         BillMilestone
+#         FeeItem
+#         OrgFeeAmount
+#         DedAmount(抵扣金額)
+#         FeeAmount(應收(會員繳)金額)
+#         ReceivedAmount(累計實收(會員繳)金額(初始為0))
+#         OverAmount(重溢繳金額 銷帳介面會自動計算帶出)
+#         ShortAmount(短繳金額 銷帳介面會自動計算帶出)
+#         ShortOverReason(短繳原因 自行輸入)
+#         WriteOffDate(銷帳日期)
+#         ReceiveDate(最新收款日期 自行輸入)
+#         Note
+#         ToCB(金額是否已存在 null or Done)
+#         Status
+#         """
+#         BillDetailDictData = {
+#             # "BillMasterID": BillMasterData.BillMasterID,
+#             "WKMasterID": InvoiceDetailData.WKMasterID,
+#             "InvDetailID": InvoiceDetailData.InvDetailID,
+#             "InvoiceNo": InvoiceDetailData.InvoiceNo,
+#             "PartyName": InvoiceDetailData.PartyName,
+#             "SupplierName": InvoiceDetailData.SupplierName,
+#             "SubmarineCable": InvoiceDetailData.SubmarineCable,
+#             "WorkTitle": InvoiceDetailData.WorkTitle,
+#             "BillMilestone": InvoiceDetailData.BillMilestone,
+#             "FeeItem": InvoiceDetailData.FeeItem,
+#             "OrgFeeAmount": InvoiceDetailData.FeeAmountPost,
+#             "DedAmount": 0,
+#             "FeeAmount": InvoiceDetailData.FeeAmountPost,
+#             "ReceivedAmount": 0,
+#             "OverAmount": 0,
+#             "ShortAmount": 0,
+#             "ShortOverReason": None,
+#             "WriteOffDate": None,
+#             "ReceiveDate": None,
+#             "Note": None,
+#             "ToCBAmount": 0,
+#             "Status": "INCOMPLETE",
+#         }
+#         # BillDetailData = crudBillDetail.create(BillDetailSchema(**BillDetailDictData))
+#         BillDetailDataList.append(BillDetailDictData)
+#
+#     return {
+#         "message": "success",
+#         "BillMaster": BillMasterDictData,
+#         "BillDetail": BillDetailDataList,
+#     }
+
+
+# 待抵扣階段(for 把getBillMaster&BillDetailStream產生的初始化帳單及帳單明細資料存入db)
+
+
 @router.post("/getBillMaster&BillDetailStream")
 async def initBillMasterAndBillDetail(request: Request, db: Session = Depends(get_db)):
     """
     {
-        "InvoiceMaster": [
+        "InvoiceDetail": [
             {...},
             {...},
-            {...}
+            {...},
         ]
     }
     """
-    request_data = await request.json()
-    InvoiceMasterIdList = [
-        InvoiceMasterDictData["InvMasterID"]
-        for InvoiceMasterDictData in request_data["InvoiceMaster"]
-    ]
-
     crudInvoiceDetail = CRUD(db, InvoiceDetailDBModel)
-    crudInvoiceMaster = CRUD(db, InvoiceMasterDBModel)
-    crudBillMaster = CRUD(db, BillMasterDBModel)
-    crudBillDetail = CRUD(db, BillDetailDBModel)
+    InvoiceDetailDictDataList = (await request.json())["InvoiceDetail"]
 
-    InvoiceMasterDataList = crudInvoiceMaster.get_value_if_in_a_list(
-        InvoiceMasterDBModel.InvMasterID, InvoiceMasterIdList
+    alert_msg = await checkInitBillMasterAndBillDetailFunc(
+        {"InvoiceDetail": InvoiceDetailDictDataList}
     )
 
-    # check PartName or SubmarineCable or WorkTitle is not unique
-    try:
-        _ = await checkInitBillMasterAndBillDetailFunc(
-            {
-                "InvoiceMaster": [
-                    orm_to_dict(InvoiceMasterData)
-                    for InvoiceMasterData in InvoiceMasterDataList
-                ]
-            }
-        )
-    except Exception as e:
-        print(e)
+    # 檢查合併的發票明細(InvoiceDetail)是否有不同的會員名稱、海纜名稱、海纜作業
+    if not alert_msg.get("isUnique"):
+        return alert_msg
 
     InvoiceDetailDataList = crudInvoiceDetail.get_value_if_in_a_list(
-        InvoiceDetailDBModel.InvMasterID, InvoiceMasterIdList
+        InvoiceDetailDBModel.InvDetailID,
+        [
+            InvoiceDetailDictData["InvDetailID"]
+            for InvoiceDetailDictData in InvoiceDetailDictDataList
+        ],
     )
-    InvoiceDetailDataList = list(
-        filter(
-            lambda x: x.PartyName == InvoiceMasterDataList[0].PartyName,
-            InvoiceDetailDataList,
-        )
-    )
+    BillingNo = f"{InvoiceDetailDataList[0].SubmarineCable}-\
+                  {InvoiceDetailDataList[0].WorkTitle}-\
+                  CBP-\
+                  {InvoiceDetailDataList[0].PartyName}-\
+                  {convert_time_to_str(datetime.now()).replace('-', '').replace(' ', '').replace(':', '')[2:-2]}"
 
-    BillingNo = f"{InvoiceMasterDataList[0].SubmarineCable}-{InvoiceMasterDataList[0].WorkTitle}-CBP-{InvoiceMasterDataList[0].PartyName}-{convert_time_to_str(datetime.now()).replace('-', '').replace(' ', '').replace(':', '')[2:-2]}"
-
-    # change InvoiceMaster status to "MERGED"
-    for InvoiceMasterData in InvoiceMasterDataList:
-        InvoiceMasterDictData = orm_to_dict(InvoiceMasterData)
-        InvoiceMasterDictData["Status"] = "MERGED"
-
-    # cal FeeAmountSum
-    FeeAmountSum = 0
+    # change InvoiceDetail status to "MERGED"
     for InvoiceDetailData in InvoiceDetailDataList:
-        FeeAmountSum += InvoiceDetailData.FeeAmountPost
+        InvoiceDetailDictData = deepcopy(orm_to_dict(InvoiceDetailData))
+        InvoiceDetailDictData["Status"] = "MERGED"
 
     # init BillMaster
     BillMasterDictData = {
         "BillingNo": BillingNo,
-        "SubmarineCable": InvoiceMasterDataList[0].SubmarineCable,
-        "WorkTitle": InvoiceMasterDataList[0].WorkTitle,
-        "PartyName": InvoiceMasterDataList[0].PartyName,
+        "SubmarineCable": InvoiceDetailDataList[0].SubmarineCable,
+        "WorkTitle": InvoiceDetailDataList[0].WorkTitle,
+        "PartyName": InvoiceDetailDataList[0].PartyName,
         "IssueDate": convert_time_to_str(datetime.now()),
         "DueDate": None,
-        "FeeAmountSum": FeeAmountSum,
+        "FeeAmountSum": sum(
+            [
+                InvoiceDetailData.FeeAmountPost
+                for InvoiceDetailData in InvoiceDetailDataList
+            ]
+        ),
         "ReceivedAmountSum": 0,
-        "IsPro": InvoiceMasterDataList[0].IsPro,
+        "IsPro": InvoiceDetailDataList[0].IsPro,
         "Status": "INITIAL",
     }
 
-    # init BillDetail
-    BillDetailDataList = []
-    for InvoiceDetailData in InvoiceDetailDataList:
-        """
-        BillDetailData keys:
-        BillDetailID
-        BillMasterID
-        WKMasterID
-        InvDetailID
-        PartyName
-        SupplierName
-        SubmarineCable
-        WorkTitle
-        BillMilestone
-        FeeItem
-        OrgFeeAmount
-        DedAmount(抵扣金額)
-        FeeAmount(應收(會員繳)金額)
-        ReceivedAmount(累計實收(會員繳)金額(初始為0))
-        OverAmount(重溢繳金額 銷帳介面會自動計算帶出)
-        ShortAmount(短繳金額 銷帳介面會自動計算帶出)
-        ShortOverReason(短繳原因 自行輸入)
-        WriteOffDate(銷帳日期)
-        ReceiveDate(最新收款日期 自行輸入)
-        Note
-        ToCB(金額是否已存在 null or Done)
-        Status
-        """
-        BillDetailDictData = {
-            # "BillMasterID": BillMasterData.BillMasterID,
-            "WKMasterID": InvoiceDetailData.WKMasterID,
-            "InvDetailID": InvoiceDetailData.InvDetailID,
-            "InvoiceNo": InvoiceDetailData.InvoiceNo,
-            "PartyName": InvoiceDetailData.PartyName,
-            "SupplierName": InvoiceDetailData.SupplierName,
-            "SubmarineCable": InvoiceDetailData.SubmarineCable,
-            "WorkTitle": InvoiceDetailData.WorkTitle,
-            "BillMilestone": InvoiceDetailData.BillMilestone,
-            "FeeItem": InvoiceDetailData.FeeItem,
-            "OrgFeeAmount": InvoiceDetailData.FeeAmountPost,
-            "DedAmount": 0,
-            "FeeAmount": InvoiceDetailData.FeeAmountPost,
-            "ReceivedAmount": 0,
-            "OverAmount": 0,
-            "ShortAmount": 0,
-            "ShortOverReason": None,
-            "WriteOffDate": None,
-            "ReceiveDate": None,
-            "Note": None,
-            "ToCBAmount": 0,
-            "Status": "INCOMPLETE",
-        }
-        # BillDetailData = crudBillDetail.create(BillDetailSchema(**BillDetailDictData))
-        BillDetailDataList.append(BillDetailDictData)
-
-    return {
-        "message": "success",
-        "BillMaster": BillMasterDictData,
-        "BillDetail": BillDetailDataList,
-    }
+    return
 
 
-# 待抵扣階段(for 把getBillMaster&BillDetailStream產生的初始化帳單及帳單明細資料存入db)
 @router.post("/initBillMaster&BillDetail")
 async def generateInitBillMasterAndBillDetail(
     request: Request, db: Session = Depends(get_db)
