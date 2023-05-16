@@ -154,7 +154,8 @@ async def initBillMasterAndBillDetail(request: Request, db: Session = Depends(ge
     }
     """
     crudInvoiceDetail = CRUD(db, InvoiceDetailDBModel)
-    InvoiceDetailDictDataList = (await request.json())["InvoiceDetail"]
+    crudInvoiceMaster = CRUD(db, InvoiceMasterDBModel)
+    InvoiceDetailDictDataList = (await request.json())["InvoiceMaster"]
 
     alert_msg = await checkInitBillMasterAndBillDetailFunc(
         {"InvoiceDetail": InvoiceDetailDictDataList}, db
@@ -171,11 +172,7 @@ async def initBillMasterAndBillDetail(request: Request, db: Session = Depends(ge
             for InvoiceDetailDictData in InvoiceDetailDictDataList
         ],
     )
-    BillingNo = f"{InvoiceDetailDataList[0].SubmarineCable}-\
-                  {InvoiceDetailDataList[0].WorkTitle}-\
-                  CBP-\
-                  {InvoiceDetailDataList[0].PartyName}-\
-                  {convert_time_to_str(datetime.now()).replace('-', '').replace(' ', '').replace(':', '')[2:-2]}"
+    BillingNo = f"{InvoiceDetailDataList[0].SubmarineCable}-{InvoiceDetailDataList[0].WorkTitle}-CBP-{InvoiceDetailDataList[0].PartyName}-{convert_time_to_str(datetime.now()).replace('-', '').replace(' ', '').replace(':', '')[2:-2]}"
 
     # change InvoiceDetail status to "MERGED"
     BillDetailDictDataList = list()
@@ -223,7 +220,9 @@ async def initBillMasterAndBillDetail(request: Request, db: Session = Depends(ge
             ]
         ),
         "ReceivedAmountSum": 0,
-        "IsPro": InvoiceDetailDataList[0].IsPro,
+        "IsPro": crudInvoiceMaster.get_value_if_in_a_list(
+            InvoiceMasterDBModel.InvMasterID, [InvoiceDetailDataList[0].InvMasterID]
+        )[0].IsPro,
         "Status": "INITIAL",
     }
 
@@ -243,7 +242,7 @@ async def generateInitBillMasterAndBillDetail(
     DueDate = request_data["DueDate"]
     crudBillMaster = CRUD(db, BillMasterDBModel)
     crudBillDetail = CRUD(db, BillDetailDBModel)
-    crudInvoiceMaster = CRUD(db, InvoiceMasterDBModel)
+    crudInvoiceDetail = CRUD(db, InvoiceDetailDBModel)
     BillMasterDictData = request_data["BillMaster"]
     BillDetailDataList = request_data["BillDetail"]
     PONo = request_data["PONo"]
@@ -274,23 +273,13 @@ async def generateInitBillMasterAndBillDetail(
             ]
         )
     )
-    InvoiceMasterDataList = crudInvoiceMaster.get_value_if_in_a_list(
+    InvoiceDetailDataList = crudInvoiceDetail.get_value_if_in_a_list(
         InvoiceDetailDBModel.InvDetailID, InvDetailIDList
     )
-    InvoiceMasterDataList = list(
-        filter(lambda x: x.PartyName == BillMasterData.PartyName, InvoiceMasterDataList)
-    )
-
-    newInvoiceMasterDataList = []
-    for InvoiceMasterData in InvoiceMasterDataList:
-        InvoiceMasterData.Status = "MERGED"
-        newInvoiceMasterDataList.append(InvoiceMasterData)
-
-    for oldInvoiceMasterData, newInvoiceMasterData in zip(
-        InvoiceMasterDataList, newInvoiceMasterDataList
-    ):
-        crudInvoiceMaster.update(
-            oldInvoiceMasterData, orm_to_dict(newInvoiceMasterData)
+    for i, newInvoiceDetailData in enumerate(InvoiceDetailDataList):
+        newInvoiceDetailData.Status = "MERGED"
+        _ = crudInvoiceDetail.update(
+            InvoiceDetailDataList[i], orm_to_dict(newInvoiceDetailData)
         )
 
     # 紀錄使用者操作log
@@ -344,6 +333,10 @@ async def getBillMasterAndBillDetail(urlCondition: str, db: Session = Depends(ge
             )
     else:
         dictCondition = convert_url_condition_to_dict(urlCondition)
+        if "Status" in dictCondition:
+            if "%" in dictCondition["Status"]:
+                dictCondition["Status"] = dictCondition["Status"].split("%")[0]
+        pprint(dictCondition)
         if "BillingNo" in urlCondition:
             BillingNo = dictCondition.pop("BillingNo")
         BillMasterDataList = crudBillMaster.get_with_condition(dictCondition)
@@ -1020,7 +1013,7 @@ async def returnBillMasterAfterDeduction(
 
                 newCBStatementDictData = {
                     "CBID": tempCBData.CBID,
-                    "BillingNo": None,  # TODO: Start from here
+                    "BillingNo": BillMasterData.BillingNo,
                 }
 
     return

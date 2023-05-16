@@ -98,7 +98,6 @@ class BillMasterDBModel(Base):
     BillMasterID      int NOT NULL AUTO_INCREMENT,
     BillingNo         varchar(64),
     PONo              varchar(32),
-    SupplierName      varchar(100),
     SubmarineCable    varchar(10),
     WorkTitle         varchar(50),
     PartyName         varchar(100),
@@ -119,7 +118,6 @@ class BillMasterDBModel(Base):
     BillingNo = Column(String(20))
     PONo = Column(String(20))
     SubmarineCable = Column(String(10))
-    SupplierName = Column(String(100))
     WorkTitle = Column(String(50))
     PartyName = Column(String(100))
     IssueDate = Column(String(20))
