@@ -9,9 +9,9 @@ CREATE TABLE InvoiceWKMaster
     IssueDate      datetime       DEFAULT NULL,
     DueDate        datetime       DEFAULT NULL,
     PartyName      varchar(100)   DEFAULT NULL,
-    IsPro          tinyint(1) DEFAULT NULL,
-    IsRecharge     tinyint(1) DEFAULT NULL,
-    IsLiability    tinyint(1) DEFAULT NULL,
+    IsPro          tinyint(1)     DEFAULT NULL,
+    IsRecharge     tinyint(1)     DEFAULT NULL,
+    IsLiability    tinyint(1)     DEFAULT NULL,
     TotalAmount    decimal(12, 2) DEFAULT NULL,
     PaidAmount     decimal(12, 2) DEFAULT NULL,
     CreateDate     datetime       DEFAULT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE InvoiceMaster
     ContractType   varchar(20)  DEFAULT NULL,
     IssueDate      datetime     DEFAULT NULL,
     DueDate        datetime     DEFAULT NULL,
-    IsPro          tinyint(1) DEFAULT NULL,
+    IsPro          tinyint(1)   DEFAULT NULL,
     Status         varchar(20)  DEFAULT NULL,
     PRIMARY KEY (InvMasterID)
 );
@@ -85,7 +85,7 @@ CREATE TABLE BillMaster
     FeeAmountSum      decimal(12, 2) DEFAULT NULL,
     ReceivedAmountSum decimal(12, 2) DEFAULT NULL,
     BankFees          decimal(12, 2) DEFAULT NULL,
-    IsPro             tinyint(1) DEFAULT NULL,
+    IsPro             tinyint(1)     DEFAULT NULL,
     Status            varchar(20)    DEFAULT NULL,
     URI               varchar(128),
     PRIMARY KEY (BillMasterID)
@@ -110,10 +110,8 @@ CREATE TABLE BillDetail
     ReceivedAmount  decimal(12, 2) DEFAULT NULL,
     OverAmount      decimal(12, 2) DEFAULT NULL,
     ShortAmount     decimal(12, 2) DEFAULT NULL,
-    ToCBAmount      decimal(12, 2),
-    DEFAULT NULL,
-    PaidAmount      decimal(12, 2),
-    DEFAULT NULL,
+    ToCBAmount      decimal(12, 2) DEFAULT NULL,
+    PaidAmount      decimal(12, 2) DEFAULT NULL,
     ShortOverReason varchar(128)   DEFAULT NULL,
     WriteOffDate    datetime       DEFAULT NULL,
     ReceiveDate     datetime       DEFAULT NULL,
@@ -463,16 +461,3 @@ CREATE TABLE Corporates
     BranchAddress  varchar(512) DEFAULT NULL,
     PRIMARY KEY (CorpID)
 );
-
-/*
-ALTER TABLE cbp_db.Parties 
-ADD COLUMN BankAcctName VARCHAR(100) NULL AFTER Tel,
-ADD COLUMN BankAcctNo VARCHAR(32) NULL AFTER BankAcctName,
-ADD COLUMN SWIFTCode  VARCHAR(32) NULL AFTER BankAcctNo,
-ADD COLUMN IBAN VARCHAR(32) NULL AFTER SWIFTCode,
-ADD COLUMN ACHNo VARCHAR(32) NULL AFTER IBAN,
-ADD COLUMN WireRouting VARCHAR(32) NULL AFTER ACHNo,
-ADD COLUMN BankName VARCHAR(100) NULL AFTER WireRouting,
-ADD COLUMN Branch VARCHAR(100) NULL AFTER BankName,
-ADD COLUMN BankAddress  VARCHAR(512) NULL AFTER Branch;
-*/
