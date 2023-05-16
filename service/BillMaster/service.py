@@ -178,9 +178,35 @@ async def initBillMasterAndBillDetail(request: Request, db: Session = Depends(ge
                   {convert_time_to_str(datetime.now()).replace('-', '').replace(' ', '').replace(':', '')[2:-2]}"
 
     # change InvoiceDetail status to "MERGED"
+    BillDetailDictDataList = list()
     for InvoiceDetailData in InvoiceDetailDataList:
         InvoiceDetailDictData = deepcopy(orm_to_dict(InvoiceDetailData))
         InvoiceDetailDictData["Status"] = "MERGED"
+        newBillDetailDictData = {
+            "WKMasterID": InvoiceDetailDictData["WKMasterID"],
+            "InvoiceNo": InvoiceDetailDictData["InvoiceNo"],
+            "InvDetailID": InvoiceDetailDictData["InvDetailID"],
+            "PartyName": InvoiceDetailDictData["PartyName"],
+            "SupplierName": InvoiceDetailDictData["SupplierName"],
+            "SubmarineCable": InvoiceDetailDictData["SubmarineCable"],
+            "WorkTitle": InvoiceDetailDictData["WorkTitle"],
+            "BillMilestone": InvoiceDetailDictData["BillMilestone"],
+            "FeeItem": InvoiceDetailDictData["FeeItem"],
+            "OrgFeeAmount": InvoiceDetailDictData["FeeAmountPost"],
+            "DedAmount": 0,
+            "FeeAmount": InvoiceDetailDictData["FeeAmountPost"],
+            "ReceivedAmount": 0,
+            "OverAmount": 0,
+            "ShortAmount": 0,
+            "ToCBAmount": 0,
+            "PaidAmount": 0,
+            "ShortOverReason": "",
+            "WriteOffDate": None,
+            "ReceiveDate": None,
+            "Note": "",
+            "Status": "",
+        }
+        BillDetailDictDataList.append(newBillDetailDictData)
 
     # init BillMaster
     BillMasterDictData = {
@@ -201,7 +227,11 @@ async def initBillMasterAndBillDetail(request: Request, db: Session = Depends(ge
         "Status": "INITIAL",
     }
 
-    return
+    return {
+        "message": "success",
+        "BillMaster": BillMasterDictData,
+        "BillDetail": BillDetailDictDataList,
+    }
 
 
 # 待抵扣階段(for 把getBillMaster&BillDetailStream產生的初始化帳單及帳單明細資料存入db)

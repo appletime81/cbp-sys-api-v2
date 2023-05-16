@@ -152,6 +152,7 @@ class BillDetailDBModel(Base):
     OverAmount      decimal(12, 2),
     ShortAmount     decimal(12, 2),
     ToCBAmount      decimal(12, 2),
+    PaidAmount      decimal(12, 2),
     ShortOverReason varchar(128),
     WriteOffDate    datetime,
     ReceiveDate     datetime,
@@ -178,6 +179,7 @@ class BillDetailDBModel(Base):
     OverAmount = Column(Float)
     ShortAmount = Column(Float)
     ToCBAmount = Column(Float)
+    PaidAmount = Column(Float)
     ShortOverReason = Column(String(128))
     WriteOffDate = Column(String(20))
     ReceiveDate = Column(String(20))

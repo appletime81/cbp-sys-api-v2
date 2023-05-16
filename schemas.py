@@ -143,6 +143,7 @@ class BillDetailSchema(BaseModel):
     ReceiveDate: Optional[datetime]
     Note: Optional[str]
     ToCBAmount: Optional[float]
+    PaidAmount: Optional[float]
     Status: str
 
 
