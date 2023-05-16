@@ -93,9 +93,3 @@ async def paymentForInvWKMaster(
     db: Session = Depends(get_db),
 ):
     pass
-
-
-def test():
-    df = pd.read_excel("test.xlsx")
-    # if the "PP_NAME" column's value is string called "FALSE", it will be converted to False
-    df["PP_NAME"] = df["PP_NAME"].apply(lambda x: False if x == "FALSE" else True)
