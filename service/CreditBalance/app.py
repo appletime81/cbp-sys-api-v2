@@ -342,14 +342,14 @@ async def generateReport(
         "Credit": CreditList,
         "Balance": BalanceList,
     }
-
+    df = pd.DataFrame(dict_data)
     if (await request.json())["Download"]:
         df = pd.DataFrame(dict_data)
 
         # 產製CB歷程
         fileResponse = generate_credit_balance_report(df, CBData.PartyName)
         return fileResponse
-    return dict_data
+    return df.to_dict(orient="records")
 
 
 @router.post("/CreditBalance", status_code=status.HTTP_201_CREATED)

@@ -155,7 +155,7 @@ async def initBillMasterAndBillDetail(request: Request, db: Session = Depends(ge
     """
     crudInvoiceDetail = CRUD(db, InvoiceDetailDBModel)
     crudInvoiceMaster = CRUD(db, InvoiceMasterDBModel)
-    InvoiceDetailDictDataList = (await request.json())["InvoiceMaster"]
+    InvoiceDetailDictDataList = (await request.json())["InvoiceDetail"]
 
     alert_msg = await checkInitBillMasterAndBillDetailFunc(
         {"InvoiceDetail": InvoiceDetailDictDataList}, db

@@ -164,3 +164,11 @@
 2023-05-17 03:29:25.187523: Eva Change initial BillMaster, BillingNo is 02CO-CI2305170309
 --------------------------------------------------
 2023-05-17 03:40:51.507728: Eva Change initial BillMaster, BillingNo is 02CO-CI2305170340
+--------------------------------------------------
+2023-05-17 17:10:37.491235: Eva Change initial BillMaster, BillingNo is 02CO-CI2305171710
+--------------------------------------------------
+2023-05-17 17:12:15.545280: Eva Change downloaded 02CO-CI2305171710.docx, title is SJC2 Cable Network  Central Billing Party Invoice, logo is 1
+--------------------------------------------------
+2023-05-17 17:13:01.043283: Eva Change downloaded 02CO-CI2305171710.docx, title is SJC2 Cable Network  Central Billing Party Invoice, logo is 2
+--------------------------------------------------
+2023-05-17 17:18:46.296609: Eva Change added CB: {'InvoiceNo': 'test-invoice-no', 'CBType': '其他', 'SubmarineCable': 'SJC2', 'BillMilestone': None, 'PartyName': 'CHT', 'CreateDate': '2023-05-17T17:18:46', 'LastUpdDate': None, 'BLDetailID': None, 'BillingNo': 'test-billing-no', 'CBID': 1, 'WorkTitle': 'Construction', 'CurrAmount': 200000.0, 'CNNo': None, 'Note': 'test-abstract'}
