@@ -16,80 +16,10 @@ router = APIRouter()
 
 
 # ------------------------------- 付款功能 -------------------------------
-@router.get("/payment/datastream")
-async def getPaymentDatastream(
+@router.get("/payment/{urlCondition}")
+async def getPaymentData(
     request: Request,
     db: Session = Depends(get_db),
 ):
-    """
-    [
-        {
-            "InvoiceWKMaster": {...},
-            "InvoiceDetail": {...},
-            "BillDetail": {...}
-        },
-        {...},
-    ]
-    """
-    getResult = []
-    crudInvoiceWKMaster = CRUD(db, InvoiceWKMasterDBModel)
-    crudInvoiceWKDetail = CRUD(db, InvoiceWKDetailDBModel)
-    crudInvoiceMaster = CRUD(db, InvoiceMasterDBModel)
-    crudInvoiceDetail = CRUD(db, InvoiceDetailDBModel)
-    crudBillMaster = CRUD(db, BillMasterDBModel)
-    crudBillDetail = CRUD(db, BillDetailDBModel)
-
-    InvoiceWKMasterDataList = crudInvoiceWKMaster.get_with_condition(
-        {"Status": "PAYING"}
-    )
-    for InvoiceWKMasterData in InvoiceWKMasterDataList:
-        # ------------------------ 抓取 InvoiceDetail ------------------------
-        InvoiceDetailDataList = crudInvoiceDetail.get_with_condition(
-            {"WKMasterID": InvoiceWKMasterData.WKMasterID}
-        )
-        # -------------------------------------------------------------------
-
-        for InvoiceDetailData in InvoiceDetailDataList:
-            # ------------------------ 抓取 BillDetail ------------------------
-            BillDetailDataList = crudBillDetail.get_with_condition(
-                {"InvDetailID": InvoiceDetailData.InvDetailID}
-            )
-            # ----------------------------------------------------------------
-            if BillDetailDataList:
-                BillDetailData = BillDetailDataList[0]
-                data = {
-                    "InvoiceWKMaster": InvoiceWKMasterData,
-                    "InvoiceDetail": InvoiceDetailData,
-                    "BillDetail": BillDetailData,
-                }
-
-                getResult.append(data)
-
-    # ------------------------ test part ------------------------
-    df_dict = {}
-    for data in getResult:
-        for k, v in orm_to_dict(data["InvoiceWKMaster"]).items():
-            if "InvoiceWKMaster_" + k not in df_dict:
-                df_dict["InvoiceWKMaster_" + k] = []
-            df_dict["InvoiceWKMaster_" + k].append(v)
-        for k, v in orm_to_dict(data["InvoiceDetail"]).items():
-            if "InvoiceDetail_" + k not in df_dict:
-                df_dict["InvoiceDetail_" + k] = []
-            df_dict["InvoiceDetail_" + k].append(v)
-        for k, v in orm_to_dict(data["BillDetail"]).items():
-            if "BillDetail_" + k not in df_dict:
-                df_dict["BillDetail_" + k] = []
-            df_dict["BillDetail_" + k].append(v)
-
-    df = pd.DataFrame(df_dict)
-    df.to_excel("test.xlsx", index=False)
-
-    return getResult
-
-
-@router.post("/InvoiceWKMaster/payment")
-async def paymentForInvWKMaster(
-    request: Request,
-    db: Session = Depends(get_db),
-):
+    # the datas will be shown on the frontend page
     pass
