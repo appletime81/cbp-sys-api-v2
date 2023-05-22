@@ -78,6 +78,7 @@ async def checkInitBillMasterAndBillDetail(
     PartyList = []
     SubmarineCableList = []
     WorkTitleList = []
+    return
 
 
 async def checkInitBillMasterAndBillDetailFunc(request_data, db):
@@ -1014,7 +1015,17 @@ async def returnBillMasterAfterDeduction(
                 newCBStatementDictData = {
                     "CBID": tempCBData.CBID,
                     "BillingNo": BillMasterData.BillingNo,
+                    "BLDetailID": BillDetailData.BillDetailID,
+                    "TransItem": "RETURN",
+                    "OrgAmount": tempCBData.Amount,
+                    "TransAmount": 0 - totalTransAmount,
+                    "Note": "",
+                    "CreateDate": convert_time_to_str(datetime.now()),
                 }
+
+                newCBStatementPydanticData = dict_to_pydantic(
+                    CreditBalanceStatementSchema, newCBStatementDictData
+                )
 
     return
 
