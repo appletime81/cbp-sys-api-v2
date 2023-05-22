@@ -1,0 +1,80 @@
+{
+    "CB": [
+        {
+            "InvoiceNo": "test-invoice-no",
+            "CBType": "\u5176\u4ed6",
+            "SubmarineCable": "SJC2",
+            "BillMilestone": null,
+            "PartyName": "CHT",
+            "CreateDate": "2023-05-17T17:18:46",
+            "LastUpdDate": "2023-05-22 16:54:08",
+            "BillingNo": "test-billing-no",
+            "CBID": 1,
+            "BLDetailID": null,
+            "WorkTitle": "Construction",
+            "CurrAmount": 200000.0,
+            "CNNo": null,
+            "Note": "test-abstract"
+        }
+    ],
+    "CBStatement": [
+        {
+            "CBID": 1,
+            "BillingNo": "02CO-CI2305171710",
+            "BLDetailID": 2,
+            "TransItem": "RETURN",
+            "OrgAmount": 199929.5,
+            "TransAmount": 30.0,
+            "Note": "",
+            "CreateDate": "2023-05-22 16:54:08"
+        },
+        {
+            "CBID": 1,
+            "BillingNo": "02CO-CI2305171710",
+            "BLDetailID": 1,
+            "TransItem": "RETURN",
+            "OrgAmount": 199959.5,
+            "TransAmount": 40.5,
+            "Note": "",
+            "CreateDate": "2023-05-22 16:54:08"
+        }
+    ],
+    "InvoiceDetail": [
+        {
+            "InvMasterID": 1,
+            "WKDetailID": 1,
+            "InvDetailID": 21,
+            "PartyName": "CHT",
+            "SubmarineCable": "SJC2",
+            "BillMilestone": "BM9a",
+            "FeeItem": "BM9a Sea cable manufactured (except 8.5km spare cable))- Equipment",
+            "LBRatio": 7.1428571429,
+            "Difference": 0.0,
+            "InvoiceNo": "DT0170168-1",
+            "WKMasterID": 1,
+            "SupplierName": "NEC",
+            "WorkTitle": "Construction",
+            "FeeAmountPre": 1288822.32,
+            "FeeAmountPost": 92058.74,
+            "Status": "MERGED"
+        },
+        {
+            "InvMasterID": 1,
+            "WKDetailID": 2,
+            "InvDetailID": 22,
+            "PartyName": "CHT",
+            "SubmarineCable": "SJC2",
+            "BillMilestone": "BM9a",
+            "FeeItem": "BM9a Sea cable manufactured (except 8.5km spare cable))- Service",
+            "LBRatio": 7.1428571429,
+            "Difference": 0.0,
+            "InvoiceNo": "DT0170168-1",
+            "WKMasterID": 1,
+            "SupplierName": "NEC",
+            "WorkTitle": "Construction",
+            "FeeAmountPre": 1178227.94,
+            "FeeAmountPost": 84159.14,
+            "Status": "MERGED"
+        }
+    ]
+}

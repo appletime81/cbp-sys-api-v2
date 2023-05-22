@@ -27,6 +27,7 @@ async def getInvoiceMasterAndInvoiceDetail(
 
     if urlCondition != "all":
         dictCondition = convert_url_condition_to_dict(urlCondition)
+    pprint(dictCondition)
 
     if urlCondition == "all":
         InvoiceDetailDataList = crudInvoiceDetail.get_all()
@@ -37,6 +38,10 @@ async def getInvoiceMasterAndInvoiceDetail(
         )
     else:
         InvoiceDetailDataList = crudInvoiceDetail.get_with_condition(dictCondition)
+
+    # 如果為空值，則直接回傳空值
+    if not InvoiceDetailDataList:
+        return InvoiceDetailDataList
 
     InvoiceMasterData = crudInvoiceMaster.get_value_if_in_a_list(
         InvoiceMasterDBModel.InvMasterID,
@@ -961,6 +966,47 @@ async def getBillMasterDraftStream(
 
 
 # region: ------------------------------ 退回及作廢 ------------------------------
+
+
+# 未抵扣退回
+@router.post("/returnBillMaster/beforeduction")
+async def returnBillMasterBeforeDeduction(
+    request: Request, db: Session = Depends(get_db)
+):
+    """
+    input data:
+    {
+        "BillMasterID": int,
+        "Note": str
+    }
+    """
+    crudInvoiceDetail = CRUD(db, InvoiceDetailDBModel)
+    crudBillMaster = CRUD(db, BillMasterDBModel)
+    crudBillDetail = CRUD(db, BillDetailDBModel)
+
+    BillMasterID = (await request.json())["BillMasterID"]
+    BillDetailDataList = crudBillDetail.get_with_condition(
+        {"BillMasterID": BillMasterID}
+    )
+
+    InvDetailIDList = list(
+        set([BillDetailData.InvDetailID for BillDetailData in BillDetailDataList])
+    )
+
+    InvoiceDetailDataList = crudInvoiceDetail.get_value_if_in_a_list(
+        InvoiceDetailDBModel.InvDetailID, InvDetailIDList
+    )
+
+    # remove BillMaster
+    crudBillMaster.remove(BillMasterID)
+
+    # remove BillDetail
+    for BillDetailData in BillDetailDataList:
+        crudBillDetail.remove(BillDetailData.BillDetailID)
+
+    return {"message": "success", "InvoiceDetail": InvoiceDetailDataList}
+
+
 # 已抵扣退回
 @router.post("/returnBillMaster/afterdeduction")
 async def returnBillMasterAfterDeduction(
@@ -969,24 +1015,35 @@ async def returnBillMasterAfterDeduction(
     """
     input data
     {
-        "BillMasterID": int
+        "BillMasterID": int,
+        "Note": str
     }
     """
+
     dictCondition = await request.json()
+    Note = None
+    if dictCondition.get("Note"):
+        Note = dictCondition.pop("Note")
     crudBillMaster = CRUD(db, BillMasterDBModel)
     crudBillDetail = CRUD(db, BillDetailDBModel)
+    crudInvoiceDetail = CRUD(db, InvoiceDetailDBModel)
     crudCreditBalance = CRUD(db, CreditBalanceDBModel)
     crudCreditBalanceStatement = CRUD(db, CreditBalanceStatementDBModel)
 
     BillMasterData = crudBillMaster.get_with_condition(dictCondition)[0]
     BillDetailDataList = crudBillDetail.get_with_condition(dictCondition)
+    BillDetailDataList.sort(key=lambda x: x.BillDetailID, reverse=True)
 
+    # =============================================
+    # 處理CreditBalanceStatement資料               #
+    # =============================================
+    newCBStatementDictDataList = []
+    CBStatementCreateDate = convert_time_to_str(datetime.now())
     for BillDetailData in BillDetailDataList:
         # 抓取對應BillDetail的CreditBalanceStatement
         tempCBStatementDataList = crudCreditBalanceStatement.get_with_condition(
             {"BLDetailID": BillDetailData.BillDetailID}
         )
-
         # 抓取對應BillDetail的CreditBalance主檔(如果有找到該BillDetail對應的CreditBalanceStatement)
         if tempCBStatementDataList:
             tempCBIDList = list(
@@ -1000,34 +1057,72 @@ async def returnBillMasterAfterDeduction(
             tempCBDataList = crudCreditBalance.get_value_if_in_a_list(
                 CreditBalanceDBModel.CBID, tempCBIDList
             )
-
             for tempCBData in tempCBDataList:
+                # 處理CreditBalanceStatement資料
                 filterCBStatementDataList = list(
                     filter(lambda x: x.CBID == tempCBData.CBID, tempCBStatementDataList)
                 )
-                totalTransAmount = sum(
-                    [
-                        filterCBStatementData.TransAmount
-                        for filterCBStatementData in filterCBStatementDataList
-                    ]
-                )
+                filterCBStatementDataList.sort(key=lambda x: x.CBStateID, reverse=True)
+                for filterCBStatementData in filterCBStatementDataList:
+                    newCBStatementDictData = {
+                        "CBID": filterCBStatementData.CBID,
+                        "BillingNo": filterCBStatementData.BillingNo,
+                        "BLDetailID": filterCBStatementData.BLDetailID,
+                        "TransItem": "RETURN",
+                        "OrgAmount": filterCBStatementData.OrgAmount
+                        + filterCBStatementData.TransAmount,
+                        "TransAmount": 0 - filterCBStatementData.TransAmount,
+                        "Note": "",
+                        "CreateDate": CBStatementCreateDate,
+                    }
+                    if Note:
+                        newCBStatementDictData["Note"] = Note
+                    newCBStatementDictDataList.append(newCBStatementDictData)
 
-                newCBStatementDictData = {
-                    "CBID": tempCBData.CBID,
-                    "BillingNo": BillMasterData.BillingNo,
-                    "BLDetailID": BillDetailData.BillDetailID,
-                    "TransItem": "RETURN",
-                    "OrgAmount": tempCBData.Amount,
-                    "TransAmount": 0 - totalTransAmount,
-                    "Note": "",
-                    "CreateDate": convert_time_to_str(datetime.now()),
-                }
+    # =============================================
+    # 處理CreditBalance資料                        #
+    # =============================================
+    df_CBStatement = pd.DataFrame.from_records(newCBStatementDictDataList)
+    df_CBStatement = df_CBStatement[["CBID", "TransAmount"]]
+    df_CBStatement_groupby = df_CBStatement.groupby(["CBID"]).sum(["TransAmount"])
+    df_CBStatement_groupby = df_CBStatement_groupby.reset_index()  # reset index
 
-                newCBStatementPydanticData = dict_to_pydantic(
-                    CreditBalanceStatementSchema, newCBStatementDictData
-                )
+    newCBDictDataList = []
+    for i in range(len(df_CBStatement_groupby)):
+        CBData = crudCreditBalance.get_with_condition(
+            {"CBID": df_CBStatement_groupby.iloc[i]["CBID"]}
+        )[0]
+        CBDictData = orm_to_dict(deepcopy(CBData))
+        CBDictData["CurrAmount"] = (
+            CBDictData["CurrAmount"] + df_CBStatement_groupby.iloc[i]["TransAmount"]
+        )
+        CBDictData["LastUpdDate"] = CBStatementCreateDate
+        if Note:
+            CBDictData["Note"] = Note
+        newCBDictDataList.append(CBDictData)
 
-    return
+    # =============================================
+    # 刪除BillDetail資料                           #
+    # =============================================
+    InvDetailIDList = list()
+    for BillDetailData in BillDetailDataList:
+        # crudBillDetail.remove(BillDetailData.BillDetailID)
+        InvDetailIDList.append(BillDetailData.InvDetailID)
+    InvDetailIDList = sorted(list(set(InvDetailIDList)))
+    InvoiceDetailDataList = crudInvoiceDetail.get_value_if_in_a_list(
+        InvoiceDetailDBModel.InvDetailID, InvDetailIDList
+    )
+
+    # =============================================
+    # 刪除BillMaster資料                           #
+    # =============================================
+    # crudBillMaster.remove(BillMasterData.BillMasterID)
+
+    return {
+        "CB": newCBDictDataList,
+        "CBStatement": newCBStatementDictDataList,
+        "InvoiceDetail": InvoiceDetailDataList,
+    }
 
 
 # endregion: -------------------------------------------------------------------
