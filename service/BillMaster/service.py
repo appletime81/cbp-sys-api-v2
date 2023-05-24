@@ -592,6 +592,7 @@ async def getBillMasterAndBillDetailWithCBData(
 
     # ---------- get BillMaster ----------
     BillingNo = None
+    dictCondition = None
     if urlCondition != "all":
         dictCondition = convert_url_condition_to_dict(urlCondition)
         if "BillingNo" in dictCondition:
@@ -1006,17 +1007,102 @@ async def returnBillMasterBeforeDeduction(
         InvoiceDetailDBModel.InvDetailID, InvDetailIDList
     )
 
-    # remove BillMaster
+    # =============================================
+    # 刪除BillMaster
+    # =============================================
     crudBillMaster.remove(BillMasterID)
 
-    # remove BillDetail
+    # =============================================
+    # 刪除BillDetail
+    # =============================================
     for BillDetailData in BillDetailDataList:
         crudBillDetail.remove(BillDetailData.BillDetailID)
 
-    return {"message": "success", "InvoiceDetail": InvoiceDetailDataList}
+    # =============================================
+    # 更改InvoiceDetail狀態
+    # =============================================
+    newInvoiceDetailDictDataList = []
+    for InvoiceDetailData in InvoiceDetailDataList:
+        newInvoiceDetailDictData = orm_to_dict(deepcopy(InvoiceDetailData))
+        newInvoiceDetailDictData["Status"] = "TO_MERGE"
+        newInvoiceDetailDictDataList.append(newInvoiceDetailDictData)
+
+    newInvoiceDetailDataList = []
+    for newInvoiceDetailDictData, oldInvoiceDetailData in zip(
+        newInvoiceDetailDictDataList, InvoiceDetailDataList
+    ):
+        newInvoiceDetailData = crudInvoiceDetail.update(
+            oldInvoiceDetailData, newInvoiceDetailDictData
+        )
+        newInvoiceDetailDataList.append(newInvoiceDetailData)
+
+    return {"message": "success", "InvoiceDetail": newInvoiceDetailDataList}
 
 
-# 已抵扣退回
+# 未抵扣作廢
+@router.post("/invalidBillMaster/beforededuction")
+async def invlaidBillMasterBeforeDeduction(
+    request: Request, db: Session = Depends(get_db)
+):
+    """
+    input data:
+    {
+        "BillMasterID": int,
+        "Note": str
+    }
+    """
+    crudBillMaster = CRUD(db, BillMasterDBModel)
+    crudBillDetail = CRUD(db, BillDetailDBModel)
+
+    BillMasterID = (await request.json())["BillMasterID"]
+    Note = None
+    if "Note" in (await request.json()).keys():
+        Note = (await request.json())["Note"]
+
+    BillMasterData = crudBillMaster.get_with_condition({"BillMasterID": BillMasterID})[
+        0
+    ]
+    BillDetailDataList = crudBillDetail.get_with_condition(
+        {"BillMasterID": BillMasterID}
+    )
+
+    # =============================================
+    # 變更BillMaster狀態
+    # =============================================
+    newBillMasterData = deepcopy(BillMasterData)
+    newBillMasterData.Status = "INVALID"
+    newBillMasterData = crudBillMaster.update(
+        BillMasterData, orm_to_dict(newBillMasterData)
+    )
+
+    # =============================================
+    # 變更BillDetail狀態
+    # =============================================
+    newBillDetailDictDataList = []
+    for BillDetailData in BillDetailDataList:
+        newBillDetailData = deepcopy(BillDetailData)
+        newBillDetailData.Status = "INVALID"
+        if Note:
+            newBillDetailData.Note = Note
+        newBillDetailDictDataList.append(orm_to_dict(newBillDetailData))
+
+    newBillDetailDataList = []
+    for newBillDetailDictData, oldBillDetailData in zip(
+        newBillDetailDictDataList, BillDetailDataList
+    ):
+        newBillDetailData = crudBillDetail.update(
+            oldBillDetailData, newBillDetailDictData
+        )
+        newBillDetailDataList.append(newBillDetailData)
+
+    return {
+        "message": "success",
+        "BillMaster": newBillMasterData,
+        "BillDetail": newBillDetailDataList,
+    }
+
+
+# 已抵扣退回至未抵扣
 @router.post("/returnBillMaster/afterdeduction")
 async def returnBillMasterAfterDeduction(
     request: Request, db: Session = Depends(get_db)
@@ -1111,82 +1197,57 @@ async def returnBillMasterAfterDeduction(
         newCBDictDataList.append(CBDictData)
 
     # =============================================
-    # 刪除BillDetail資料                           #
+    # 更新CreditBalance資料                        #
     # =============================================
-    InvDetailIDList = list()
-    for BillDetailData in BillDetailDataList:
-        # crudBillDetail.remove(BillDetailData.BillDetailID)
-        InvDetailIDList.append(BillDetailData.InvDetailID)
-    InvDetailIDList = sorted(list(set(InvDetailIDList)))
-    InvoiceDetailDataList = crudInvoiceDetail.get_value_if_in_a_list(
-        InvoiceDetailDBModel.InvDetailID, InvDetailIDList
-    )
-
-    # =============================================
-    # 刪除BillMaster資料                           #
-    # =============================================
-    # crudBillMaster.remove(BillMasterData.BillMasterID)
-
-    return {
-        "CB": newCBDictDataList,
-        "CBStatement": newCBStatementDictDataList,
-        "InvoiceDetail": InvoiceDetailDataList,
-    }
-
-
-# 未抵扣作廢
-@router.post("/invalidBillMaster/beforededuction")
-async def invlaidBillMasterBeforeDeduction(
-    request: Request, db: Session = Depends(get_db)
-):
-    """
-    input data:
-    {
-        "BillMasterID": int,
-        "Note": str
-    }
-    """
-    crudBillMaster = CRUD(db, BillMasterDBModel)
-    crudBillDetail = CRUD(db, BillDetailDBModel)
-
-    BillMasterID = (await request.json())["BillMasterID"]
-    Note = None
-    if "Note" in (await request.json()).keys():
-        Note = (await request.json())["Note"]
-
-    BillMasterData = crudBillMaster.get_with_condition({"BillMasterID": BillMasterID})[
-        0
-    ]
-    BillDetailDataList = crudBillDetail.get_with_condition(
-        {"BillMasterID": BillMasterID}
-    )
+    newCBDataList = []
+    for newCBDictData in newCBDictDataList:
+        oldCBData = crudCreditBalance.get_with_condition(
+            {"CBID": newCBDictData["CBID"]}
+        )[0]
+        newCBData = crudCreditBalance.update(oldCBData, newCBDictData)
+        newCBDataList.append(newCBData)
 
     # =============================================
-    # 變更BillMaster狀態
+    # 更新CreditBalanceStatement資料               #
     # =============================================
-    newBillMasterData = deepcopy(BillMasterData)
-    newBillMasterData.Status = "INVALID"
-    if Note:
-        newBillMasterData.Note = Note
-    crudBillMaster.update(BillMasterID, orm_to_dict(newBillMasterData))
+    newCBStatementDataList = []
+    for newCBStatementDictData in newCBStatementDictDataList:
+        newCBStatementPydanticData = dict_to_pydantic(
+            CreditBalanceStatementSchema, newCBStatementDictData
+        )
+        newCBStatementData = crudCreditBalanceStatement.create(
+            newCBStatementPydanticData
+        )
+        newCBStatementDataList.append(newCBStatementData)
 
     # =============================================
-    # 變更BillDetail狀態
+    # 更改BillDetail資料                           #
     # =============================================
-    newBillDetailDictDataList = []
+    newBillDetailDataList = []
     for BillDetailData in BillDetailDataList:
         newBillDetailData = deepcopy(BillDetailData)
-        newBillDetailData.Status = "INVALID"
-        if Note:
-            newBillDetailData.Note = Note
-        newBillDetailDictDataList.append(orm_to_dict(newBillDetailData))
+        newBillDetailData.DedAmount = 0
+        newBillDetailData.FeeAmount = newBillDetailData.OrgFeeAmount
+        newBillDetailData = crudBillDetail.update(
+            BillDetailData, orm_to_dict(newBillDetailData)
+        )
+        newBillDetailDataList.append(newBillDetailData)
 
-    for BillDetailData, newBillDetailDictData in zip(
-        BillDetailDataList, newBillDetailDictDataList
-    ):
-        crudBillDetail.update(BillDetailData, newBillDetailDictData)
+    # =============================================
+    # 更改BillMaster資料                           #
+    # =============================================
+    newBillMasterData = deepcopy(BillMasterData)
+    newBillMasterData.Status = "INITIAL"
+    newBillMasterData = crudBillMaster.update(
+        BillMasterData, orm_to_dict(newBillMasterData)
+    )
 
-    return {"message": "success"}
+    return {
+        "CB": newCBDataList,
+        "CBStatement": newCBStatementDataList,
+        "BillMaster": newBillMasterData,
+        "BillDetail": newBillDetailDataList,
+    }
 
 
 @router.post("/invalidBillMaster/afterdeduction")
@@ -1300,61 +1361,6 @@ async def invlaidBillMasterAfterDeduction(
 
 
 # region: ----------------------------------- 銷帳 -----------------------------------
-
-
-# @router.post("/BillMaster&BillDetail/toWriteOff")
-# async def billWriteOff(request: Request, db: Session = Depends(get_db)):
-#     """
-#     {
-#         "BillMaster": {...},
-#         "BillDetail": [
-#             {...},
-#             {...}
-#         ]
-#     }
-#     """
-#     BillMasterDictData = (await request.json())["BillMaster"]
-#     BillDetailDictDataList = (await request.json())["BillDetail"]
-#
-#     crudBillMaster = CRUD(db, BillMasterDBModel)
-#     crudBillDetail = CRUD(db, BillDetailDBModel)
-#     crudCreditBalance = CRUD(db, CreditBalanceDBModel)
-#     crudCreditBalanceStatement = CRUD(db, CreditBalanceStatementDBModel)
-#
-#     newBillDetailDataList = []
-#
-#     for BillDetailDictData in BillDetailDictDataList:
-#         oldBillDetailData = crudBillDetail.get_with_condition(
-#             {"BillDetailID": BillDetailDictData["BillDetailID"]}
-#         )[0]
-#
-#         if BillMasterDictData["Status"] == "COMPLETE":
-#             BillDetailDictData["WriteOffDate"] = convert_time_to_str(datetime.now())
-#
-#         newBillDetailData = crudBillDetail.update(oldBillDetailData, BillDetailDictData)
-#         newBillDetailDataList.append(newBillDetailData)
-#
-#     oldBillMasterData = crudBillMaster.get_with_condition(
-#         {"BillMasterID": BillMasterDictData["BillMasterID"]}
-#     )[0]
-#     ReceivedAmountSum = sum(
-#         [
-#             newBillDetailData.ReceivedAmount
-#             for newBillDetailData in newBillDetailDataList
-#         ]
-#     )
-#     BillMasterDictData["ReceivedAmountSum"] = ReceivedAmountSum
-#
-#     newBillMasterData = crudBillMaster.update(oldBillMasterData, BillMasterDictData)
-#
-#     # ---------------------------- 溢繳 -------------------------------
-#     for newBillDetailData in newBillDetailDataList:
-#         if newBillDetailData.OverAmount > 0:
-#             newCBDictData = {
-#                 "BLDetailID": newBillDetailData.BillDetailID,
-#             }
-#
-#     return
 
 
 @router.post("/BillMaster&BillDetail/toWriteOff")
