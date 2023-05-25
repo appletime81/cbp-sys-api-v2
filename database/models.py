@@ -80,7 +80,7 @@ class InvoiceDetailDBModel(Base):
     WKDetailID = Column(Integer)
     InvoiceNo = Column(String(20))
     PartyName = Column(String(100))
-    SupplierName = Column(String(100.0))
+    SupplierName = Column(String(100))
     SubmarineCable = Column(String(10))
     WorkTitle = Column(String(50))
     BillMilestone = Column(String(20))
