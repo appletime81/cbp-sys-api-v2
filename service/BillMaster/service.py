@@ -7,6 +7,8 @@ from sqlalchemy.orm import Session
 from utils.utils import *
 from utils.log import *
 from utils.orm_pydantic_convert import *
+from itertools import groupby
+from operator import itemgetter
 
 import os
 from copy import deepcopy
@@ -395,10 +397,11 @@ async def generateBillMasterAndBillDetail(
         {"BillMasterID": BillMasterDictData["BillMasterID"]}
     )[0]
     newBillMasterData = deepcopy(oldBillMasterData)
-
+    pprint((await request.json()))
     deductDataList = (await request.json())["Deduct"]
     deductDataList = sorted(deductDataList, key=lambda x: x["BillDetailID"])
 
+    LastUpDate = CreateDate = convert_time_to_str(datetime.now())
     newBillDetailDataList = []
     for deductData in deductDataList:
         oldBillDetailData = crudBillDetail.get_with_condition(
@@ -415,7 +418,7 @@ async def generateBillMasterAndBillDetail(
             newCBData = deepcopy(oldCBData)
             newCBDictData = orm_to_dict(newCBData)
             newCBDictData["CurrAmount"] -= reqCBData["TransAmount"]
-            newCBDictData["LastUpdDate"] = convert_time_to_str(datetime.now())
+            newCBDictData["LastUpdDate"] = LastUpDate
 
             newCBStatementDictData = {
                 "CBID": newCBDictData["CBID"],
@@ -425,7 +428,7 @@ async def generateBillMasterAndBillDetail(
                 "OrgAmount": oldCBData.CurrAmount,
                 "TransAmount": reqCBData["TransAmount"] * (-1),
                 "Note": "",
-                "CreateDate": convert_time_to_str(datetime.now()),
+                "CreateDate": CreateDate,
             }
 
             tempTotalDedAmount += reqCBData["TransAmount"]
@@ -1139,6 +1142,35 @@ async def returnBillMasterAfterDeduction(
         tempCBStatementDataList = crudCreditBalanceStatement.get_with_condition(
             {"BLDetailID": BillDetailData.BillDetailID}
         )
+        tempCBStatementDictDataList = [
+            orm_to_dict(tempCBStatementData)
+            for tempCBStatementData in tempCBStatementDataList
+        ]
+
+        # Filter TransItem is DEDUCT and sort by CreateDate
+        tempCBStatementDictDataList = sorted(
+            [d for d in tempCBStatementDictDataList if d["TransItem"] == "DEDUCT"],
+            key=lambda x: x["CreateDate"],
+            reverse=True,
+        )
+
+        # Groupby CreateDate and get the first group
+        tempCBStatementDictDataList = next(
+            iter(
+                [
+                    list(group)
+                    for key, group in groupby(
+                        tempCBStatementDictDataList, key=lambda x: x["CreateDate"]
+                    )
+                ]
+            )
+        )
+
+        tempCBStatementDataList = [
+            dict_to_orm(tempCBStatementDictData, CreditBalanceStatementDBModel)
+            for tempCBStatementDictData in tempCBStatementDictDataList
+        ]
+
         # 抓取對應BillDetail的CreditBalance主檔(如果有找到該BillDetail對應的CreditBalanceStatement)
         if tempCBStatementDataList:
             tempCBIDList = list(
@@ -1238,6 +1270,12 @@ async def returnBillMasterAfterDeduction(
     # =============================================
     newBillMasterData = deepcopy(BillMasterData)
     newBillMasterData.Status = "INITIAL"
+    newBillMasterData.FeeAmountSum += sum(
+        [
+            newCBStatementData.TransAmount
+            for newCBStatementData in newCBStatementDataList
+        ]
+    )
     newBillMasterData = crudBillMaster.update(
         BillMasterData, orm_to_dict(newBillMasterData)
     )
