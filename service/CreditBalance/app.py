@@ -119,7 +119,6 @@ async def generateReport(
     BalanceList = []
 
     for i, CBStatementData in enumerate(CBStatementDataList):
-        pprint(orm_to_dict(CBStatementData))
         if CBStatementData.TransItem == "BM_ADD":
             BillMilestoneList.append(CBData.BillMilestone)
             InvNoList.append(CBStatementData.BillingNo)
@@ -193,7 +192,7 @@ async def generateReport(
             BillDetailData = crudBillDetail.get_with_condition(
                 {"BillDetailID": CBStatementData.BLDetailID}
             )[0]
-            BillMasterData = crudBillDetail.get_with_condition(
+            BillMasterData = crudBillMaster.get_with_condition(
                 {"BillMasterID": BillDetailData.BillMasterID}
             )[0]
             BillIssueDateList.append(orm_to_dict(BillMasterData)["IssueDate"])
@@ -214,10 +213,10 @@ async def generateReport(
             DescriptionList.append(
                 BillDetailData.FeeItem if BillDetailData.FeeItem else ""
             )
-            DebitList.append(
+            DebitList.append("")
+            CreditList.append(
                 abs(CBStatementData.TransAmount) if CBStatementData.TransAmount else ""
             )
-            CreditList.append("")
             BalanceList.append(CBStatementData.OrgAmount + CBStatementData.TransAmount)
         elif CBStatementData.TransItem == "DEDUCT":
             BillDetailData = crudBillDetail.get_with_condition(
@@ -342,6 +341,7 @@ async def generateReport(
         "Credit": CreditList,
         "Balance": BalanceList,
     }
+
     df = pd.DataFrame(dict_data)
     if (await request.json())["Download"]:
         df = pd.DataFrame(dict_data)
@@ -349,7 +349,14 @@ async def generateReport(
         # 產製CB歷程
         fileResponse = generate_credit_balance_report(df, CBData.PartyName)
         return fileResponse
-    return df.to_dict(orient="records")
+    if not (await request.json())["Download"]:
+        df_transpose_dict_list = [
+            {} for _ in range(len(dict_data.get("SubmarineCable")))
+        ]
+        for k, v_list in dict_data.items():
+            for i, v in enumerate(v_list):
+                df_transpose_dict_list[i].update({k: v})
+        return df_transpose_dict_list
 
 
 @router.post("/CreditBalance", status_code=status.HTTP_201_CREATED)
