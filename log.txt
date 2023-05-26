@@ -208,3 +208,41 @@
 2023-05-25 17:35:41.342847: Eva Change completed the deduction of the BillMaster: {'BillingNo': '02CO-CI2305251730', 'SubmarineCable': 'SJC2', 'PartyName': 'CHT', 'DueDate': '2023-05-31T17:30:36', 'ReceivedAmountSum': 0.0, 'BankFees': None, 'Status': 'RATED', 'PONo': '', 'BillMasterID': 1, 'WorkTitle': 'Construction', 'IssueDate': '2023-05-25T17:30:54', 'FeeAmountSum': 176167.88, 'IsPro': False, 'URI': None}
 --------------------------------------------------
 2023-05-25 17:47:03.936180: Eva Change completed the deduction of the BillMaster: {'BillingNo': '02CO-CI2305251730', 'SubmarineCable': 'SJC2', 'PartyName': 'CHT', 'DueDate': '2023-05-31T17:30:36', 'ReceivedAmountSum': 0.0, 'BankFees': None, 'Status': 'RATED', 'PONo': '', 'WorkTitle': 'Construction', 'BillMasterID': 1, 'IssueDate': '2023-05-25T17:30:54', 'FeeAmountSum': 176127.88, 'IsPro': False, 'URI': None}
+--------------------------------------------------
+2023-05-26 16:26:07.427528: Eva Change update InvoiceWKMaster: {'WKMasterID': 1, 'Status': 'VALIDATED'}
+--------------------------------------------------
+2023-05-26 16:26:18.177123: Eva Change add InvoiceMaster {'InvMasterID': 1, 'WKMasterID': 1, 'InvoiceNo': 'DT0170168-1', 'PartyName': 'CHT', 'SupplierName': 'NEC', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'IssueDate': '2023-05-25 17:28:31', 'DueDate': '2023-05-31 17:28:31', 'IsPro': False, 'ContractType': 'SC', 'Status': ''}
+--------------------------------------------------
+2023-05-26 16:26:18.192706: Eva Change add InvoiceMaster {'InvMasterID': 2, 'WKMasterID': 1, 'InvoiceNo': 'DT0170168-1', 'PartyName': 'CM', 'SupplierName': 'NEC', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'IssueDate': '2023-05-25 17:28:31', 'DueDate': '2023-05-31 17:28:31', 'IsPro': False, 'ContractType': 'SC', 'Status': ''}
+--------------------------------------------------
+2023-05-26 16:26:18.207600: Eva Change add InvoiceMaster {'InvMasterID': 3, 'WKMasterID': 1, 'InvoiceNo': 'DT0170168-1', 'PartyName': 'DHT', 'SupplierName': 'NEC', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'IssueDate': '2023-05-25 17:28:31', 'DueDate': '2023-05-31 17:28:31', 'IsPro': False, 'ContractType': 'SC', 'Status': ''}
+--------------------------------------------------
+2023-05-26 16:26:18.221236: Eva Change add InvoiceMaster {'InvMasterID': 4, 'WKMasterID': 1, 'InvoiceNo': 'DT0170168-1', 'PartyName': 'EDGE', 'SupplierName': 'NEC', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'IssueDate': '2023-05-25 17:28:31', 'DueDate': '2023-05-31 17:28:31', 'IsPro': False, 'ContractType': 'SC', 'Status': ''}
+--------------------------------------------------
+2023-05-26 16:26:18.232452: Eva Change add InvoiceMaster {'InvMasterID': 5, 'WKMasterID': 1, 'InvoiceNo': 'DT0170168-1', 'PartyName': 'KDDI', 'SupplierName': 'NEC', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'IssueDate': '2023-05-25 17:28:31', 'DueDate': '2023-05-31 17:28:31', 'IsPro': False, 'ContractType': 'SC', 'Status': ''}
+--------------------------------------------------
+2023-05-26 16:26:18.246341: Eva Change add InvoiceMaster {'InvMasterID': 6, 'WKMasterID': 1, 'InvoiceNo': 'DT0170168-1', 'PartyName': 'Singtel', 'SupplierName': 'NEC', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'IssueDate': '2023-05-25 17:28:31', 'DueDate': '2023-05-31 17:28:31', 'IsPro': False, 'ContractType': 'SC', 'Status': ''}
+--------------------------------------------------
+2023-05-26 16:26:18.261824: Eva Change add InvoiceMaster {'InvMasterID': 7, 'WKMasterID': 1, 'InvoiceNo': 'DT0170168-1', 'PartyName': 'SKB', 'SupplierName': 'NEC', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'IssueDate': '2023-05-25 17:28:31', 'DueDate': '2023-05-31 17:28:31', 'IsPro': False, 'ContractType': 'SC', 'Status': ''}
+--------------------------------------------------
+2023-05-26 16:26:18.275144: Eva Change add InvoiceMaster {'InvMasterID': 8, 'WKMasterID': 1, 'InvoiceNo': 'DT0170168-1', 'PartyName': 'Telin', 'SupplierName': 'NEC', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'IssueDate': '2023-05-25 17:28:31', 'DueDate': '2023-05-31 17:28:31', 'IsPro': False, 'ContractType': 'SC', 'Status': ''}
+--------------------------------------------------
+2023-05-26 16:26:18.288566: Eva Change add InvoiceMaster {'InvMasterID': 9, 'WKMasterID': 1, 'InvoiceNo': 'DT0170168-1', 'PartyName': 'TICC', 'SupplierName': 'NEC', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'IssueDate': '2023-05-25 17:28:31', 'DueDate': '2023-05-31 17:28:31', 'IsPro': False, 'ContractType': 'SC', 'Status': ''}
+--------------------------------------------------
+2023-05-26 16:26:18.303326: Eva Change add InvoiceMaster {'InvMasterID': 10, 'WKMasterID': 1, 'InvoiceNo': 'DT0170168-1', 'PartyName': 'VNPT', 'SupplierName': 'NEC', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'IssueDate': '2023-05-25 17:28:31', 'DueDate': '2023-05-31 17:28:31', 'IsPro': False, 'ContractType': 'SC', 'Status': ''}
+--------------------------------------------------
+2023-05-26 16:27:34.232165: Eva Change added CB: {'BLDetailID': None, 'CBID': 1, 'BillingNo': 'test-billing-no', 'WorkTitle': 'Construction', 'CurrAmount': 200000.0, 'CNNo': None, 'LastUpdDate': None, 'Note': None, 'InvoiceNo': 'test-invoice-no', 'CBType': '其他', 'SubmarineCable': 'SJC2', 'BillMilestone': None, 'PartyName': 'CHT', 'CreateDate': '2023-05-26T16:27:34'}
+--------------------------------------------------
+2023-05-26 16:32:28.807560: Eva Change initial BillMaster, BillingNo is 02CO-CI2305261632
+--------------------------------------------------
+2023-05-26 16:32:46.981288: Eva Change completed the deduction of the BillMaster: {'BillingNo': '02CO-CI2305261632', 'SubmarineCable': 'SJC2', 'PartyName': 'CHT', 'DueDate': '2023-05-31T16:32:13', 'ReceivedAmountSum': 0.0, 'BankFees': None, 'Status': 'RATED', 'PONo': '', 'BillMasterID': 1, 'WorkTitle': 'Construction', 'IssueDate': '2023-05-26T16:32:28', 'FeeAmountSum': 176167.88, 'IsPro': False, 'URI': None}
+--------------------------------------------------
+2023-05-26 16:36:37.106498: Eva Change downloaded 02CO-CI2305261632.docx, title is SJC2 Cable Network  Central Billing Party Invoice, logo is 1
+--------------------------------------------------
+2023-05-26 16:48:00.125283: Eva Change initial BillMaster, BillingNo is 02CO-CM2305261647
+--------------------------------------------------
+2023-05-26 17:00:52.168405: Eva Change completed the deduction of the BillMaster: {'BillingNo': '02CO-CI2305261632', 'SubmarineCable': 'SJC2', 'PartyName': 'CHT', 'DueDate': '2023-05-31T00:00:00', 'ReceivedAmountSum': 0.0, 'BankFees': None, 'Status': 'RATED', 'PONo': '', 'BillMasterID': 1, 'WorkTitle': 'Construction', 'IssueDate': '2023-05-26T00:00:00', 'FeeAmountSum': 176137.88, 'IsPro': False, 'URI': None}
+--------------------------------------------------
+2023-05-26 17:33:20.491181: Eva Change added CB: {'BLDetailID': None, 'CBID': 2, 'BillingNo': 'test-billing-no-2', 'WorkTitle': 'Construction', 'CurrAmount': 500000.0, 'CNNo': None, 'LastUpdDate': None, 'Note': None, 'InvoiceNo': 'test-invoice-no-2', 'CBType': '其他', 'SubmarineCable': 'SJC2', 'BillMilestone': None, 'PartyName': 'CHT', 'CreateDate': '2023-05-26T17:33:20'}
+--------------------------------------------------
+2023-05-26 17:36:29.348521: Eva Change completed the deduction of the BillMaster: {'BillingNo': '02CO-CI2305261632', 'SubmarineCable': 'SJC2', 'PartyName': 'CHT', 'DueDate': '2023-05-31T00:00:00', 'ReceivedAmountSum': 0.0, 'BankFees': None, 'Status': 'RATED', 'PONo': '', 'BillMasterID': 1, 'WorkTitle': 'Construction', 'IssueDate': '2023-05-26T00:00:00', 'FeeAmountSum': 176117.88, 'IsPro': False, 'URI': None}

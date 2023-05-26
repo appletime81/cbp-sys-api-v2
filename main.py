@@ -442,10 +442,8 @@ async def addInvoiceMasterAndInvoiceDetail(
 
     # add InvoiceMaster data to database
     for InvoiceMasterDictData in InvoiceMasterDictDataList:
-        # InvoiceMasterDictData["Status"] = "TO_MERGE"
         InvoiceMasterPydanticData = InvoiceMasterSchema(**InvoiceMasterDictData)
         await InvoiceMasterApp.addInvoiceMaster(request, InvoiceMasterPydanticData, db)
-        record_log(f"{user_name} add InvoiceMaster {InvoiceMasterDictData}")
 
     # add InvoiceDetail data to database
     for InvoiceDetailDictData in InvoiceDetailDictDataList:
@@ -462,6 +460,10 @@ async def addInvoiceMasterAndInvoiceDetail(
     InvoiceWKMasterDictData["Status"] = "BILLED"
     updatedInvoiceWKMasterData = crud.update(
         InvoiceWKMasterData, InvoiceWKMasterDictData
+    )
+
+    record_log(
+        f"{user_name} add InvoiceMaster and InvoiceDetail, InvoiceNo: {InvoiceMasterDictDataList[0]['InvoiceNo']}"
     )
 
     return {
