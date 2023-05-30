@@ -246,3 +246,25 @@
 2023-05-26 17:33:20.491181: Eva Change added CB: {'BLDetailID': None, 'CBID': 2, 'BillingNo': 'test-billing-no-2', 'WorkTitle': 'Construction', 'CurrAmount': 500000.0, 'CNNo': None, 'LastUpdDate': None, 'Note': None, 'InvoiceNo': 'test-invoice-no-2', 'CBType': '其他', 'SubmarineCable': 'SJC2', 'BillMilestone': None, 'PartyName': 'CHT', 'CreateDate': '2023-05-26T17:33:20'}
 --------------------------------------------------
 2023-05-26 17:36:29.348521: Eva Change completed the deduction of the BillMaster: {'BillingNo': '02CO-CI2305261632', 'SubmarineCable': 'SJC2', 'PartyName': 'CHT', 'DueDate': '2023-05-31T00:00:00', 'ReceivedAmountSum': 0.0, 'BankFees': None, 'Status': 'RATED', 'PONo': '', 'BillMasterID': 1, 'WorkTitle': 'Construction', 'IssueDate': '2023-05-26T00:00:00', 'FeeAmountSum': 176117.88, 'IsPro': False, 'URI': None}
+--------------------------------------------------
+2023-05-30 15:38:33.336268: Eva Change added CB: {'BLDetailID': None, 'CBID': 3, 'BillingNo': 'test-billing-no-3', 'WorkTitle': 'Construction', 'CurrAmount': 400000.0, 'CNNo': None, 'LastUpdDate': None, 'Note': None, 'InvoiceNo': 'test-invoice-no -3', 'CBType': '其他', 'SubmarineCable': 'SJC2', 'BillMilestone': None, 'PartyName': 'EDGE', 'CreateDate': '2023-05-30T15:38:33'}
+--------------------------------------------------
+2023-05-30 15:40:15.418650: Eva Change added CB: {'BLDetailID': None, 'CBID': 4, 'BillingNo': 'test-billing-no-4', 'WorkTitle': 'Construction', 'CurrAmount': 700000.0, 'CNNo': None, 'LastUpdDate': None, 'Note': None, 'InvoiceNo': 'test-invoice-no-4', 'CBType': '其他', 'SubmarineCable': 'SJC2', 'BillMilestone': None, 'PartyName': 'KDDI', 'CreateDate': '2023-05-30T15:40:15'}
+--------------------------------------------------
+2023-05-30 16:01:22.336983: Eva Change add Liability: [{'BillMilestone': 'test-billmilestone', 'PartyName': 'SKB', 'LBRatio': '100', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'Note': 'test', 'CreateDate': '2023-05-30 16:01:22'}]
+--------------------------------------------------
+2023-05-30 16:02:00.014509: Eva Change created InvoiceWKMaster, the InvoiceNo is test-invoice-no
+--------------------------------------------------
+2023-05-30 16:02:04.101532: Eva Change update InvoiceWKMaster: {'WKMasterID': 2, 'Status': 'VALIDATED'}
+--------------------------------------------------
+2023-05-30 16:02:22.543126: Eva Change add InvoiceMaster and InvoiceDetail, InvoiceNo: test-invoice-no
+--------------------------------------------------
+2023-05-30 16:03:21.446501: Eva Change update InvoiceWKMaster: {'WKMasterID': 2, 'Status': 'INVALID'}
+--------------------------------------------------
+2023-05-30 16:09:27.518450: Eva Change created InvoiceWKMaster, the InvoiceNo is test-invoice-no-2
+--------------------------------------------------
+2023-05-30 16:09:34.488249: Eva Change update InvoiceWKMaster: {'WKMasterID': 3, 'Status': 'VALIDATED'}
+--------------------------------------------------
+2023-05-30 16:10:16.695374: Eva Change created InvoiceWKMaster, the InvoiceNo is test-invoice-no-3
+--------------------------------------------------
+2023-05-30 16:10:23.647188: Eva Change delete InvoiceWKMaster: 4

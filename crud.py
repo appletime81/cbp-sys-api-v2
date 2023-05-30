@@ -67,6 +67,13 @@ class CRUD:
     def get_max_id(self, model_id):
         return self.db.query(func.max(model_id)).scalar()
 
+    # use sql get data by Pandas
+    def get_all_by_sql_return_with_df(self, sql: str):
+        print(sql)
+        with engine.begin() as conn:
+            df = pd.read_sql_query(sql=text(f"""{sql}"""), con=conn)
+        return df
+
     def create(self, obj_in):
         db_obj = self.model(**obj_in.dict())
         self.db.add(db_obj)

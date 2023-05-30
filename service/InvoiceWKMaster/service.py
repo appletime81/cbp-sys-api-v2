@@ -101,3 +101,88 @@ async def invoiceWKMasterBilledReturn(request: Request, db: Session = Depends(ge
     #
     # return {"message": "success", "InvoiceWKMaster": newInvoiceWKMasterData}
     return {"message": "success"}
+
+
+@router.post("/invalidInvoice/afterBilled")
+async def invalidInvoiceAfterBilled(request: Request, db: Session = Depends(get_db)):
+    """
+    input data:
+    {
+        "WKMasterID": int,
+    }
+
+    response data:
+    1. 如果還有帳單存在:
+    {
+        "ifReturn": False,
+        "BillMaster": {
+            "INITIAL": [],
+            "RATED": [],
+            "SIGNED": [],
+            "TO_WRITEOFF": [],
+            "COMPLETE": [],
+        }
+    }
+    """
+    crudInvoiceWKMaster = CRUD(db, InvoiceWKMasterDBModel)
+    crudInvoiceWKDetail = CRUD(db, InvoiceWKDetailDBModel)
+    crudInvoiceMaster = CRUD(db, InvoiceMasterDBModel)
+    crudInvoiceDetail = CRUD(db, InvoiceDetailDBModel)
+
+    crudBillMaster = CRUD(db, BillMasterDBModel)
+    crudBillDetail = CRUD(db, BillDetailDBModel)
+
+    # =============================================
+    # 抓取
+    # 1. InvoiceWKMaster
+    # 2. InvoiceMaster
+    # 3. InvoiceDetail
+    # =============================================
+    InvoiceWKMasterData = crudInvoiceWKMaster.get_with_condition(
+        {"WKMasterID": (await request.json())["WKMasterID"]}
+    )[0]
+    InvoiceMasterDataList = crudInvoiceMaster.get_with_condition(
+        {"WKMasterID": InvoiceWKMasterData.WKMasterID}
+    )
+    InvoiceDetailDataList = crudInvoiceDetail.get_with_condition(
+        {"WKMasterID": InvoiceWKMasterData.WKMasterID}
+    )
+
+    # =============================================
+    # 根據InvoiceDetailDataList抓取BillDetail
+    # =============================================
+    InvDetailIDList = list(set([x.InvDetailID for x in InvoiceDetailDataList]))
+    BillDetailDataList = crudBillDetail.get_value_if_in_a_list(
+        BillDetailDBModel.InvDetailID, InvDetailIDList
+    )
+    if BillDetailDataList:
+        resultDictList = {
+            "INITIAL": [],
+            "RATED": [],
+            "SIGNED": [],
+            "TO_WRITEOFF": [],
+            "COMPLETE": [],
+        }
+        BillMasterIDList = list(set([x.BillMasterID for x in BillDetailDataList]))
+
+        # =============================================
+        # 抓取BillMaster
+        # =============================================
+        for BillMasterID in BillMasterIDList:
+            BillMasterData = crudBillMaster.get_with_condition(
+                {"BillMasterID": BillMasterID}
+            )[0]
+
+            subBillDetailDataList = list(
+                filter(lambda x: x.BillMasterID == BillMasterID, BillDetailDataList)
+            )
+
+            if subBillDetailDataList[0].Status == "MERGED" or (
+                not subBillDetailDataList[0].Status
+            ):
+                resultDictList["INITIAL"].append(BillMasterData)
+            else:
+                resultDictList[subBillDetailDataList[0].Status].append(BillMasterData)
+        pprint(resultDictList)
+        return {"ifReturn": False, "BillMaster": resultDictList}
+    return None
