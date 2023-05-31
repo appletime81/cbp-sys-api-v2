@@ -268,3 +268,17 @@
 2023-05-30 16:10:16.695374: Eva Change created InvoiceWKMaster, the InvoiceNo is test-invoice-no-3
 --------------------------------------------------
 2023-05-30 16:10:23.647188: Eva Change delete InvoiceWKMaster: 4
+--------------------------------------------------
+2023-05-31 15:19:06.259608: Eva Change initial BillMaster, BillingNo is 02CO-SK2305311518
+--------------------------------------------------
+2023-05-31 16:55:40.190537: Eva Change add InvoiceMaster and InvoiceDetail, InvoiceNo: test-invoice-no-2
+--------------------------------------------------
+2023-05-31 16:56:12.395477: Eva Change initial BillMaster, BillingNo is 02CO-SK2305311656
+--------------------------------------------------
+2023-05-31 17:58:24.039428: Eva Change add InvoiceMaster and InvoiceDetail, InvoiceNo: test-invoice-no-2
+--------------------------------------------------
+2023-05-31 17:59:25.652716: Eva Change initial BillMaster, BillingNo is 02CO-SK2305311759
+--------------------------------------------------
+2023-05-31 17:59:32.532655: Eva Change completed the deduction of the BillMaster: {'BillingNo': '02CO-SK2305311759', 'SubmarineCable': 'SJC2', 'PartyName': 'SKB', 'DueDate': '2023-05-31T17:59:25', 'ReceivedAmountSum': 0.0, 'BankFees': None, 'Status': 'RATED', 'BillMasterID': 5, 'PONo': '', 'WorkTitle': 'Construction', 'IssueDate': '2023-05-31T17:59:25', 'FeeAmountSum': 10.0, 'IsPro': False, 'URI': None}
+--------------------------------------------------
+2023-05-31 18:00:54.313790: Eva Change upload signed bill master, BillMasterID: 5

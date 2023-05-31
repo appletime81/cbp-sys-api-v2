@@ -1459,20 +1459,26 @@ async def invlaidBillMasterAfterDeduction(
     # 更新CB資料
     # =============================================
     df_CBStatement = pd.DataFrame.from_records(newCBStatementDictDataList)
-    df_CBStatement = df_CBStatement[["CBID", "TransAmount"]]
-    df_CBStatement_groupby = (
-        df_CBStatement.groupby(["CBID"]).sum(["TransAmount"]).reset_index()
-    )
-
     newCBDictDataList = []
-    for i in range(len(df_CBStatement_groupby)):
-        CBData = crudCreditBalance.get_with_condition(
-            {"CBID": df_CBStatement_groupby.loc[i, "CBID"]}
-        )[0]
-        newCBDictData = orm_to_dict(deepcopy(CBData))
-        newCBDictData["LastUpdDate"] = newDataCreateDate
-        newCBDictData["CurrAmount"] += df_CBStatement_groupby.loc[i, "TransAmount"]
-        newCBDictDataList.append(newCBDictData)
+    if not df_CBStatement.empty:
+        df_CBStatement = df_CBStatement[["CBID", "TransAmount"]]
+        df_CBStatement_groupby = (
+            df_CBStatement.groupby(["CBID"]).sum(["TransAmount"]).reset_index()
+        )
+        for i in range(len(df_CBStatement_groupby)):
+            CBData = crudCreditBalance.get_with_condition(
+                {"CBID": df_CBStatement_groupby.loc[i, "CBID"]}
+            )[0]
+            newCBDictData = orm_to_dict(deepcopy(CBData))
+            newCBDictData["LastUpdDate"] = newDataCreateDate
+            newCBDictData["CurrAmount"] += df_CBStatement_groupby.loc[i, "TransAmount"]
+            newCBDictDataList.append(newCBDictData)
+
+        for newCBDictData in newCBDictDataList:
+            CBData = crudCreditBalance.get_with_condition(
+                {"CBID": newCBDictData["CBID"]}
+            )[0]
+            crudCreditBalance.update(CBData, newCBDictData)
 
     # =============================================
     # 更新BillDetail
@@ -1483,6 +1489,11 @@ async def invlaidBillMasterAfterDeduction(
         newBillDetailDictData["Status"] = "INVALID"
         newBillDetailDictDataList.append(newBillDetailDictData)
 
+    for oldBillDetailData, newBillDetailDictData in zip(
+        BillDetailDataList, newBillDetailDictDataList
+    ):
+        crudBillDetail.update(oldBillDetailData, newBillDetailDictData)
+
     # =============================================
     # 更新BillMaster
     # =============================================
@@ -1491,6 +1502,7 @@ async def invlaidBillMasterAfterDeduction(
     ]
     newBillMasterDictData = orm_to_dict(deepcopy(BillMasterData))
     newBillMasterDictData["Status"] = "INVALID"
+    crudBillMaster.update(BillMasterData, newBillMasterDictData)
     return {
         "CBStatement": newCBStatementDictDataList,
         "CB": newCBDictDataList,

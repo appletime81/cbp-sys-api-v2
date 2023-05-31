@@ -14,47 +14,74 @@ from copy import deepcopy
 router = APIRouter()
 
 
-@router.post("/InvoiceWKMaster/returnToValidated")
-async def invoiceWKMasterBilledReturn(request: Request, db: Session = Depends(get_db)):
+@router.post("/returnToValidated")
+async def returnToValidatedInvoice(request: Request, db: Session = Depends(get_db)):
     """
+    input data:
     {
         "WKMasterID": int,
     }
     """
 
-    crudBillMaster = CRUD(db, BillMasterDBModel)
-    crudBillDetail = CRUD(db, BillDetailDBModel)
     crudInvoiceWKMaster = CRUD(db, InvoiceWKMasterDBModel)
     crudInvoiceMaster = CRUD(db, InvoiceMasterDBModel)
     crudInvoiceDetail = CRUD(db, InvoiceDetailDBModel)
 
-    WKMasterID = (await request.json())["WKMasterID"]
+    crudBillMaster = CRUD(db, BillMasterDBModel)
+    crudBillDetail = CRUD(db, BillDetailDBModel)
 
     # =============================================
-    # Get InvoiceDetail
+    # 抓取 InvoiceDetail
     # =============================================
     InvoiceDetailDataList = crudInvoiceDetail.get_with_condition(
-        {"WKMasterID": WKMasterID}
+        {"WKMasterID": (await request.json())["WKMasterID"]}
     )
+
+    # =============================================
+    # 抓取 InvoiceMaster
+    # =============================================
+    InvoiceMasterDataList = crudInvoiceMaster.get_with_condition(
+        {"WKMasterID": (await request.json())["WKMasterID"]}
+    )
+
+    # =============================================
+    # 抓取 InvoiceWKMaster
+    # =============================================
     InvoiceWKMasterData = crudInvoiceWKMaster.get_with_condition(
-        {"WKMasterID": WKMasterID}
+        {"WKMasterID": (await request.json())["WKMasterID"]}
     )[0]
 
     # =============================================
-    # 檢查是否已開立帳單，或者帳單已進入銷帳狀態
+    # 抓取 BillDetail，
+    # 檢查是否有其他 InvoiceDetail 還是被併為帳單
+    # 若有 -> 不讓重新立帳
+    # 無 -> 則反之
     # =============================================
-
-    # 抓取 InvoiceMasterID
-    InvDetailIDList = list(set([x.InvDetailID for x in InvoiceDetailDataList]))
     BillDetailDataList = crudBillDetail.get_value_if_in_a_list(
-        BillDetailDBModel.InvDetailID, InvDetailIDList
+        BillDetailDBModel.InvDetailID,
+        list(
+            set(
+                [
+                    InvoiceDetailData.InvDetailID
+                    for InvoiceDetailData in InvoiceDetailDataList
+                ]
+            )
+        ),
     )
-    if BillDetailDataList:
-        BillMasterIDList = list(set([x.BillMasterID for x in BillDetailDataList]))
-        BillMasterDataList = crudBillMaster.get_value_if_in_a_list(
-            BillMasterDBModel.BillMasterID, BillMasterIDList
-        )
-        BillMasterDataResult = {
+    BillMasterDataList = crudBillMaster.get_value_if_in_a_list(
+        BillMasterDBModel.BillMasterID,
+        list(
+            set([BillDetailData.BillMasterID for BillDetailData in BillDetailDataList])
+        ),
+    )
+    invalidBillDetailDataListStatus = list(set([x.Status for x in BillDetailDataList]))
+    invalidBillDetailDataListStatus = (
+        invalidBillDetailDataListStatus == ["INVALID"]
+        if invalidBillDetailDataListStatus
+        else False
+    )
+    if BillDetailDataList and (not invalidBillDetailDataListStatus):
+        resultDictList = {
             "INITIAL": [],
             "RATED": [],
             "SIGNED": [],
@@ -62,45 +89,42 @@ async def invoiceWKMasterBilledReturn(request: Request, db: Session = Depends(ge
             "COMPLETE": [],
         }
         for BillMasterData in BillMasterDataList:
+            tempBillDetailDataList = list(
+                filter(
+                    lambda x: x.BillMasterID == BillMasterData.BillMasterID,
+                    BillDetailDataList,
+                )
+            )
             if BillMasterData.Status == "INITIAL":
-                BillMasterDataResult["INITIAL"].append(BillMasterData)
-            elif BillMasterData.Status == "RATED":
-                BillMasterDataResult["RATED"].append(BillMasterData)
-            elif BillMasterData.Status == "SIGNED":
-                BillMasterDataResult["SIGNED"].append(BillMasterData)
-            elif BillMasterData.Status == "TO_WRITEOFF":
-                BillMasterDataResult["TO_WRITEOFF"].append(BillMasterData)
-            elif BillMasterData.Status == "COMPLETE":
-                BillMasterDataResult["COMPLETE"].append(BillMasterData)
-        return {"ifReturn": False, "BillMaster": BillMasterDataResult}
+                resultDictList["INITIAL"].append(BillMasterData)
+            else:
+                resultDictList[tempBillDetailDataList[0].Status].append(BillMasterData)
+            return {"ifReturn": False, "BillMaster": resultDictList}
 
-    # =============================================
-    # 刪除 InvoiceMaster
-    # =============================================
-    # InvoiceMasterIDList = list(set([x.InvMasterID for x in InvoiceDetailDataList]))
-    # InvoiceMasterDataList = crudInvoiceMaster.get_value_if_in_a_list(
-    #     InvoiceMasterDBModel.InvMasterID, InvoiceMasterIDList
-    # )
-    # for InvoiceMasterData in InvoiceMasterDataList:
-    #     crudInvoiceMaster.remove(InvoiceMasterData.InvMasterID)
+    if (not BillDetailDataList) or invalidBillDetailDataListStatus:
+        # =============================================
+        # 刪除 InvoiceMaster
+        # =============================================
+        for InvoiceMasterData in InvoiceMasterDataList:
+            crudInvoiceMaster.remove(InvoiceMasterData.InvMasterID)
 
-    # =============================================
-    # 刪除 InvoiceDetail
-    # =============================================
-    # for InvoiceDetailData in InvoiceDetailDataList:
-    #     crudInvoiceDetail.remove(InvoiceDetailData.InvDetailID)
+        # =============================================
+        # 刪除 InvoiceDetail
+        # =============================================
+        for InvoiceDetailData in InvoiceDetailDataList:
+            crudInvoiceDetail.remove(InvoiceDetailData.InvDetailID)
 
-    # =============================================
-    # 更改 InvoiceWKMaster 狀態
-    # =============================================
-    # newInvoiceWKMasterData = deepcopy(InvoiceWKMasterData)
-    # newInvoiceWKMasterData.Status = "VALIDATED"
-    # newInvoiceWKMasterData = crudInvoiceWKMaster.update(
-    #     newInvoiceWKMasterData, orm_to_dict(newInvoiceWKMasterData)
-    # )
-    #
-    # return {"message": "success", "InvoiceWKMaster": newInvoiceWKMasterData}
-    return {"message": "success"}
+        newInvoiceWKMasterData = deepcopy(InvoiceWKMasterData)
+        newInvoiceWKMasterData.Status = "VALIDATED"
+        newInvoiceWKMasterData = crudInvoiceWKMaster.update(
+            InvoiceWKMasterData, orm_to_dict(newInvoiceWKMasterData)
+        )
+
+        return {
+            "message": "success",
+            "ifReturn": True,
+            "InvoiceWKMaster": newInvoiceWKMasterData,
+        }
 
 
 @router.post("/invalidInvoice/afterBilled")
@@ -112,7 +136,7 @@ async def invalidInvoiceAfterBilled(request: Request, db: Session = Depends(get_
     }
 
     response data:
-    1. 如果還有帳單存在:
+    如果還有帳單存在:
     {
         "ifReturn": False,
         "BillMaster": {
@@ -125,7 +149,6 @@ async def invalidInvoiceAfterBilled(request: Request, db: Session = Depends(get_
     }
     """
     crudInvoiceWKMaster = CRUD(db, InvoiceWKMasterDBModel)
-    crudInvoiceWKDetail = CRUD(db, InvoiceWKDetailDBModel)
     crudInvoiceMaster = CRUD(db, InvoiceMasterDBModel)
     crudInvoiceDetail = CRUD(db, InvoiceDetailDBModel)
 
@@ -155,7 +178,14 @@ async def invalidInvoiceAfterBilled(request: Request, db: Session = Depends(get_
     BillDetailDataList = crudBillDetail.get_value_if_in_a_list(
         BillDetailDBModel.InvDetailID, InvDetailIDList
     )
-    if BillDetailDataList:
+    invalidBillDetailDataListStatus = list(set([x.Status for x in BillDetailDataList]))
+    invalidBillDetailDataListStatus = (
+        invalidBillDetailDataListStatus == ["INVALID"]
+        if invalidBillDetailDataListStatus
+        else False
+    )
+
+    if BillDetailDataList and (not invalidBillDetailDataListStatus):
         resultDictList = {
             "INITIAL": [],
             "RATED": [],
@@ -173,16 +203,56 @@ async def invalidInvoiceAfterBilled(request: Request, db: Session = Depends(get_
                 {"BillMasterID": BillMasterID}
             )[0]
 
-            subBillDetailDataList = list(
+            tempBillDetailDataList = list(
                 filter(lambda x: x.BillMasterID == BillMasterID, BillDetailDataList)
             )
 
-            if subBillDetailDataList[0].Status == "MERGED" or (
-                not subBillDetailDataList[0].Status
+            if tempBillDetailDataList[0].Status == "MERGED" or (
+                not tempBillDetailDataList[0].Status
             ):
                 resultDictList["INITIAL"].append(BillMasterData)
             else:
-                resultDictList[subBillDetailDataList[0].Status].append(BillMasterData)
-        pprint(resultDictList)
+                resultDictList[tempBillDetailDataList[0].Status].append(BillMasterData)
         return {"ifReturn": False, "BillMaster": resultDictList}
-    return None
+
+    if (not BillDetailDataList) or invalidBillDetailDataListStatus:
+        # =============================================
+        # 作廢 InvoiceMaster
+        # =============================================
+        newInvoiceMasterDataList = []
+        for InvoiceMasterData in InvoiceMasterDataList:
+            newInvoiceMasterData = deepcopy(InvoiceMasterData)
+            newInvoiceMasterData.Status = "INVALID"
+            newInvoiceMasterData = crudInvoiceMaster.update(
+                newInvoiceMasterData, orm_to_dict(newInvoiceMasterData)
+            )
+            newInvoiceMasterDataList.append(newInvoiceMasterData)
+
+        # =============================================
+        # 作廢 InvoiceDetail
+        # =============================================
+        newInvoiceDetailDataList = []
+        for InvoiceDetailData in InvoiceDetailDataList:
+            newInvoiceDetailData = deepcopy(InvoiceDetailData)
+            newInvoiceDetailData.Status = "INVALID"
+            newInvoiceDetailData = crudInvoiceDetail.update(
+                newInvoiceDetailData, orm_to_dict(newInvoiceDetailData)
+            )
+            newInvoiceDetailDataList.append(newInvoiceDetailData)
+
+        # =============================================
+        # 作廢 InvoiceWKMaster
+        # =============================================
+        newInvoiceWKMasterData = deepcopy(InvoiceWKMasterData)
+        newInvoiceWKMasterData.Status = "INVALID"
+        newInvoiceWKMasterData = crudInvoiceWKMaster.update(
+            newInvoiceWKMasterData, orm_to_dict(newInvoiceWKMasterData)
+        )
+
+        return {
+            "message": "success",
+            "ifReturn": True,
+            "InvoiceWKMaster": newInvoiceWKMasterData,
+            "InvoiceMaster": newInvoiceMasterDataList,
+            "InvoiceDetail": newInvoiceDetailDataList,
+        }
