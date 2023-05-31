@@ -24,8 +24,6 @@ from pprint import pprint
 # print(np.isnan(df_NAN_list[0]["Status"]))
 
 
-
-
 """
 {
     "ifReturn": False,
@@ -45,7 +43,9 @@ df_BillDetailData_INITIAL = df_BillDetailData[df_BillDetailData["Status"].isnull
 df_BillDetailData_INITIAL_list = df_BillDetailData_INITIAL.to_dict("records")
 
 
-df_BillDetailData_COMPLETE = df_BillDetailData[df_BillDetailData["Status"] == "COMPLETE"]
+df_BillDetailData_COMPLETE = df_BillDetailData[
+    df_BillDetailData["Status"] == "COMPLETE"
+]
 df_BillDetailData_COMPLETE_list = df_BillDetailData_COMPLETE.to_dict("records")
 
 df_BillDetailData_RATED = df_BillDetailData[df_BillDetailData["Status"] == "RATED"]
@@ -54,9 +54,7 @@ df_BillDetailData_RATED_list = df_BillDetailData_RATED.to_dict("records")
 df_BillDetailData_SIGNED = df_BillDetailData[df_BillDetailData["Status"] == "SIGNED"]
 df_BillDetailData_SIGNED_list = df_BillDetailData_SIGNED.to_dict("records")
 
-df_BillDetailData_TO_WRITEOFF = df_BillDetailData[df_BillDetailData["Status"] == "TO_WRITEOFF"]
+df_BillDetailData_TO_WRITEOFF = df_BillDetailData[
+    df_BillDetailData["Status"] == "TO_WRITEOFF"
+]
 df_BillDetailData_TO_WRITEOFF_list = df_BillDetailData_TO_WRITEOFF.to_dict("records")
-
-
-
-
