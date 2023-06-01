@@ -160,6 +160,10 @@ def convert_number_to_string(numbers: List[str]):
     return result
 
 
+def parsing_file_name():
+    pass
+
+
 if __name__ == "__main__":
     a = "BillMilestone=2022.B_BM0"
     urlList, value = re_search_url_condition_value(a, "BillMilestone")
