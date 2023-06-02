@@ -30,7 +30,7 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
     PayDraftID = (await request.json())["PayDraftID"]
     crudPayDraft = CRUD(db, PayDraftDBModel)
     crudPayDraftDetail = CRUD(db, PayDraftDetailDBModel)
-    crudPayMaster = CRUD(db, InvoiceWKMasterDBModel)
+    crudPayMaster = CRUD(db, PayMasterDBModel)
 
     PayDraftData = crudPayDraft.get_with_condition({"PayDraftID": PayDraftID})[0]
     PayDraftDetailDataList = crudPayDraftDetail.get_with_condition(
@@ -39,6 +39,7 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
     PayMasterData = crudPayMaster.get_with_condition(
         {"PayMasterID": PayDraftData.PayMasterID}
     )[0]
+    SupplierName = PayMasterData.SupplierName
 
     if (await request.json())["GetTemplate"]:
         PostingDate = convert_time_to_str(PayDraftData.IssueDate)
