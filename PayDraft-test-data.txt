@@ -1,0 +1,24 @@
+PayDraftID      : 1
+Payee           : string
+CableInfo       : CableInfo
+TotalFeeAmount  : 123.45
+Subject         : Subject
+Address         : Address
+CtactPerson     : CtactPerson
+Tel             : Tel
+email           : email@abc.def.ghi
+IssueDate       :
+IssueNo         : IssueNo
+OriginalTo      : OriginalTo
+CBPBankAcctNo   : CBPBankAcctNo
+BankAcctName    : BankAcctName
+BankName        : BankName
+BankAddress     : BankAddress
+BankAcctNo      : BankAcctNo
+IBAN            : IBAN
+SWIFTCode       : SWIFTCode
+Status          : Status
+PayeeType       : PayeeType
+URI             :
+
+

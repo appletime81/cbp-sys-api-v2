@@ -448,8 +448,94 @@ class UsersSchema(BaseModel):
     Company: Optional[str]
     Address: Optional[str]
 
-class PayDraft(BaseModel):
-    pass
+
+class PayMasterSchema(BaseModel):
+    """
+    CREATE TABLE PayMaster
+    (
+        PayMID       int NOT NULL AUTO_INCREMENT,
+        SupplierName varchar(100),
+        FeeAmount    decimal(65, 2),
+        PaidAmount   decimal(12, 2),
+        PaidDate     datetime,
+        Note         varchar(128),
+        PRIMARY KEY (PayMID)
+    );
+    """
+
+    PayMID: Optional[int]
+    SupplierName: str
+    FeeAmount: float
+    PaidAmount: float
+    PaidDate: datetime
+    Note: Optional[str]
+
+
+class PayDraftSchema(BaseModel):
+    """
+    PayDraftID     int NOT NULL AUTO_INCREMENT,
+    PayMID         int,
+    Payee          varchar(100),
+    CableInfo      varchar(64),
+    TotalFeeAmount decimal(12, 2),
+    Subject        varchar(128),
+    Address        varchar(256),
+    CtactPerson    varchar(10),
+    Tel            varchar(32),
+    email          varchar(64),
+    IssueDate      varchar(32),
+    IssueNo        varchar(32),
+    OriginalTo     varchar(64),
+    CBPBankAcctNo  varchar(20),
+    BankAcctName   varchar(100),
+    BankName       varchar(100),
+    BankAddress    varchar(512),
+    BankAcctNo     varchar(32),
+    IBAN           varchar(64),
+    SWIFTCode      varchar(32),
+    Status         varchar(20),
+    PayeeType      varchar(10),
+    URI            varchar(128),
+    PRIMARY KEY (PayDraftID)
+    """
+
+    PayDraftID: Optional[int]
+    PayMID: int
+    Payee: Optional[str]
+    CableInfo: Optional[str]
+    TotalFeeAmount: float
+    Subject: Optional[str]
+    Address: Optional[str]
+    CtactPerson: Optional[str]
+    Tel: Optional[str]
+    email: Optional[str]
+    IssueDate: Optional[str]
+    IssueNo: Optional[str]
+    OriginalTo: Optional[str]
+    CBPBankAcctNo: Optional[str]
+    BankAcctName: Optional[str]
+    BankName: Optional[str]
+    BankAddress: Optional[str]
+    BankAcctNo: Optional[str]
+    IBAN: Optional[str]
+    SWIFTCode: Optional[str]
+    Status: Optional[str]
+    PayeeType: Optional[str]
+    URI: Optional[str]
+
+
+class PayDraftDetailSchema(BaseModel):
+    """
+    PayDraftDetailID int NOT NULL AUTO_INCREMENT,
+    PayDraftID       int,
+    InvoiceNo        varchar(20),
+    FeeAmount        varchar(20),
+    """
+
+    PayDraftDetailID: Optional[int]
+    PayDraftID: Optional[int]
+    InvoiceNo: Optional[str]
+    FeeAmount: Optional[str]
 
 
 class CBIDSchema(BaseModel):

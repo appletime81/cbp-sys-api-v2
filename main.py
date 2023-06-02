@@ -46,6 +46,7 @@ from utils.orm_pydantic_convert import *
 from service.BillMaster.service import router as BillMasterServiceRouter
 from service.Users.service import router as UsersServiceRouter
 from service.InvoiceWKMaster.service import router as InvoiceWKMasterServiceRouter
+from service.Payment.service import router as PaymentServiceRouter
 
 app = FastAPI()
 
@@ -79,6 +80,7 @@ app.include_router(PaymentRouter, prefix=ROOT_URL, tags=["Payment"])
 app.include_router(
     InvoiceWKMasterServiceRouter, prefix=ROOT_URL, tags=["InvoiceWKMasterService"]
 )
+app.include_router(PaymentServiceRouter, prefix=ROOT_URL, tags=["PaymentService"])
 
 # allow middlewares
 app.add_middleware(
