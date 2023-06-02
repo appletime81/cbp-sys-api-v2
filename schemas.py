@@ -448,6 +448,9 @@ class UsersSchema(BaseModel):
     Company: Optional[str]
     Address: Optional[str]
 
+class PayDraft(BaseModel):
+    pass
+
 
 class CBIDSchema(BaseModel):
     CBID: int

@@ -550,3 +550,9 @@ class UsersDBModel(Base):
     DFax = Column(String(20))
     Company = Column(String(256))
     Address = Column(String(256))
+
+
+class PayDraftDBModel(Base):
+
+    __tablename__ = "PayDraft"
+    # TODO: Continue complete dbmodel class
