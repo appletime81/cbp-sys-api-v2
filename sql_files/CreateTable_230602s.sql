@@ -69,7 +69,7 @@ CREATE TABLE InvoiceDetail
     LBRatio        decimal(13, 10) DEFAULT NULL,
     FeeAmountPost  decimal(12, 2)  DEFAULT NULL,
     Difference     decimal(3, 2)   DEFAULT NULL,
-    Status         varchar(20)  DEFAULT NULL,
+    Status         varchar(20)     DEFAULT NULL,
     PRIMARY KEY (InvDetailID)
 );
 

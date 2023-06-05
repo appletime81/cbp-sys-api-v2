@@ -22,6 +22,7 @@ async def getSuppliers(
         SuppliersDataList = crud.get_all()
     else:
         dictCondition = convert_url_condition_to_dict(urlCondition)
+        pprint(dictCondition)
         SuppliersDataList = crud.get_with_condition(dictCondition)
     return SuppliersDataList
 

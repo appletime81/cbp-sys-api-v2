@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from utils.utils import *
 from utils.log import *
 from utils.orm_pydantic_convert import *
+from docxtpl import DocxTemplate
 
 import os
 from copy import deepcopy
@@ -37,9 +38,10 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
         {"PayDraftID": PayDraftID}
     )
     PayMasterData = crudPayMaster.get_with_condition(
-        {"PayMasterID": PayDraftData.PayMasterID}
+        {"PayMID": PayDraftData.PayMID}
     )[0]
     SupplierName = PayMasterData.SupplierName
+    print(f"SupplierName: {SupplierName}")
 
     if (await request.json())["GetTemplate"]:
         PostingDate = convert_time_to_str(PayDraftData.IssueDate)
@@ -50,4 +52,10 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
             "PostingMonth": PostingDate[5:7],
             "PostingDay": PostingDate[8:10],
         }
+
+        doc = DocxTemplate("templates/payment-supplier-letter-template.docx")
+        doc.render(context)
+        fileName = "payment-supplier-letter-template.docx"
+        doc.save(f"{fileName}.docx")
+
         return context
