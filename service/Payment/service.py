@@ -45,8 +45,6 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
 
     if (await request.json())["GetTemplate"]:
         PostingDate = convert_time_to_str(PayDraftData.IssueDate)
-        print(PostingDate)
-        print(type(PostingDate))
         context = {
             "PostingYear": PostingDate[:4],
             "PostingMonth": PostingDate[5:7],
