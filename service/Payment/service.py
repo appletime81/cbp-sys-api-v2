@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request, Depends
+
 from fastapi.responses import FileResponse
 
 from crud import *
@@ -7,6 +8,7 @@ from sqlalchemy.orm import Session
 from utils.utils import *
 from utils.log import *
 from utils.orm_pydantic_convert import *
+
 from docxtpl import DocxTemplate
 
 import os
@@ -37,9 +39,7 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
     PayDraftDetailDataList = crudPayDraftDetail.get_with_condition(
         {"PayDraftID": PayDraftID}
     )
-    PayMasterData = crudPayMaster.get_with_condition(
-        {"PayMID": PayDraftData.PayMID}
-    )[0]
+    PayMasterData = crudPayMaster.get_with_condition({"PayMID": PayDraftData.PayMID})[0]
     SupplierName = PayMasterData.SupplierName
     print(f"SupplierName: {SupplierName}")
 

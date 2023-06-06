@@ -199,6 +199,64 @@ class CollectStatementDBModel(Base):
     Note = Column(String(128))
 
 
+class PayMasterDBModel(Base):
+    __tablename__ = "PayMaster"
+    PayMID = Column(Integer, primary_key=True, index=True)
+    SupplierName = Column(String(100))
+    FeeAmount = Column(Float)
+    PaidAmount = Column(Float)
+    PaidDate = Column(String(20))
+    Note = Column(String(128))
+
+
+class PayStatementDBModel(Base):
+    __tablename__ = "PayStatement"
+    PaySID = Column(Integer, primary_key=True, index=True)
+    PayMID = Column(Integer)
+    WKMasterID = Column(Integer)
+    InvoiceNo = Column(String(64))
+    FeeAmount = Column(Float)
+    PaidAmount = Column(Float)
+    PaidDate = Column(String(20))
+    Note = Column(String(128))
+    Status = Column(String(20))
+
+
+class PayDraftDBModel(Base):
+    __tablename__ = "PayDraft"
+    PayDraftID = Column(Integer, primary_key=True, index=True)
+    PayMID = Column(Integer)
+    Payee = Column(String(100))
+    CableInfo = Column(String(64))
+    TotalFeeAmount = Column(Float)
+    Subject = Column(String(128))
+    Address = Column(String(256))
+    CtactPerson = Column(String(10))
+    Tel = Column(String(32))
+    email = Column(String(32))
+    IssueDate = Column(String(20))
+    IssueNo = Column(String(32))
+    OriginalTo = Column(String(64))
+    CBPBankAcctNo = Column(String(20))
+    BankAcctName = Column(String(100))
+    BankName = Column(String(100))
+    BankAddress = Column(String(512))
+    BankAcctNo = Column(String(32))
+    IBAN = Column(String(64))
+    SWIFTCode = Column(String(32))
+    Status = Column(String(20))
+    PayeeType = Column(String(19))
+    URI = Column(String(128))
+
+
+class PayDraftDetailDBModel(Base):
+    __tablename__ = "PayDraftDetail"
+    PayDraftDetailID = Column(Integer, primary_key=True, index=True)
+    PayDraftID = Column(Integer)
+    InvoiceNo = Column(String(20))
+    FeeAmount = Column(Float)
+
+
 class LiabilityDBModel(Base):
     __tablename__ = "Liability"
     LBRawID = Column(Integer, primary_key=True, index=True)
@@ -550,94 +608,3 @@ class UsersDBModel(Base):
     DFax = Column(String(20))
     Company = Column(String(256))
     Address = Column(String(256))
-
-
-class PayMasterDBModel(Base):
-    """
-    CREATE TABLE PayMaster
-    (
-        PayMID       int NOT NULL AUTO_INCREMENT,
-        SupplierName varchar(100),
-        FeeAmount    decimal(65, 2),
-        PaidAmount   decimal(12, 2),
-        PaidDate     datetime,
-        Note         varchar(128),
-        PRIMARY KEY (PayMID)
-    );
-    """
-
-    __tablename__ = "PayMaster"
-    PayMID = Column(Integer, primary_key=True, index=True)
-    SupplierName = Column(String(100))
-    FeeAmount = Column(Float)
-    PaidAmount = Column(Float)
-    PaidDate = Column(String(20))
-    Note = Column(String(128))
-
-
-class PayDraftDBModel(Base):
-    """
-    PayDraftID     int NOT NULL AUTO_INCREMENT,
-    PayMID         int,
-    Payee          varchar(100),
-    CableInfo      varchar(64),
-    TotalFeeAmount decimal(12, 2),
-    Subject        varchar(128),
-    Address        varchar(256),
-    CtactPerson    varchar(10),
-    Tel            varchar(32),
-    email          varchar(64),
-    IssueDate      varchar(32),
-    IssueNo        varchar(32),
-    OriginalTo     varchar(64),
-    CBPBankAcctNo  varchar(20),
-    BankAcctName   varchar(100),
-    BankName       varchar(100),
-    BankAddress    varchar(512),
-    BankAcctNo     varchar(32),
-    IBAN           varchar(64),
-    SWIFTCode      varchar(32),
-    Status         varchar(20),
-    PayeeType      varchar(10),
-    URI            varchar(128),
-    """
-
-    __tablename__ = "PayDraft"
-    PayDraftID = Column(Integer, primary_key=True, index=True)
-    PayMID = Column(Integer)
-    Payee = Column(String(100))
-    CableInfo = Column(String(64))
-    TotalFeeAmount = Column(Float)
-    Subject = Column(String(128))
-    Address = Column(String(256))
-    CtactPerson = Column(String(10))
-    Tel = Column(String(32))
-    email = Column(String(64))
-    IssueDate = Column(String(32))
-    IssueNo = Column(String(32))
-    OriginalTo = Column(String(64))
-    CBPBankAcctNo = Column(String(20))
-    BankAcctName = Column(String(100))
-    BankName = Column(String(100))
-    BankAddress = Column(String(512))
-    BankAcctNo = Column(String(32))
-    IBAN = Column(String(64))
-    SWIFTCode = Column(String(32))
-    Status = Column(String(20))
-    PayeeType = Column(String(10))
-    URI = Column(String(128))
-
-
-class PayDraftDetailDBModel(Base):
-    """
-    PayDraftDetailID int NOT NULL AUTO_INCREMENT,
-    PayDraftID       int,
-    InvoiceNo        varchar(20),
-    FeeAmount        varchar(20),
-    """
-
-    __tablename__ = "PayDraftDetail"
-    PayDraftDetailID = Column(Integer, primary_key=True, index=True)
-    PayDraftID = Column(Integer)
-    InvoiceNo = Column(String(20))
-    FeeAmount = Column(String(20))

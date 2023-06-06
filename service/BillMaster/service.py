@@ -1,4 +1,4 @@
-﻿from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Request, Depends
 from fastapi.responses import FileResponse
 
 from crud import *

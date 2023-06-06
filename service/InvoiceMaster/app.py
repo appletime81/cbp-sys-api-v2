@@ -1,4 +1,4 @@
-﻿from fastapi import APIRouter, Request, status, Depends, Body
+from fastapi import APIRouter, Request, status, Depends, Body
 from crud import *
 from get_db import get_db
 from sqlalchemy.orm import Session

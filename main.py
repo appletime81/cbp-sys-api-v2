@@ -1,4 +1,4 @@
-﻿import os
+import os
 from fastapi import FastAPI, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -85,7 +85,7 @@ app.include_router(PaymentServiceRouter, prefix=ROOT_URL, tags=["PaymentService"
 # allow middlewares
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://192.168.1.102:4000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
