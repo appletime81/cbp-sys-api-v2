@@ -149,10 +149,10 @@ async def getSignedDraft(
 
     try:
         # --------- 先清空pdf檔案 ---------
-        files = os.listdir(os.getcwd())
-        for file in files:
-            if file.endswith(".pdf"):
-                os.system(f"rm -rf {file}")
+        # files = os.listdir(os.getcwd())
+        # for file in files:
+        #     if file.endswith(".pdf"):
+        #         os.system(f"rm -rf {file}")
         # -------------------------------
 
         os.system(f"aws s3 cp {draftURI} .")

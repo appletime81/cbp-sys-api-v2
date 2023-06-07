@@ -332,3 +332,29 @@
 2023-06-06 01:54:11.624924: Eva Change upload signed bill master, BillMasterID: 1
 --------------------------------------------------
 2023-06-06 02:03:04.812455: Eva Change update BillMaster, BillMasterID: 1 to TO_WRITEOFF
+--------------------------------------------------
+2023-06-07 11:06:35.477754: Eva Change initial BillMaster, BillingNo is 02CO-CI2306071105
+--------------------------------------------------
+2023-06-07 11:06:42.689901: Eva Change completed the deduction of the BillMaster: {'WorkTitle': 'Construction', 'BillingNo': '02CO-CI2306071105', 'PONo': '測試po號碼-02CO-CI2306071105', 'IssueDate': '2023-06-07T11:06:35', 'DueDate': '2023-07-31T11:05:28', 'ReceivedAmountSum': 0.0, 'IsPro': False, 'URI': None, 'SubmarineCable': 'SJC2', 'BillMasterID': 2, 'PartyName': 'CHT', 'FeeAmountSum': 208294.52, 'BankFees': None, 'Status': 'RATED'}
+--------------------------------------------------
+2023-06-07 11:08:38.686525: Eva Change downloaded 02CO-CI2306071105.docx, title is SJC2 Cable Network  Central Billing Party Invoice, logo is 1
+--------------------------------------------------
+2023-06-07 11:18:47.205287: Eva Change upload signed bill master, BillMasterID: 2
+--------------------------------------------------
+2023-06-07 11:20:53.063826: Eva Change update BillMaster, BillMasterID: 2 to TO_WRITEOFF
+--------------------------------------------------
+2023-06-07 14:38:47.264675: Eva Change writes off 02CO-CI2306071105 successfully.
+--------------------------------------------------
+2023-06-07 14:38:54.012218: Eva Change writes off 02CO-CI2306071105 successfully.
+--------------------------------------------------
+2023-06-07 14:42:14.148433: Eva Change initial BillMaster, BillingNo is 02CO-CI2306071442
+--------------------------------------------------
+2023-06-07 14:45:43.887162: Eva Change completed the deduction of the BillMaster: {'WorkTitle': 'Construction', 'BillingNo': '02CO-CI2306071442', 'PONo': '', 'IssueDate': '2023-06-07T14:42:14', 'DueDate': '2023-07-31T14:41:47', 'ReceivedAmountSum': 0.0, 'IsPro': False, 'URI': None, 'SubmarineCable': 'SJC2', 'BillMasterID': 3, 'PartyName': 'CHT', 'FeeAmountSum': 190371.68, 'BankFees': None, 'Status': 'RATED'}
+--------------------------------------------------
+2023-06-07 15:03:22.258912: Eva Change downloaded 02CO-CI2306071442.docx, title is SJC2 Cable Network  Central Billing Party Invoice, logo is 1
+--------------------------------------------------
+2023-06-07 16:49:59.529205: Eva Change downloaded 02CO-CI2306071442.docx, title is SJC2 Cable Network  Central Billing Party Invoice, logo is 1
+--------------------------------------------------
+2023-06-07 16:53:49.023256: Eva Change upload signed bill master, BillMasterID: 3
+--------------------------------------------------
+2023-06-07 17:31:49.689699: Eva Change update BillMaster, BillMasterID: 3 to TO_WRITEOFF

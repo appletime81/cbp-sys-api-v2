@@ -5,6 +5,7 @@ from crud import *
 from get_db import get_db
 from sqlalchemy.orm import Session
 from utils.utils import *
+from utils.log import record_log
 from utils.orm_pydantic_convert import *
 
 import os
