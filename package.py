@@ -4,11 +4,15 @@ import os
 import re
 
 
-def main():
-    # remove backend folder
-    shutil.rmtree("backend", ignore_errors=True)
+import shutil
+import os
+import re
+import subprocess
 
-    # create backend folder
+
+def main():
+    # remove backend folder and create a new one
+    shutil.rmtree("backend", ignore_errors=True)
     os.mkdir("backend")
 
     # copy required folders and files to backend
@@ -23,27 +27,25 @@ def main():
         "crud.py",
         "delete_pycache.py",
         "start.sh",
+        "dbinfo.ini",
+        "userinfo.ini",
     ]
     for file in files_to_copy:
         shutil.copy(file, "backend")
 
-    subprocess.run(["cp", "./dbinfo.ini", "./backend"], check=True)
-    subprocess.run(["cp", "./userinfo.ini", "./backend"], check=True)
-
-    with open("./backend/database/engine.py", "r") as f:
-        # read all content
+    # read and modify the content of "engine.py"
+    with open("./backend/database/engine.py", "r+") as f:
         content = f.read()
-
-    res = re.search(r'section = "\S+"', content).group()
-    findTargetStr = res.split("=")[1].replace('"', "").strip()
-
-    targetStr = "aws"  # database name
-    content = content.replace(findTargetStr, targetStr)
-
-    with open("./backend/database/engine.py", "w") as f:
+        res = re.search(r'section = "\S+"', content).group()
+        findTargetStr = res.split("=")[1].replace('"', "").strip()
+        targetStr = "aws"  # database name
+        content = content.replace(findTargetStr, targetStr)
+        f.seek(0)
         f.write(content)
+        f.truncate()
 
-    os.system("cd ./backend && tar -zcvf ./backend.tar.gz .")
+    # compress the backend folder
+    subprocess.run(["tar", "-zcvf", "backend.tar.gz", "-C", "backend", "."], check=True)
 
 
 if __name__ == "__main__":
