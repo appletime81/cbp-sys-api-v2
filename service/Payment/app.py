@@ -40,8 +40,11 @@ async def getPaymentData(
             )
             for BillDetailData in BillDetailDataList:
                 # 要與發票金額對得起來，必須要用抵扣前的金額資訊來對，所以此處已實收要納入已抵扣金額
+                # 但已實收金額應該又要扣除ToCBAmount
                 BillDetailData.ReceivedAmount = (
-                    BillDetailData.ReceivedAmount + BillDetailData.DedAmount
+                    BillDetailData.ReceivedAmount
+                    + BillDetailData.DedAmount
+                    - BillDetailData.ToCBAmount
                 )
                 receivedAmountSum = receivedAmountSum + BillDetailData.ReceivedAmount
 
@@ -142,7 +145,9 @@ async def submitPayment(request: Request, db: Session = Depends(get_db)):
             BillDetailDictData["PaidAmount"] = (
                 BillDetailDictData["PaidAmount"] + BillDetailDictData["PayAmount"]
             )
-            # 因頁面上傳來的累計實收是有加上DedAmount，所以要把它復原成DB原有的值
+
+            # 因頁面上傳來的累計實收是有加上DedAmount以及扣除ToCBAmount，所以要把它復原成DB原有的值
+
             # 才能做update BillDetailDictData["PaidAmount"]
             BillDetailDictData["ReceivedAmount"] = oldBillDetailData.ReceivedAmount
             crudBillDetail.update(oldBillDetailData, BillDetailDictData)
