@@ -358,3 +358,9 @@
 2023-06-07 16:53:49.023256: Eva Change upload signed bill master, BillMasterID: 3
 --------------------------------------------------
 2023-06-07 17:31:49.689699: Eva Change update BillMaster, BillMasterID: 3 to TO_WRITEOFF
+--------------------------------------------------
+2023-06-09 14:56:13.987384: Eva Change downloaded 02CO-CM2305261647.docx, title is SJC2 Cable Network  Central Billing Party Invoice, logo is 1
+--------------------------------------------------
+2023-06-09 15:26:21.408484: Eva Change downloaded 02CO-CM2305261647.docx, title is SJC2 Cable Network  Central Billing Party Invoice, logo is 1
+--------------------------------------------------
+2023-06-09 15:27:41.690125: Eva Change downloaded 02CO-CM2305261647.docx, title is SJC2 Cable Network  Central Billing Party Invoice, logo is 1

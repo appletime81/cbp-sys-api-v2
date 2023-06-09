@@ -796,6 +796,7 @@ async def getBillMasterDraftStream(
                 DetailInformationDictData["InvNumber"].append(CBData.BillingNo)
 
     DetailInformationDictDataList = list()
+    No = 1
     for supplier, invNumber, description, amountBilled, liability, yourShare in zip(
         DetailInformationDictData["Supplier"],
         DetailInformationDictData["InvNumber"],
@@ -812,8 +813,10 @@ async def getBillMasterDraftStream(
                 "BilledAmount": amountBilled,
                 "Liability": liability,
                 "ShareAmount": yourShare,
+                "No": str(No),
             }
         )
+        No += 1
 
     getResult = {
         "ContactWindowAndSupervisorInformation": ContactWindowAndSupervisorInformationDictData,
@@ -889,32 +892,58 @@ async def getBillMasterDraftStream(
         "ContactWindowDEmail": getResult["ContactWindowAndSupervisorInformation"][
             "DEmail"
         ],
-        "CorporateBankName": getResult["CorporateInformation"]["BankName"],
-        "CorporateBranch": getResult["CorporateInformation"]["Branch"]
+        # "CorporateBankName": getResult["CorporateInformation"]["BankName"],
+        "CorporateBankName": f"Bank Name: {getResult['CorporateInformation']['BankName']}"
+        if getResult["CorporateInformation"]["BankName"]
+        else "",
+        # "CorporateBranch": getResult["CorporateInformation"]["Branch"]
+        # if getResult["CorporateInformation"]["Branch"]
+        # else "n/a",
+        "CorporateBranch": f"Branch Name: {getResult['CorporateInformation']['Branch']}"
         if getResult["CorporateInformation"]["Branch"]
-        else "n/a",
-        "CorporateBranchAddress": getResult["CorporateInformation"]["BranchAddress"]
+        else "",
+        # "CorporateBranchAddress": getResult["CorporateInformation"]["BranchAddress"]
+        # if getResult["CorporateInformation"]["BranchAddress"]
+        # else "n/a",
+        "CorporateBranchAddress": f"Branch Address: {getResult['CorporateInformation']['BranchAddress']}"
         if getResult["CorporateInformation"]["BranchAddress"]
-        else "n/a",
-        "CorporateBankAcctName": getResult["CorporateInformation"]["BankAcctName"]
+        else "",
+        # "CorporateBankAcctName": getResult["CorporateInformation"]["BankAcctName"]
+        # if getResult["CorporateInformation"]["BankAcctName"]
+        # else "n/a",
+        "CorporateBankAcctName": f"A/C Name: {getResult['CorporateInformation']['BankAcctName']}"
         if getResult["CorporateInformation"]["BankAcctName"]
-        else "n/a",
-        "CorporateBankAcctNo": getResult["CorporateInformation"]["BankAcctNo"]
+        else "",
+        # "CorporateBankAcctNo": getResult["CorporateInformation"]["BankAcctNo"]
+        # if getResult["CorporateInformation"]["BankAcctNo"]
+        # else "n/a",
+        "CorporateBankAcctNo": f"A/C No.: {getResult['CorporateInformation']['BankAcctNo']}"
         if getResult["CorporateInformation"]["BankAcctNo"]
-        else "n/a",
-        "CorporateSavingAcctNo": getResult["CorporateInformation"]["SavingAcctNo"]
+        else "",
+        # "CorporateSavingAcctNo": getResult["CorporateInformation"]["SavingAcctNo"]
+        # if getResult["CorporateInformation"]["SavingAcctNo"]
+        # else "n/a",
+        "CorporateSavingAcctNo": f"Saving A/C No.: {getResult['CorporateInformation']['SavingAcctNo']}"
         if getResult["CorporateInformation"]["SavingAcctNo"]
-        else "n/a",
-        "CorporateIBAN": getResult["CorporateInformation"]["IBAN"]
+        else "",
+        # "CorporateIBAN": getResult["CorporateInformation"]["IBAN"]
+        # if getResult["CorporateInformation"]["IBAN"]
+        # else "n/a",
+        "CorporateIBAN": f"IBAN: {getResult['CorporateInformation']['IBAN']}"
         if getResult["CorporateInformation"]["IBAN"]
-        else "n/a",
-        "CorporateSWIFTCode": getResult["CorporateInformation"]["SWIFTCode"],
-        "CorporateACHNo": getResult["CorporateInformation"]["ACHNo"]
+        else "",
+        # "CorporateSWIFTCode": getResult["CorporateInformation"]["SWIFTCode"],
+        "CorporateSWIFTCode": f"SWIFT Code: {getResult['CorporateInformation']['SWIFTCode']}"
+        if getResult["CorporateInformation"]["SWIFTCode"]
+        else "",
+        # "CorporateACHNo": getResult["CorporateInformation"]["ACHNo"]
+        "CorporateACHNo": f"ACH No.: {getResult['CorporateInformation']['ACHNo']}"
         if getResult["CorporateInformation"]["ACHNo"]
-        else "n/a",
-        "CorporateWireRouting": getResult["CorporateInformation"]["WireRouting"]
+        else "",
+        # "CorporateWireRouting": getResult["CorporateInformation"]["WireRouting"]
+        "CorporateWireRouting": f"Wire / Routing: {getResult['CorporateInformation']['WireRouting']}"
         if getResult["CorporateInformation"]["WireRouting"]
-        else "n/a",
+        else "",
         "IssueDate": (await request.json())["IssueDate"],
         "DueDate": (await request.json())["DueDate"],
         "InvoiceNo": getResult["InvoiceNo"],
