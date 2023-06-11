@@ -25,7 +25,7 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
     {
         "PayDraftID": int,
         "PaymentUSerInput": str,
-        "PayAmountChinese": str,
+        "PaidAmountChinese": str,
         "SubmarineCableInfo": str,
     }
     """
@@ -113,7 +113,7 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
             "CorporateAccountNo": CorporateAccountNo if CorporateAccountNo else "n/a",
             "InvoiceNo": InvoiceNo if InvoiceNo else "n/a",
             "PaymentUSerInput": (await request.json())["PaymentUSerInput"],
-            "PayAmountChinese": (await request.json())["PayAmountChinese"],
+            "PaidAmountChinese": (await request.json())["PaidAmountChinese"],
             "SubmarineCableInfo": SubmarineCableInfo if SubmarineCableInfo else "n/a",
             "PaidAmount": PaidAmount if PaidAmount else "n/a",
             "SupplierName": SupplierName if SupplierName else "n/a",
