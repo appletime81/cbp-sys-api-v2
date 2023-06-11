@@ -364,3 +364,5 @@
 2023-06-09 15:26:21.408484: Eva Change downloaded 02CO-CM2305261647.docx, title is SJC2 Cable Network  Central Billing Party Invoice, logo is 1
 --------------------------------------------------
 2023-06-09 15:27:41.690125: Eva Change downloaded 02CO-CM2305261647.docx, title is SJC2 Cable Network  Central Billing Party Invoice, logo is 1
+--------------------------------------------------
+2023-06-11 15:10:17.580903: Eva Change paid to Supplier DT0170168-1 successfully.
