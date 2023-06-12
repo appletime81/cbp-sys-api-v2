@@ -366,3 +366,31 @@
 2023-06-09 15:27:41.690125: Eva Change downloaded 02CO-CM2305261647.docx, title is SJC2 Cable Network  Central Billing Party Invoice, logo is 1
 --------------------------------------------------
 2023-06-11 15:10:17.580903: Eva Change paid to Supplier DT0170168-1 successfully.
+--------------------------------------------------
+2023-06-12 14:45:35.652079: Eva Change paid to Supplier DT0170168-2 successfully.
+--------------------------------------------------
+2023-06-12 14:45:47.088858: Eva Change paid to Supplier DT0170168-2 successfully.
+--------------------------------------------------
+2023-06-12 14:47:50.276056: Eva Change paid to Supplier DT0170168-2 successfully.
+--------------------------------------------------
+2023-06-12 14:47:52.101961: Eva Change paid to Supplier DT0170168-2 successfully.
+--------------------------------------------------
+2023-06-12 14:47:53.747944: Eva Change paid to Supplier DT0170168-2 successfully.
+--------------------------------------------------
+2023-06-12 14:48:01.471433: Eva Change paid to Supplier DT0170168-2 successfully.
+--------------------------------------------------
+2023-06-12 14:48:03.034051: Eva Change paid to Supplier DT0170168-2 successfully.
+--------------------------------------------------
+2023-06-12 14:48:04.521418: Eva Change paid to Supplier DT0170168-2 successfully.
+--------------------------------------------------
+2023-06-12 14:48:47.321042: Eva Change paid to Supplier DT0170168-2 successfully.
+--------------------------------------------------
+2023-06-12 14:49:58.593503: Eva Change paid to Supplier DT0170168-2 successfully.
+--------------------------------------------------
+2023-06-12 16:07:35.696425: Eva Change update InvoiceWKMaster: {'WKMasterID': 2, 'Status': 'VALIDATED'}
+--------------------------------------------------
+2023-06-12 16:07:37.553502: Eva Change update InvoiceWKMaster: {'WKMasterID': 1, 'Status': 'VALIDATED'}
+--------------------------------------------------
+2023-06-12 16:07:50.983047: Eva Change add InvoiceMaster and InvoiceDetail, InvoiceNo: DT0170168-2
+--------------------------------------------------
+2023-06-12 16:07:57.514651: Eva Change add InvoiceMaster and InvoiceDetail, InvoiceNo: DT0170168-1
