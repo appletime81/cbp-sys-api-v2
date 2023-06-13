@@ -201,6 +201,8 @@ class PayDraftSchema(BaseModel):
     BankAcctNo: str
     IBAN: str
     SWIFTCode: str
+    ACHNo: str
+    WireRouting: str
     Status: str
     PayeeType: str
     URI: str

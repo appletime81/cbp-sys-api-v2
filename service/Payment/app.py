@@ -25,8 +25,12 @@ async def getPaymentData(
 ):
     # the datas will be shown on the frontend page
     crudInvoiceWKMaster = CRUD(db, InvoiceWKMasterDBModel)
+    crudInvoiceDetail = CRUD(db, InvoiceDetailDBModel)
+    crudBillMaster = CRUD(db, BillMasterDBModel)
     crudBillDetail = CRUD(db, BillDetailDBModel)
-    print(urlCondition)
+
+    # print(urlCondition)
+
     getResult = []
     # if(urlCondition == "Status=PAYING"):
     if "Status" in urlCondition:
@@ -38,23 +42,79 @@ async def getPaymentData(
             BillDetailDataList = crudBillDetail.get_with_condition(
                 {"WKMasterID": InvoiceWKMasterData.WKMasterID}
             )
+            # 將BillDetailDataList中每個element轉成Dictionary型態，並增加一個key為BillingNo
+            # 另存一個DictionaryList
+            BillDetailDictList = []
             for BillDetailData in BillDetailDataList:
+                BillMasterData = crudBillMaster.get_with_condition(
+                    {"BillMasterID": BillDetailData.BillMasterID}
+                )[0]
+                BillDetailDict = orm_to_dict(BillDetailData)
+                BillDetailDict["BillingNo"] = BillMasterData.BillingNo
+                BillDetailDictList.append(BillDetailDict)
+            InvDetailDataList = crudInvoiceDetail.get_with_condition(
+                {"WKMasterID": InvoiceWKMasterData.WKMasterID}
+            )
+            if len(InvDetailDataList) > len(BillDetailDataList):
+                # 理論上InvDetailDataList與BillDetailDataList筆數應該一樣；
+                # 但若有的InvDetail還未做合併(即費用項目尚未產生帳單)，則尚未有BillMaster與BillDetail；
+                # 這時候畫面上還是要列出尚未產生帳單的明細，所以把InvDetail的資訊存放至BillDetailDictList
+                for InvDetailData in InvDetailDataList:
+                    billDetailList = crudBillDetail.get_with_condition(
+                        {"InvDetailID": InvDetailData.InvDetailID}
+                    )
+                    if len(billDetailList) == 0:
+                        BillDetailDictList.append(
+                            {
+                                "BillDetailID": -1,
+                                "BillMasterID": -1,
+                                "BillingNo": "",
+                                "WKMasterID": -1,
+                                "InvoiceNo": InvoiceWKMasterData.InvoiceNo,
+                                "InvDetailID": InvDetailData.InvDetailID,
+                                "PartyName": InvDetailData.PartyName,
+                                "SupplierName": InvDetailData.SupplierName,
+                                "SubmarineCable": InvDetailData.SubmarineCable,
+                                "WorkTitle": InvDetailData.WorkTitle,
+                                "BillMilestone": InvDetailData.BillMilestone,
+                                "FeeItem": InvDetailData.FeeItem,
+                                "OrgFeeAmount": InvDetailData.FeeAmountPost,
+                                "DedAmount": 0,
+                                "FeeAmount": 0,
+                                "ReceivedAmount": 0,
+                                "OverAmount": 0,
+                                "ShortAmount": 0,
+                                "ShortOverReason": "",
+                                "WriteOffDate": "",
+                                "ReceiveDate": "",
+                                "Note": "",
+                                "ToCBAmount": 0,
+                                "PaidAmount": 0,
+                                "Status": "",
+                            }
+                        )
+                # end for InvDetailData in InvDetailDataList
+            # end if len(InvDetailDataList) > len(BillDetailDataList)
+            for BillDetailDict in BillDetailDictList:
                 # 要與發票金額對得起來，必須要用抵扣前的金額資訊來對，所以此處已實收要納入已抵扣金額
                 # 但已實收金額應該又要扣除ToCBAmount
-                BillDetailData.ReceivedAmount = (
-                    BillDetailData.ReceivedAmount
-                    + BillDetailData.DedAmount
-                    - BillDetailData.ToCBAmount
+
+                BillDetailDict["ReceivedAmount"] = (
+                    BillDetailDict["ReceivedAmount"]
+                    + BillDetailDict["DedAmount"]
+                    - BillDetailDict["ToCBAmount"]
                 )
-                receivedAmountSum = receivedAmountSum + BillDetailData.ReceivedAmount
+
+                receivedAmountSum = receivedAmountSum + BillDetailDict["ReceivedAmount"]
 
             getResult.append(
                 {
                     "InvoiceWKMaster": InvoiceWKMasterData,
-                    "BillDetailList": BillDetailDataList,
+                    "BillDetailList": BillDetailDictList,
                     "ReceivedAmountSum": receivedAmountSum,
                 }
             )
+        # end for InvoiceWKMasterData in InvoiceWKMasterDataList
         return getResult
     else:
         return {"message": "failed to get invoice data which is in PAYING"}

@@ -244,6 +244,8 @@ class PayDraftDBModel(Base):
     BankAcctNo = Column(String(32))
     IBAN = Column(String(64))
     SWIFTCode = Column(String(32))
+    ACHNo = Column(String(32))
+    WireRouting = Column(String(32))
     Status = Column(String(20))
     PayeeType = Column(String(19))
     URI = Column(String(128))
