@@ -32,7 +32,11 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
     """
     requestDictData = await request.json()
     crudPayMaster = CRUD(db , PayMasterDBModel)
+    crudPayStatement = CRUD(db , PayStatementDBModel)
     crudPayDraft = CRUD(db , PayDraftDBModel)
+    crudPayDraftDetail = CRUD(db, PayDraftDetailDBModel)
+    crudSuppliers = CRUD(db , SuppliersDBModel)
+
     if requestDictData.get("CacheData"):
         pass
 
