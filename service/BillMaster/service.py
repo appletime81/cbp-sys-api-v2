@@ -948,7 +948,7 @@ async def getBillMasterDraftStream(
         "DueDate": (await request.json())["DueDate"],
         "InvoiceNo": getResult["InvoiceNo"],
         "logo": InlineImage(doc, logo_path),
-        "PONo": f"PO No.: {BillMasterData.PONo}" if BillMasterData.PONo else "n/a",
+        "PONo": f"PO No.: {BillMasterData.PONo}" if BillMasterData.PONo else "",
     }
     doc.render(context)
     titleName = f"{context['submarinecable']} Cable Network {context['worktitle']} Central Billing Party"

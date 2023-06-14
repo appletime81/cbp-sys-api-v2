@@ -396,3 +396,33 @@
 2023-06-12 16:07:57.514651: Eva Change add InvoiceMaster and InvoiceDetail, InvoiceNo: DT0170168-1
 --------------------------------------------------
 2023-06-13 15:10:48.934353: Eva Change add Liability: [{'BillMilestone': 'BM12', 'PartyName': 'CHT', 'LBRatio': '7.1428571429', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'Note': '', 'CreateDate': '2023-06-13 15:10:48'}, {'BillMilestone': 'BM12', 'PartyName': 'CM', 'LBRatio': '28.5714285714', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'Note': '', 'CreateDate': '2023-06-13 15:10:48'}, {'BillMilestone': 'BM12', 'PartyName': 'DHT', 'LBRatio': '3.5714285714', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'Note': '', 'CreateDate': '2023-06-13 15:10:48'}, {'BillMilestone': 'BM12', 'PartyName': 'EDGE', 'LBRatio': '28.5714285714', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'Note': '', 'CreateDate': '2023-06-13 15:10:48'}, {'BillMilestone': 'BM12', 'PartyName': 'KDDI', 'LBRatio': '0.0793650794', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'Note': '', 'CreateDate': '2023-06-13 15:10:48'}, {'BillMilestone': 'BM12', 'PartyName': 'Singtel', 'LBRatio': '7.0634920635', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'Note': '', 'CreateDate': '2023-06-13 15:10:48'}, {'BillMilestone': 'BM12', 'PartyName': 'SKB', 'LBRatio': '7.1428571429', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'Note': '', 'CreateDate': '2023-06-13 15:10:48'}, {'BillMilestone': 'BM12', 'PartyName': 'Telin', 'LBRatio': '3.5714285714', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'Note': '', 'CreateDate': '2023-06-13 15:10:48'}, {'BillMilestone': 'BM12', 'PartyName': 'TICC', 'LBRatio': '7.1428571429', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'Note': '', 'CreateDate': '2023-06-13 15:10:48'}, {'BillMilestone': 'BM12', 'PartyName': 'VNPT', 'LBRatio': '7.1428571428', 'SubmarineCable': 'SJC2', 'WorkTitle': 'Construction', 'Note': '', 'CreateDate': '2023-06-13 15:10:48'}]
+--------------------------------------------------
+2023-06-14 08:21:54.934935: Eva Change created InvoiceWKMaster, the InvoiceNo is DT0170168-1
+--------------------------------------------------
+2023-06-14 08:25:21.789419: Eva Change created InvoiceWKMaster, the InvoiceNo is DT0170168-2
+--------------------------------------------------
+2023-06-14 08:28:49.463762: Eva Change update InvoiceWKMaster: {'WKMasterID': 1, 'Status': 'VALIDATED'}
+--------------------------------------------------
+2023-06-14 08:28:50.691237: Eva Change update InvoiceWKMaster: {'WKMasterID': 2, 'Status': 'VALIDATED'}
+--------------------------------------------------
+2023-06-14 08:37:27.809089: Eva Change add InvoiceMaster and InvoiceDetail, InvoiceNo: DT0170168-2
+--------------------------------------------------
+2023-06-14 08:38:24.117771: Eva Change add InvoiceMaster and InvoiceDetail, InvoiceNo: DT0170168-1
+--------------------------------------------------
+2023-06-14 09:37:40.503079: Eva Change initial BillMaster, BillingNo is 02CO-CI2306140936
+--------------------------------------------------
+2023-06-14 09:37:58.796985: Eva Change completed the deduction of the BillMaster: {'PONo': '', 'WorkTitle': 'Construction', 'BillMasterID': 1, 'IssueDate': '2023-06-14T09:37:40', 'FeeAmountSum': 176217.88, 'ReceivedAmountSum': 0.0, 'IsPro': False, 'URI': None, 'BillingNo': '02CO-CI2306140936', 'SubmarineCable': 'SJC2', 'PartyName': 'CHT', 'DueDate': '2023-06-30T17:02:23', 'BankFees': None, 'Status': 'RATED'}
+--------------------------------------------------
+2023-06-14 09:47:21.164749: Eva Change downloaded 02CO-CI2306140936.docx, title is SJC2 Cable Network _Construction, BM9a, BM12_ Central Billing Party Invoice, logo is 1
+--------------------------------------------------
+2023-06-14 09:49:24.161615: Eva Change downloaded 02CO-CI2306140936.docx, title is SJC2 Cable Network _Construction, BM9a, BM12_ Central Billing Party Invoice, logo is 1
+--------------------------------------------------
+2023-06-14 09:55:11.118928: Eva Change downloaded 02CO-CI2306140936.docx, title is SJC2 Cable Network _Construction, BM9a, BM12_ Central Billing Party Invoice, logo is 1
+--------------------------------------------------
+2023-06-14 09:57:06.684443: Eva Change downloaded 02CO-CI2306140936.docx, title is SJC2 Cable Network _Construction, BM9a, BM12_ Central Billing Party Invoice, logo is 1
+--------------------------------------------------
+2023-06-14 10:04:11.550911: Eva Change downloaded 02CO-CI2306140936.docx, title is SJC2 Cable Network _Construction, BM9a, BM12_ Central Billing Party Invoice, logo is 1
+--------------------------------------------------
+2023-06-14 10:10:17.153506: Eva Change downloaded 02CO-CI2306140936.docx, title is SJC2 Cable Network _Construction, BM9a, BM12_ Central Billing Party Invoice, logo is 1
+--------------------------------------------------
+2023-06-14 11:03:55.860040: Eva Change upload signed bill master, BillMasterID: 1
