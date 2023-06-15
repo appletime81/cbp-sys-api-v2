@@ -85,7 +85,7 @@ app.include_router(PaymentServiceRouter, prefix=ROOT_URL, tags=["PaymentService"
 # allow middlewares
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://192.168.1.102:3000"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
