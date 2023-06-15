@@ -184,6 +184,9 @@ class PayDraftSchema(BaseModel):
     PayDraftID: Optional[int]
     PayMID: int
     Payee: str
+    InvoiceNo: str
+    SubmarineCable: str
+    WorkTitle: str
     CableInfo: str
     TotalFeeAmount: float
     Subject: str

@@ -428,3 +428,11 @@
 2023-06-14 11:03:55.860040: Eva Change upload signed bill master, BillMasterID: 1
 --------------------------------------------------
 2023-06-15 01:16:39.325889: Eva Change created InvoiceWKMaster, the InvoiceNo is DT0170168-1
+--------------------------------------------------
+2023-06-15 11:13:48.608221: Eva Change update BillMaster, BillMasterID: 1 to TO_WRITEOFF
+--------------------------------------------------
+2023-06-15 13:54:59.952257: Eva Change writes off 02CO-CI2306140936 successfully.
+--------------------------------------------------
+2023-06-15 16:24:20.946575: Eva Change paid to Supplier DT0170168-1 successfully.
+--------------------------------------------------
+2023-06-15 16:24:20.989857: Eva Change paid to Supplier DT0170168-2 successfully.

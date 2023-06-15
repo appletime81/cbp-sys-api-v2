@@ -166,6 +166,9 @@ async def submitPayment(request: Request, db: Session = Depends(get_db)):
     PayDraftDictData = {
         "PayMID": thisPayMaster.PayMID,
         "Payee": PayMasterDictData["SupplierName"],
+        "InvoiceNo": "",
+        "SubmarineCable": PaymentDataList[0]["InvoiceWKMaster"]["SubmarineCable"],
+        "WorkTitle": PaymentDataList[0]["InvoiceWKMaster"]["WorkTitle"],
         "CableInfo": "",
         "TotalFeeAmount": 0,
         "Subject": "",
@@ -183,6 +186,8 @@ async def submitPayment(request: Request, db: Session = Depends(get_db)):
         "BankAcctNo": "",
         "IBAN": "",
         "SWIFTCode": "",
+        "ACHNo": "",
+        "WireRouting": "",
         "Status": "TEMPORARY",
         "PayeeType": "SUPPLIER",
         "URI": "",
@@ -198,6 +203,10 @@ async def submitPayment(request: Request, db: Session = Depends(get_db)):
 
         BillDetailDictDataList = PaymentData["BillDetailList"]
         for BillDetailDictData in BillDetailDictDataList:
+            if BillDetailDictData["BillDetailID"] == -1:
+                # 其中有費用項目尚未產生帳單，則略過
+                continue
+
             oldBillDetailData = crudBillDetail.get_with_condition(
                 {"BillDetailID": BillDetailDictData["BillDetailID"]}
             )[0]
@@ -205,9 +214,7 @@ async def submitPayment(request: Request, db: Session = Depends(get_db)):
             BillDetailDictData["PaidAmount"] = (
                 BillDetailDictData["PaidAmount"] + BillDetailDictData["PayAmount"]
             )
-
             # 因頁面上傳來的累計實收是有加上DedAmount以及扣除ToCBAmount，所以要把它復原成DB原有的值
-
             # 才能做update BillDetailDictData["PaidAmount"]
             BillDetailDictData["ReceivedAmount"] = oldBillDetailData.ReceivedAmount
             crudBillDetail.update(oldBillDetailData, BillDetailDictData)
@@ -249,6 +256,9 @@ async def submitPayment(request: Request, db: Session = Depends(get_db)):
         }
         PayDraftDetailSchemaData = PayDraftDetailSchema(**PayDraftDetailDictData)
         crudPayDraftDetail.create(PayDraftDetailSchemaData)
+        PayDraftDictData["InvoiceNo"] = (
+            PayDraftDictData["InvoiceNo"] + InvoiceWKMasterDictData["InvoiceNo"] + "/"
+        )
 
         # ----累加付款紀錄主檔的資訊-----
         # 此次付款總金額 = 累加每張發票此次付款金額
@@ -268,6 +278,7 @@ async def submitPayment(request: Request, db: Session = Depends(get_db)):
     # 更新付款紀錄主檔、函稿主檔
     crudPayMaster.update(thisPayMaster, PayMasterDictData)
     PayDraftDictData["TotalFeeAmount"] = PayMasterDictData["PaidAmount"]
+    PayDraftDictData["InvoiceNo"] = PayDraftDictData["InvoiceNo"][:-1]
     crudPayDraft.update(thisPayDraft, PayDraftDictData)
     return
 
