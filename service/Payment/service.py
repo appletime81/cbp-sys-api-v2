@@ -35,17 +35,14 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
     """
     requestDictData = await request.json()
     pprint(requestDictData)
-    crudPayMaster = CRUD(db, PayMasterDBModel)
-    crudPayStatement = CRUD(db, PayStatementDBModel)
     crudPayDraft = CRUD(db, PayDraftDBModel)
-    crudPayDraftDetail = CRUD(db, PayDraftDetailDBModel)
     crudSuppliers = CRUD(db, SuppliersDBModel)
     crudCorporates = CRUD(db, CorporatesDBModel)
 
     PayDraftData = crudPayDraft.get_with_condition(
         {"PayDraftID": requestDictData.get("PayDraftID")}
     )[0]
-    oldPayDraftData = deepcopy(PayDraftData)
+    newPayDraftData = deepcopy(PayDraftData)
 
     SuppliersData = crudSuppliers.get_with_condition(
         {
@@ -55,65 +52,75 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
         }
     )[0]
 
-    CBPBankAcctNoDictCondition = {
-        "SubmarineCable": PayDraftData.SubmarineCable,
-        "WorkTitle": PayDraftData.WorkTitle,
-    }
-    PayDraftData.CBPBankAcctNo = (
-        crudCorporates.get_with_condition(CBPBankAcctNoDictCondition)[0].BankAcctNo
-        if crudCorporates.get_with_condition(CBPBankAcctNoDictCondition)[0].BankAcctNo
-        else crudCorporates.get_with_condition(CBPBankAcctNoDictCondition)[
-            0
-        ].SavingAcctNo
+    CorporatesData = crudCorporates.get_with_condition(
+        {
+            "SubmarineCable": PayDraftData.SubmarineCable,
+            "WorkTitle": PayDraftData.WorkTitle,
+        }
+    )[0]
+    newPayDraftData.CBPBankAcctNo = (
+        CorporatesData.BankAcctNo
+        if CorporatesData.BankAcctNo
+        else CorporatesData.SavingAcctNo
     )
-    PayDraftData.BankAcctName = SuppliersData.BankAcctName
-    PayDraftData.BankName = SuppliersData.BankName
-    PayDraftData.AcctNo = (
+    newPayDraftData.OriginalTo = " ".join(
+        [
+            CorporatesData.BankName,
+            CorporatesData.Branch if CorporatesData.Branch else "",
+        ]
+    )
+    newPayDraftData.BankAcctName = SuppliersData.BankAcctName
+    newPayDraftData.BankName = SuppliersData.BankName
+    newPayDraftData.AcctNo = (
         SuppliersData.BankAcctNo
         if SuppliersData.BankAcctNo
         else SuppliersData.SavingAcctNo
     )
-    PayDraftData.IBAN = SuppliersData.IBAN if SuppliersData.IBAN else ""
-    PayDraftData.SWIFTCode = SuppliersData.SWIFTCode if SuppliersData.SWIFTCode else ""
-    PayDraftData.ACHNo = SuppliersData.ACHNo if SuppliersData.ACHNo else ""
-    PayDraftData.WireRouting = (
+    newPayDraftData.IBAN = SuppliersData.IBAN if SuppliersData.IBAN else ""
+    newPayDraftData.SWIFTCode = (
+        SuppliersData.SWIFTCode if SuppliersData.SWIFTCode else ""
+    )
+    newPayDraftData.ACHNo = SuppliersData.ACHNo if SuppliersData.ACHNo else ""
+    newPayDraftData.WireRouting = (
         SuppliersData.WireRouting if SuppliersData.WireRouting else ""
     )
-    PayDraftData.Subject = (
+    newPayDraftData.Subject = (
         requestDictData.get("PayDraftSubject")
         if requestDictData.get("PayDraftSubject")
         else ""
     )
-    PayDraftData.CableInfo = (
+    newPayDraftData.CableInfo = (
         requestDictData.get("PayDraftCableInfo")
         if requestDictData.get("PayDraftCableInfo")
         else ""
+    )
+    newPayDraftData.BankAddress = (
+        SuppliersData.BankAddress if SuppliersData.BankAddress else ""
     )
     # =============================================
     # 拚湊 template context
     # =============================================
     context = {
-        "PayDraftPayee": "",
-        "PayDraftSubject": PayDraftData.Subject,
+        "PayDraftOriginalTo": newPayDraftData.OriginalTo,
+        "PayDraftPayee": newPayDraftData.Payee,
+        "PayDraftSubject": newPayDraftData.Subject,
         "PayDraftChineseTotalFeeAmount": requestDictData.get(
             "PayDraftChineseTotalFeeAmount"
         )
         if requestDictData.get("PayDraftChineseTotalFeeAmount")
         else "",
-        "PayDraftCableInfo": PayDraftData.CableInfo,
-        "PayDraftTotalFeeAmount": PayDraftData.TotalFeeAmount,
-        "PayDraftCBPBankAcctNo": PayDraftData.CBPBankAcctNo,
-        "PayDraftBankAcctName": PayDraftData.BankAcctName,
-        "PayDraftBankName": PayDraftData.BankName,
-        "PayDraftAcctNo": PayDraftData.AcctNo,
-        "PayDraftIBAN": PayDraftData.IBAN,
-        "PayDraftSWIFTCode": PayDraftData.SWIFTCode,
-        "PayDraftACHNo": PayDraftData.ACHNo,
-        "PayDraftWireRouting": PayDraftData.WireRouting,
-        "PayDraftInvoiceNo": PayDraftData.InvoiceNo,
-        "PayDraftBankAddress": SuppliersData.BankAddress
-        if SuppliersData.BankAddress
-        else "",
+        "PayDraftCableInfo": newPayDraftData.CableInfo,
+        "PayDraftTotalFeeAmount": newPayDraftData.TotalFeeAmount,
+        "PayDraftCBPBankAcctNo": newPayDraftData.CBPBankAcctNo,
+        "PayDraftBankAcctName": newPayDraftData.BankAcctName,
+        "PayDraftBankName": newPayDraftData.BankName,
+        "PayDraftAcctNo": newPayDraftData.AcctNo,
+        "PayDraftIBAN": newPayDraftData.IBAN,
+        "PayDraftSWIFTCode": newPayDraftData.SWIFTCode,
+        "PayDraftACHNo": newPayDraftData.ACHNo,
+        "PayDraftWireRouting": newPayDraftData.WireRouting,
+        "PayDraftInvoiceNo": newPayDraftData.InvoiceNo,
+        "PayDraftBankAddress": newPayDraftData.BankAddress,
     }
 
     if requestDictData.get("DownloadTemplate"):
@@ -126,6 +133,6 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
         return context
     if requestDictData.get("TempSave"):
         newPayDraftData = crudPayDraft.update(
-            oldPayDraftData, orm_to_dict(PayDraftData)
+            PayDraftData, orm_to_dict(newPayDraftData)
         )
         return {"message": "temp save success", "PayDraft": newPayDraftData}
