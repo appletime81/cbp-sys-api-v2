@@ -130,9 +130,21 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
         doc.save(f"{fileName}.docx")
         return FileResponse(path=f"{fileName}.docx", filename=f"{fileName}.docx")
     if requestDictData.get("Preview"):
-        return context
+        return PayDraftData
     if requestDictData.get("TempSave"):
         newPayDraftData = crudPayDraft.update(
             PayDraftData, orm_to_dict(newPayDraftData)
         )
         return {"message": "temp save success", "PayDraft": newPayDraftData}
+
+
+# {
+#     "PayDraftID": 2,
+#     "PayDraftCableInfo": "(使用者輸入CableInfo)",
+#     "PayDraftSubject": "(使用者輸入Subject)",
+#     "PayDraftChineseTotalFeeAmount": "二〇八四九四．五二",
+#     "DownloadTemplate": true,
+#     "Preview": false,
+#     "TempSave": false,
+#     "Confirm": false,
+# }
