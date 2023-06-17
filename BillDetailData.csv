@@ -1,5 +1,0 @@
-BillDetailID,BillMasterID,WKMasterID,InvoiceNo,InvDetailID,PartyName,SupplierName,SubmarineCable,WorkTitle,BillMilestone,FeeItem,OrgFeeAmount,DedAmount,FeeAmount,ReceivedAmount,OverAmount,ShortAmount,ToCBAmount,PaidAmount,ShortOverReason,WriteOffDate,ReceiveDate,Note,Status
-1,1,1,DT0170168-1,1,CHT,NEC,SJC2,Construction,BM9a,BM9a Sea cable manufactured (except 8.5km spare cable))- Equipment,92058.74,0,92058.74,0,0,0,0,0,,,,,INVALID
-2,1,1,DT0170168-1,2,CHT,NEC,SJC2,Construction,BM9a,BM9a Sea cable manufactured (except 8.5km spare cable))- Service,84159.14,0,84159.14,0,0,0,0,0,,,,,RATED
-3,2,1,DT0170168-1,3,CM,NEC,SJC2,Construction,BM9a,BM9a Sea cable manufactured (except 8.5km spare cable))- Equipment,368234.95,0,368234.95,0,0,0,0,0,,,,,SIGNED
-4,2,1,DT0170168-1,4,CM,NEC,SJC2,Construction,BM9a,BM9a Sea cable manufactured (except 8.5km spare cable))- Service,336636.55,0,336636.55,0,0,0,0,0,,,,,
