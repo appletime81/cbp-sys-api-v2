@@ -287,43 +287,34 @@ async def submitPayment(request: Request, db: Session = Depends(get_db)):
 
 
 # ---------------------------- 付款函稿管理頁面 --------------------------
+
+# -----------------------------------------------------------------------
+
+
+# ------------------------------- 顯示付款函搞 -------------------------------
 @router.get("/paydraft/{urlCondition}")
 async def showPaymentData(
     request: Request, urlCondition: str, db: Session = Depends(get_db)
 ):
     """
-    input data:
-    {
-        "PayDraftID": int
-    }
-
     output data:
     [
-        {
-            "PayDraft": {...},
-            "PayDraftDetail": [
-                {...},
-                {...},
-                {...}
-            ]
-        },
+        {...},
         {...},
         {...},
     ]
-
     """
 
-    def process_data(data_list):
-        result = []
-        for data in data_list:
-            detail_data_list = crudPayDraftDetail.get_with_condition(
-                {"PayDraftID": data.PayDraftID}
-            )
-            result.append({"PayDraft": data, "PayDraftDetail": detail_data_list})
-        return result
+    # def process_data(data_list):
+    #     result = []
+    #     for data in data_list:
+    #         detail_data_list = crudPayDraftDetail.get_with_condition(
+    #             {"PayDraftID": data.PayDraftID}
+    #         )
+    #         result.append({"PayDraft": data, "PayDraftDetail": detail_data_list})
+    #     return result
 
     crudPayDraft = CRUD(db, PayDraftDBModel)
-    crudPayDraftDetail = CRUD(db, PayDraftDetailDBModel)
     table_name = "PayDraft"
 
     if urlCondition == "all":
@@ -336,7 +327,8 @@ async def showPaymentData(
         dictCondition = convert_url_condition_to_dict_ignore_date(urlCondition)
         PayDraftDataList = crudPayDraft.get_with_condition(dictCondition)
 
-    return process_data(PayDraftDataList)
+    # return process_data(PayDraftDataList)
+    return PayDraftDataList
 
 
-# -----------------------------------------------------------------------
+# --------------------------------------------------------------------------
