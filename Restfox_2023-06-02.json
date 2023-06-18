@@ -1,1 +1,839 @@
-{"exportedFrom":"Restfox-1.0.0","collection":[{"_id":"ONOo8iLv_lrPd_2Vqb2OL","_type":"request_group","name":"cbp-sys-api","parentId":null,"workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":1,"collapsed":true},{"_id":"2Hi-1_R8sWCKSq-APfW4i","_type":"request_group","name":"付款","parentId":"ONOo8iLv_lrPd_2Vqb2OL","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":0,"collapsed":true},{"_id":"5ra_lDtcBow5TrW6S_ItV","_type":"request","name":"產製付款函稿","method":"POST","body":{"mimeType":"application/json","text":"{\n    \"PayDraftID\": 1,\n    \"GetTemplate\": true\n}"},"parentId":"2Hi-1_R8sWCKSq-APfW4i","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":0,"url":"http://172.24.156.51:8000/api/v1/getPayDraftStream","headers":[{"name":"Content-Type","value":"application/json"}]},{"_id":"tPSUDnmJPqIQQXEnWUoiT","_type":"request_group","name":"發票工作主檔&發票工作明細檔","parentId":"ONOo8iLv_lrPd_2Vqb2OL","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":3,"collapsed":true},{"_id":"4nBqSaO84ly_HNIfmR0ks","_type":"request","name":"查詢發票工作主檔&發票工作明細檔","url":"http://localhost:8000/api/v1/getInvoiceWKMaster&InvoiceWKDetail/PartyName=SSS","method":"GET","body":{"mimeType":"No Body"},"headers":[],"parameters":[],"parentId":"tPSUDnmJPqIQQXEnWUoiT","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":0},{"_id":"OtSp9Bd9k-LW8QV7BKaKF","_type":"request","name":"產生發票工作主檔&發票工作明細檔","url":"http://localhost:8000/api/v1/generateInvoiceWKMaster&InvoiceWKDetail","method":"POST","body":{"mimeType":"application/json","text":"{\r\n    \"InvoiceWKMaster\": {\r\n        \"InvoiceNo\": \"DT0170168-1\",\r\n        \"SupplierName\": \"NEC\",\r\n        \"SubmarineCable\": \"SJC2\",\r\n        \"WorkTitle\": \"Construction\",\r\n        \"ContractType\": \"SC\",\r\n        \"IssueDate\": \"2022-09-09 00:00:00\",\r\n        \"DueDate\": \"2022-11-08 00:00:00\",\r\n        \"PartyName\": \"\",\r\n        \"Status\": \"TEMPORARY\",\r\n        \"IsPro\": 0,\r\n        \"IsRecharge\": 0,\r\n        \"IsLiability\": 1,\r\n        \"TotalAmount\": 5582012.72,\r\n        \"CreateDate\": \"2023-01-13 00:00:00\"\r\n    },\r\n    \"InvoiceWKDetail\": [\r\n        {\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeAmount\": 1288822.32,\r\n            \"FeeItem\": \"BM9a Sea cable manufactured (except 8.5km spare cable))- Equipment\"\r\n        },\r\n        {\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeAmount\": 1178227.94,\r\n            \"FeeItem\": \"BM9a Sea cable manufactured (except 8.5km spare cable))- Service\"\r\n        },\r\n        {\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeAmount\": 1627300.92,\r\n            \"FeeItem\": \"BM12 Branching Units (100%)-Equipment\"\r\n        },\r\n        {\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeAmount\": 1487661.54,\r\n            \"FeeItem\": \"BM12 Branching Units (100%)-Service\"\r\n        }\r\n    ]\r\n}"},"headers":[],"parameters":[],"parentId":"tPSUDnmJPqIQQXEnWUoiT","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":2},{"_id":"Q1iaIX_wQMRqnrD48G-l4","_type":"request","name":"發票重新立帳","method":"POST","body":{"mimeType":"application/json","text":"{\n    \"WKMasterID\": 1\n}"},"parentId":"tPSUDnmJPqIQQXEnWUoiT","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":3,"url":"http://172.24.156.51:8000/api/v1/returnToValidated","headers":[{"name":"Content-Type","value":"application/json"}]},{"_id":"otelx_u1Sj9UXPQzUdehZ","_type":"request","name":"發票作廢","method":"POST","body":{"mimeType":"application/json","text":"{\n    \"WKMasterID\": 1\n}"},"parentId":"tPSUDnmJPqIQQXEnWUoiT","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":4,"url":"http://172.24.156.51:8000/api/v1/invalidInvoice/afterBilled","headers":[{"name":"Content-Type","value":"application/json"}]},{"_id":"cD1c7MLato2c9SNo0KYvV","_type":"request_group","name":"水單上傳","parentId":"ONOo8iLv_lrPd_2Vqb2OL","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":4,"collapsed":true},{"_id":"N6Xk8EL5BdoVN1I6yXv1n","_type":"request","name":"upload","method":"POST","body":{"mimeType":"No Body"},"parentId":"cD1c7MLato2c9SNo0KYvV","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":0,"url":"http://localhost:8000/api/v1/uploadWaterBill"},{"_id":"CD8WQteWNrDb2l3kr-7x-","_type":"request_group","name":"發票主檔&發票明細檔","parentId":"ONOo8iLv_lrPd_2Vqb2OL","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":5,"collapsed":true},{"_id":"v5iMDXtkfrCe2jNJviOBh","_type":"request","name":"擷取發票主檔&發票明細檔流","url":"http://localhost:8000/api/v1/getInvoiceMaster&InvoiceDetailStream/WKMasterID=1","method":"GET","body":{"mimeType":"No Body"},"headers":[],"parameters":[],"parentId":"CD8WQteWNrDb2l3kr-7x-","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":0},{"_id":"gJzyJidedsrAzsjysjfW4","_type":"request","name":"轉換帳單號碼","method":"POST","body":{"mimeType":"application/json","text":"{\n    \"SubmarineCable\": \"test\"\n}"},"parentId":"CD8WQteWNrDb2l3kr-7x-","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":1,"url":"http://localhost:8000/api/v1/checkBillingNo/convert","headers":[{"name":"Content-Type","value":"application/json"}]},{"_id":"q5qOEAaf4pOPCecdm72MD","_type":"request","name":"產生發票主檔&發票明細檔","url":"http://localhost:8000/api/v1/addInvoiceMaster&InvoiceDetail","method":"POST","body":{"mimeType":"application/json","text":"{\r\n    \"TotalAmount\": 5582012.72,\r\n    \"InvoiceMaster\": [\r\n        {\r\n            \"InvMasterID\": 1,\r\n            \"WKMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"DHT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"IssueDate\": \"2022-09-09 12:00:00\",\r\n            \"DueDate\": \"2022-11-08 12:00:00\",\r\n            \"IsPro\": false,\r\n            \"ContractType\": \"SC\",\r\n            \"Status\": \"\"\r\n        },\r\n        {\r\n            \"InvMasterID\": 2,\r\n            \"WKMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Edge\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"IssueDate\": \"2022-09-09 12:00:00\",\r\n            \"DueDate\": \"2022-11-08 12:00:00\",\r\n            \"IsPro\": false,\r\n            \"ContractType\": \"SC\",\r\n            \"Status\": \"\"\r\n        },\r\n        {\r\n            \"InvMasterID\": 3,\r\n            \"WKMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"KDDI\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"IssueDate\": \"2022-09-09 12:00:00\",\r\n            \"DueDate\": \"2022-11-08 12:00:00\",\r\n            \"IsPro\": false,\r\n            \"ContractType\": \"SC\",\r\n            \"Status\": \"\"\r\n        },\r\n        {\r\n            \"InvMasterID\": 4,\r\n            \"WKMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"TRUE\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"IssueDate\": \"2022-09-09 12:00:00\",\r\n            \"DueDate\": \"2022-11-08 12:00:00\",\r\n            \"IsPro\": false,\r\n            \"ContractType\": \"SC\",\r\n            \"Status\": \"\"\r\n        },\r\n        {\r\n            \"InvMasterID\": 5,\r\n            \"WKMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"CHT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"IssueDate\": \"2022-09-09 12:00:00\",\r\n            \"DueDate\": \"2022-11-08 12:00:00\",\r\n            \"IsPro\": false,\r\n            \"ContractType\": \"SC\",\r\n            \"Status\": \"\"\r\n        },\r\n        {\r\n            \"InvMasterID\": 6,\r\n            \"WKMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"SKB\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"IssueDate\": \"2022-09-09 12:00:00\",\r\n            \"DueDate\": \"2022-11-08 12:00:00\",\r\n            \"IsPro\": false,\r\n            \"ContractType\": \"SC\",\r\n            \"Status\": \"\"\r\n        },\r\n        {\r\n            \"InvMasterID\": 7,\r\n            \"WKMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Singtel\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"IssueDate\": \"2022-09-09 12:00:00\",\r\n            \"DueDate\": \"2022-11-08 12:00:00\",\r\n            \"IsPro\": false,\r\n            \"ContractType\": \"SC\",\r\n            \"Status\": \"\"\r\n        },\r\n        {\r\n            \"InvMasterID\": 8,\r\n            \"WKMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"CMI\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"IssueDate\": \"2022-09-09 12:00:00\",\r\n            \"DueDate\": \"2022-11-08 12:00:00\",\r\n            \"IsPro\": false,\r\n            \"ContractType\": \"SC\",\r\n            \"Status\": \"\"\r\n        },\r\n        {\r\n            \"InvMasterID\": 9,\r\n            \"WKMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Telin\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"IssueDate\": \"2022-09-09 12:00:00\",\r\n            \"DueDate\": \"2022-11-08 12:00:00\",\r\n            \"IsPro\": false,\r\n            \"ContractType\": \"SC\",\r\n            \"Status\": \"\"\r\n        },\r\n        {\r\n            \"InvMasterID\": 10,\r\n            \"WKMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"VNPT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"IssueDate\": \"2022-09-09 12:00:00\",\r\n            \"DueDate\": \"2022-11-08 12:00:00\",\r\n            \"IsPro\": false,\r\n            \"ContractType\": \"SC\",\r\n            \"Status\": \"\"\r\n        }\r\n    ],\r\n    \"InvoiceDetail\": [\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 1,\r\n            \"InvMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"DHT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test3\",\r\n            \"LBRatio\": 3.5714285714,\r\n            \"FeeAmountPre\": 1627300.92,\r\n            \"FeeAmountPost\": 58117.89,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 2,\r\n            \"InvMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"DHT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test4\",\r\n            \"LBRatio\": 3.5714285714,\r\n            \"FeeAmountPre\": 1487661.54,\r\n            \"FeeAmountPost\": 53130.77,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 3,\r\n            \"InvMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"DHT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test2\",\r\n            \"LBRatio\": 3.5714285714,\r\n            \"FeeAmountPre\": 1178227.94,\r\n            \"FeeAmountPost\": 42079.57,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 4,\r\n            \"InvMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"DHT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test1\",\r\n            \"LBRatio\": 3.5714285714,\r\n            \"FeeAmountPre\": 1288822.32,\r\n            \"FeeAmountPost\": 46029.37,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 1,\r\n            \"InvMasterID\": 2,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Edge\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test3\",\r\n            \"LBRatio\": 28.5714285714,\r\n            \"FeeAmountPre\": 1627300.92,\r\n            \"FeeAmountPost\": 464943.12,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 2,\r\n            \"InvMasterID\": 2,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Edge\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test4\",\r\n            \"LBRatio\": 28.5714285714,\r\n            \"FeeAmountPre\": 1487661.54,\r\n            \"FeeAmountPost\": 425046.15,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 3,\r\n            \"InvMasterID\": 2,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Edge\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test2\",\r\n            \"LBRatio\": 28.5714285714,\r\n            \"FeeAmountPre\": 1178227.94,\r\n            \"FeeAmountPost\": 336636.55,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 4,\r\n            \"InvMasterID\": 2,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Edge\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test1\",\r\n            \"LBRatio\": 28.5714285714,\r\n            \"FeeAmountPre\": 1288822.32,\r\n            \"FeeAmountPost\": 368234.95,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 1,\r\n            \"InvMasterID\": 3,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"KDDI\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test3\",\r\n            \"LBRatio\": 0.0793650794,\r\n            \"FeeAmountPre\": 1627300.92,\r\n            \"FeeAmountPost\": 1291.51,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 2,\r\n            \"InvMasterID\": 3,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"KDDI\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test4\",\r\n            \"LBRatio\": 0.0793650794,\r\n            \"FeeAmountPre\": 1487661.54,\r\n            \"FeeAmountPost\": 1180.68,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 3,\r\n            \"InvMasterID\": 3,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"KDDI\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test2\",\r\n            \"LBRatio\": 0.0793650794,\r\n            \"FeeAmountPre\": 1178227.94,\r\n            \"FeeAmountPost\": 935.1,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 4,\r\n            \"InvMasterID\": 3,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"KDDI\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test1\",\r\n            \"LBRatio\": 0.0793650794,\r\n            \"FeeAmountPre\": 1288822.32,\r\n            \"FeeAmountPost\": 1022.87,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 1,\r\n            \"InvMasterID\": 4,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"TRUE\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test3\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1627300.92,\r\n            \"FeeAmountPost\": 116235.78,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 2,\r\n            \"InvMasterID\": 4,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"TRUE\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test4\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1487661.54,\r\n            \"FeeAmountPost\": 106261.54,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 3,\r\n            \"InvMasterID\": 4,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"TRUE\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test2\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1178227.94,\r\n            \"FeeAmountPost\": 84159.14,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 4,\r\n            \"InvMasterID\": 4,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"TRUE\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test1\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1288822.32,\r\n            \"FeeAmountPost\": 92058.74,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 1,\r\n            \"InvMasterID\": 5,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"CHT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test3\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1627300.92,\r\n            \"FeeAmountPost\": 116235.78,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 2,\r\n            \"InvMasterID\": 5,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"CHT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test4\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1487661.54,\r\n            \"FeeAmountPost\": 106261.54,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 3,\r\n            \"InvMasterID\": 5,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"CHT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test2\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1178227.94,\r\n            \"FeeAmountPost\": 84159.14,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 4,\r\n            \"InvMasterID\": 5,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"CHT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test1\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1288822.32,\r\n            \"FeeAmountPost\": 92058.74,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 1,\r\n            \"InvMasterID\": 6,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"SKB\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test3\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1627300.92,\r\n            \"FeeAmountPost\": 116235.78,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 2,\r\n            \"InvMasterID\": 6,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"SKB\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test4\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1487661.54,\r\n            \"FeeAmountPost\": 106261.54,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 3,\r\n            \"InvMasterID\": 6,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"SKB\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test2\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1178227.94,\r\n            \"FeeAmountPost\": 84159.14,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 4,\r\n            \"InvMasterID\": 6,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"SKB\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test1\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1288822.32,\r\n            \"FeeAmountPost\": 92058.74,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 1,\r\n            \"InvMasterID\": 7,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Singtel\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test3\",\r\n            \"LBRatio\": 7.0634920635,\r\n            \"FeeAmountPre\": 1627300.92,\r\n            \"FeeAmountPost\": 114944.27,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 2,\r\n            \"InvMasterID\": 7,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Singtel\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test4\",\r\n            \"LBRatio\": 7.0634920635,\r\n            \"FeeAmountPre\": 1487661.54,\r\n            \"FeeAmountPost\": 105080.85,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 3,\r\n            \"InvMasterID\": 7,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Singtel\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test2\",\r\n            \"LBRatio\": 7.0634920635,\r\n            \"FeeAmountPre\": 1178227.94,\r\n            \"FeeAmountPost\": 83224.04,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 4,\r\n            \"InvMasterID\": 7,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Singtel\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test1\",\r\n            \"LBRatio\": 7.0634920635,\r\n            \"FeeAmountPre\": 1288822.32,\r\n            \"FeeAmountPost\": 91035.86,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 1,\r\n            \"InvMasterID\": 8,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"CMI\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test3\",\r\n            \"LBRatio\": 28.5714285714,\r\n            \"FeeAmountPre\": 1627300.92,\r\n            \"FeeAmountPost\": 464943.12,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 2,\r\n            \"InvMasterID\": 8,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"CMI\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test4\",\r\n            \"LBRatio\": 28.5714285714,\r\n            \"FeeAmountPre\": 1487661.54,\r\n            \"FeeAmountPost\": 425046.15,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 3,\r\n            \"InvMasterID\": 8,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"CMI\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test2\",\r\n            \"LBRatio\": 28.5714285714,\r\n            \"FeeAmountPre\": 1178227.94,\r\n            \"FeeAmountPost\": 336636.55,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 4,\r\n            \"InvMasterID\": 8,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"CMI\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test1\",\r\n            \"LBRatio\": 28.5714285714,\r\n            \"FeeAmountPre\": 1288822.32,\r\n            \"FeeAmountPost\": 368234.95,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 1,\r\n            \"InvMasterID\": 9,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Telin\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test3\",\r\n            \"LBRatio\": 3.5714285714,\r\n            \"FeeAmountPre\": 1627300.92,\r\n            \"FeeAmountPost\": 58117.89,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 2,\r\n            \"InvMasterID\": 9,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Telin\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test4\",\r\n            \"LBRatio\": 3.5714285714,\r\n            \"FeeAmountPre\": 1487661.54,\r\n            \"FeeAmountPost\": 53130.77,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 3,\r\n            \"InvMasterID\": 9,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Telin\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test2\",\r\n            \"LBRatio\": 3.5714285714,\r\n            \"FeeAmountPre\": 1178227.94,\r\n            \"FeeAmountPost\": 42079.57,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 4,\r\n            \"InvMasterID\": 9,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Telin\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test1\",\r\n            \"LBRatio\": 3.5714285714,\r\n            \"FeeAmountPre\": 1288822.32,\r\n            \"FeeAmountPost\": 46029.37,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 1,\r\n            \"InvMasterID\": 10,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"VNPT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test3\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1627300.92,\r\n            \"FeeAmountPost\": 116235.78,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 2,\r\n            \"InvMasterID\": 10,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"VNPT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test4\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1487661.54,\r\n            \"FeeAmountPost\": 106261.54,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 3,\r\n            \"InvMasterID\": 10,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"VNPT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test2\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1178227.94,\r\n            \"FeeAmountPost\": 84159.14,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 4,\r\n            \"InvMasterID\": 10,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"VNPT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test1\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1288822.32,\r\n            \"FeeAmountPost\": 92058.74,\r\n            \"Difference\": 0\r\n        }\r\n    ]\r\n}"},"headers":[],"parameters":[],"parentId":"CD8WQteWNrDb2l3kr-7x-","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":2},{"_id":"Xd1U05ZZ4-ylNNWVy5JFw","_type":"request_group","name":"帳單主檔&帳單明細檔","parentId":"ONOo8iLv_lrPd_2Vqb2OL","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":6,"collapsed":true},{"_id":"htY7Oj_TYloxxruFBnXK1","_type":"request","name":"查詢帳單及帳單明細","method":"GET","body":{"mimeType":"No Body"},"parentId":"Xd1U05ZZ4-ylNNWVy5JFw","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":0,"url":"http://localhost:8000/api/v1/getBillMaster&BillDetail/BillMasterID=1"},{"_id":"wqtiAOqd8Ec73-7yjRIxs","_type":"request","name":"查詢帳單跟CB","method":"GET","body":{"mimeType":"No Body"},"parentId":"Xd1U05ZZ4-ylNNWVy5JFw","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":1,"url":"http://localhost:8000/api/v1/getBillMaster&BillDetailWithCBData/BillMasterID=3"},{"_id":"Ipw_lClt0kLaaT2FBTtPr","_type":"request","name":"待合併(抓取InvoiceMaster、InvoiceDetail)","method":"GET","body":{"mimeType":"No Body"},"parentId":"Xd1U05ZZ4-ylNNWVy5JFw","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":2,"url":"http://localhost:8000/api/v1/getInvoiceMaster&InvoiceDetail/WKMasterID=1"},{"_id":"5FsbAFGcXSYZhiEhtW3an","_type":"request","name":"查詢帳單","method":"GET","body":{"mimeType":"No Body"},"parentId":"Xd1U05ZZ4-ylNNWVy5JFw","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":3,"url":"http://localhost:8000/api/v1/BillMaster/BillMasterID=1"},{"_id":"cbBTcfFp3ZnHCjB4tAAY-","_type":"request","name":"檢查帳單號碼是否存在","url":"http://localhost:8000/api/v1/checkBillingNo/testNo","method":"GET","body":{"mimeType":"No Body"},"headers":[],"parameters":[],"parentId":"Xd1U05ZZ4-ylNNWVy5JFw","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":4},{"_id":"3qIkR7uBYrCZTBqTI8Xra","_type":"request","name":"未抵扣帳單退回至待合併發票","method":"POST","body":{"mimeType":"application/json"},"parentId":"Xd1U05ZZ4-ylNNWVy5JFw","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":5,"headers":[{"name":"Content-Type","value":"application/json"}],"url":"http://172.24.156.51:8000/api/v1/returnBillMaster/beforeduction"},{"_id":"ccgGPDPtW3apuMn3_MhKS","_type":"request","name":"已抵扣帳單退回至未抵扣","method":"POST","body":{"mimeType":"application/json","text":"{\n    \"BillMasterID\": 1\n}"},"parentId":"Xd1U05ZZ4-ylNNWVy5JFw","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":6,"url":"http://172.24.156.51:8000/api/v1/returnBillMaster/afterdeduction","headers":[{"name":"Content-Type","value":"application/json"}]},{"_id":"P3vg7apxsNiM7qE_vzM-v","_type":"request","name":"已簽核作廢","method":"POST","body":{"mimeType":"application/json","text":"{\n    \"BillMasterID\": 5\n}"},"parentId":"Xd1U05ZZ4-ylNNWVy5JFw","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":7,"url":"http://172.24.156.51:8000/api/v1/invalidBillMaster/signed","headers":[{"name":"Content-Type","value":"application/json"}]},{"_id":"SGST7E3k2chDhwLaPpTxF","_type":"request","name":"帳單draft","method":"POST","body":{"mimeType":"application/json","text":"{\n    \"BillMasterID\": 1,\n    \"UserID\": \"chang_ty\",\n    \"GetTemplate\": true,\n    \"IssueDate\": \"2023/04/01\",\n    \"DueDate\": \"2023/04/30\",\n    \"WorkTitle\": \"Construction #11\",\n    \"InvoiceName\": \"\",\n    \"logo\": 1\n}"},"parentId":"Xd1U05ZZ4-ylNNWVy5JFw","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":8,"url":"http://localhost:8000/api/v1/getBillMasterDraftStream","headers":[{"name":"Content-Type","value":"application/json"}]},{"_id":"sksn5D2lvg47bB5l2mtzU","_type":"request","name":"進入待銷帳","method":"POST","body":{"mimeType":"application/json","text":"{\n    \"BillMasterID\": 1,\n    \"Status\": \"TO_WRITEOFF\"\n}"},"parentId":"Xd1U05ZZ4-ylNNWVy5JFw","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":9,"url":"http://localhost:8000/api/v1/updateBillMaster","headers":[{"name":"Content-Type","value":"application/json"}]},{"_id":"uK35XrbdQXrFVDphcYxe8","_type":"request_group","name":"付款","parentId":"ONOo8iLv_lrPd_2Vqb2OL","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":7,"collapsed":true},{"_id":"RP8qHJPL4oTzB2XMStmA2","_type":"request","name":"顯示狀態為PAYING的發票","method":"GET","body":{"mimeType":"No Body"},"parentId":"uK35XrbdQXrFVDphcYxe8","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":0,"url":"http://localhost:8000/api/v1/payment/datastream"},{"_id":"_5uv1mmNO_r6_gUmlAhps","_type":"request_group","name":"使用者","parentId":"ONOo8iLv_lrPd_2Vqb2OL","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":9,"collapsed":true},{"_id":"wgLlNn_NEqqq_yBLhkrBn","_type":"request","name":"查詢使用者","url":"http://localhost:8000/api/v1/User/startCreateDate=20230303&endCreateDate=20230303","method":"GET","body":{"mimeType":"No Body"},"headers":[],"parameters":[],"parentId":"_5uv1mmNO_r6_gUmlAhps","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":0},{"_id":"971tulC7eUdNCa1Zsa5Mr","_type":"request","name":"刪除使用者","url":"http://localhost:8000/api/v1/deleteUser","method":"POST","body":{"mimeType":"application/json","text":"{\n    \"UserID\": 1\n}"},"headers":[{"name":"Content-Type","value":"application/json"}],"parameters":[],"parentId":"_5uv1mmNO_r6_gUmlAhps","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":1},{"_id":"9hve6QgBAp5ledjXwaWCJ","_type":"request","name":"新增使用者","url":"http://localhost:8000/api/v1/User","method":"POST","body":{"mimeType":"application/json","text":"{\n    \"UserName\": \"Test User 1\",\n    \"Password\": 1234,\n    \"CreateDate\": \"2023-03-08 00:00:00\",\n    \"Note\": \"Test Note\"\n}"},"headers":[{"name":"Content-Type","value":"application/json"}],"parameters":[],"parentId":"_5uv1mmNO_r6_gUmlAhps","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":2},{"_id":"1wegWui2-79GfWY7gQLTP","_type":"request","name":"更改使用者資訊","url":"http://localhost:8000/api/v1/updateUser","method":"POST","body":{"mimeType":"application/json","text":"{\n    \"UserID\": 1,\n    \"UserName\": \"Test User 1 Update\"\n}"},"headers":[{"name":"Content-Type","value":"application/json"}],"parameters":[],"parentId":"_5uv1mmNO_r6_gUmlAhps","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":3},{"_id":"NZmxQvd3twv9p4buXiNbi","_type":"request_group","name":"Contracts","parentId":"ONOo8iLv_lrPd_2Vqb2OL","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":10,"collapsed":true},{"_id":"hJvmUf26zolvJv6c2Zcpm","_type":"request","name":"TEST","url":"http://localhost:8000/api/v1/deleteContracts","method":"POST","body":{"mimeType":"application/json","text":"{\n    \"Test\": \"Test\"\n}"},"headers":[{"name":"Content-Type","value":"application/json"}],"parameters":[],"parentId":"NZmxQvd3twv9p4buXiNbi","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":0},{"_id":"T1dk-fV_3n7fZLF2xKuTR","_type":"request_group","name":"Corporates","parentId":"ONOo8iLv_lrPd_2Vqb2OL","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":11,"collapsed":true},{"_id":"UPxzo73JK4agDYG1qH7ZI","_type":"request","name":"查詢Corporates","url":"http://localhost:8000/api/v1/Corporates/startCreateDate=20230217&endCreateDate=20230217","method":"GET","body":{"mimeType":"No Body"},"headers":[],"parameters":[],"parentId":"T1dk-fV_3n7fZLF2xKuTR","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":0},{"_id":"6o49CP0U5VGYWzvfNU4rf","_type":"request","name":"刪除Corporates","url":"http://localhost:8000/api/v1/deleteCorporates","method":"POST","body":{"mimeType":"application/json","text":"{\n    \"CorpID\": 2\n}"},"headers":[{"name":"Content-Type","value":"application/json"}],"parameters":[],"parentId":"T1dk-fV_3n7fZLF2xKuTR","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":1},{"_id":"fDFwuB2fmMO8pFYyZDI4S","_type":"request","name":"更新Corporates","url":"http://localhost:8000/api/v1/updateCorporates","method":"POST","body":{"mimeType":"application/json","text":"{\n    \"CorpID\": 2,\n    \"CorpName\": \"TEST2Update\"\n}"},"headers":[{"name":"Content-Type","value":"application/json"}],"parameters":[],"parentId":"T1dk-fV_3n7fZLF2xKuTR","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":2},{"_id":"VCRPgIvdcWOjMrlm6o8ri","_type":"request","name":"新增Corporates","url":"http://localhost:8000/api/v1/Corporates","method":"POST","body":{"mimeType":"application/json","text":"{\n    \"CorpName\": \"TEST2\"   \n}"},"headers":[{"name":"Content-Type","value":"application/json"}],"parameters":[],"parentId":"T1dk-fV_3n7fZLF2xKuTR","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":3},{"_id":"ZXCt1Lz7lsP8CW7L4nKNi","_type":"request_group","name":"CreditBalance","parentId":"ONOo8iLv_lrPd_2Vqb2OL","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":12,"collapsed":true},{"_id":"P-ZEofQNCNUtzwzPh202g","_type":"request","name":"CB歷程預覽","method":"POST","body":{"mimeType":"application/json","text":"{\n    \"CBID\": 1,\n    \"Download\": false\n}"},"parentId":"ZXCt1Lz7lsP8CW7L4nKNi","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":0,"headers":[{"name":"Content-Type","value":"application/json"}],"url":"http://127.0.0.1:8000/api/v1/CreditBalanceStatement/generateReport"},{"_id":"GXmRzxKfbyH-iU-PacMFZ","_type":"request","name":"產製CBStatement報表","method":"POST","body":{"mimeType":"application/json","text":"{\n    \"CBID\": 9,\n    \"Download\": true\n}"},"parentId":"ZXCt1Lz7lsP8CW7L4nKNi","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":1,"url":"http://localhost:8000/api/v1/CreditBalanceStatement/generateReport","headers":[{"name":"Content-Type","value":"application/json"}]},{"_id":"6WzYbg19anlqLcKwDN3w7","_type":"request_group","name":"Liability","parentId":"ONOo8iLv_lrPd_2Vqb2OL","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":13,"collapsed":true},{"_id":"a8iTX73zlf03DFGh0ZTDW","_type":"request","name":"查詢會員","url":"http://localhost:8000/api/v1/dropdownmenuParties","method":"GET","body":{"mimeType":"No Body"},"headers":[],"parameters":[],"parentId":"6WzYbg19anlqLcKwDN3w7","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":0},{"_id":"dn9YIv6tCuXaBPMte-mvU","_type":"request","name":"查詢Liability","url":"http://127.0.0.1:8000/api/v1/searchLiability","method":"POST","body":{"mimeType":"application/json","text":"{\r\n    \"startCreateDate\": \"20221227\",\r\n    \"endCreateDate\": \"20221227\"\r\n}"},"headers":[],"parameters":[],"parentId":"6WzYbg19anlqLcKwDN3w7","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":1},{"_id":"y-0g4oolMZ-3kWYygUxIE","_type":"request_group","name":"記帳段號(BillMilestone)","parentId":"ONOo8iLv_lrPd_2Vqb2OL","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":14,"collapsed":true},{"_id":"f2PDGOaHXcjQNKcfeisTg","_type":"request","name":"查詢記帳段號","url":"http://localhost:8000/api/v1/BillMilestone/SubmarineCable=SJC2&WorkTitle=Construction","method":"GET","body":{"mimeType":"No Body"},"headers":[],"parameters":[],"parentId":"y-0g4oolMZ-3kWYygUxIE","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":0},{"_id":"mE2XIp0XC0jcV0kbvGqJB","_type":"request_group","name":"海纜名稱(SubmarineCable)","parentId":"ONOo8iLv_lrPd_2Vqb2OL","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":15,"collapsed":true},{"_id":"TmHAi4hm3Gb3smoSUXc1B","_type":"request","name":"查詢海纜名稱","url":"http://127.0.0.1:8000/api/v1/SubmarineCables/all","method":"GET","body":{"mimeType":"No Body"},"headers":[],"parameters":[],"parentId":"mE2XIp0XC0jcV0kbvGqJB","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":0},{"_id":"LNLq8sOMY56wa4oJZzgJN","_type":"request","name":"增加海纜名稱","url":"http://localhost:8000/api/v1/SubmarineCables","method":"POST","body":{"mimeType":"application/json","text":"{\r\n    \"CableName\": \"SJC2\"\r\n}"},"headers":[],"parameters":[],"parentId":"mE2XIp0XC0jcV0kbvGqJB","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":1},{"_id":"LYj7DGhJrpI_gKouptGa2","_type":"request_group","name":"供應商(Suppliers)","parentId":"ONOo8iLv_lrPd_2Vqb2OL","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":16,"collapsed":true},{"_id":"ziWsBiDix_QLyLJwX2H2S","_type":"request","name":"查詢供應商","url":"http://127.0.0.1:8000/api/v1/Suppliers/all","method":"GET","body":{"mimeType":"No Body"},"headers":[],"parameters":[],"parentId":"LYj7DGhJrpI_gKouptGa2","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":0},{"_id":"ZWDeaPGRpPlSLOBMkP7fL","_type":"request","name":"增加供應商","url":"http://localhost:8000/api/v1/Suppliers","method":"POST","body":{"mimeType":"application/json","text":"{\r\n    \"SupplierName\": \"NEC\"\r\n}"},"headers":[],"parameters":[],"parentId":"LYj7DGhJrpI_gKouptGa2","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":1},{"_id":"xuqFj1QASLWatR6bLnr8_","_type":"request_group","name":"會員","parentId":"ONOo8iLv_lrPd_2Vqb2OL","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":17,"collapsed":true},{"_id":"0FdpKRevth204GR03gjZp","_type":"request","name":"查詢會員","url":"http://localhost:8000/api/v1/Parties/all","method":"GET","body":{"mimeType":"No Body"},"headers":[],"parameters":[],"parentId":"xuqFj1QASLWatR6bLnr8_","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":0},{"_id":"eypmSmBofJJ8K2HDyyIOd","_type":"request","name":"新增會員","url":"http://localhost:8000/api/v1/Parties","method":"POST","body":{"mimeType":"application/json","text":"{\r\n    \"PartyName\": \"CMI\"\r\n}"},"headers":[],"parameters":[],"parentId":"xuqFj1QASLWatR6bLnr8_","workspaceId":"VMFPjZ2CiRorfNKAjKtNA","sortOrder":1}]}
+{
+  "exportedFrom": "Restfox-1.0.0",
+  "collection": [
+    {
+      "_id": "ONOo8iLv_lrPd_2Vqb2OL",
+      "_type": "request_group",
+      "name": "cbp-sys-api",
+      "parentId": null,
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 1,
+      "collapsed": true
+    },
+    {
+      "_id": "2Hi-1_R8sWCKSq-APfW4i",
+      "_type": "request_group",
+      "name": "付款",
+      "parentId": "ONOo8iLv_lrPd_2Vqb2OL",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 0,
+      "collapsed": true
+    },
+    {
+      "_id": "5ra_lDtcBow5TrW6S_ItV",
+      "_type": "request",
+      "name": "產製付款函稿",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n    \"PayDraftID\": 1,\n    \"GetTemplate\": true\n}"
+      },
+      "parentId": "2Hi-1_R8sWCKSq-APfW4i",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 0,
+      "url": "http://172.24.156.51:8000/api/v1/getPayDraftStream",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "_id": "tPSUDnmJPqIQQXEnWUoiT",
+      "_type": "request_group",
+      "name": "發票工作主檔&發票工作明細檔",
+      "parentId": "ONOo8iLv_lrPd_2Vqb2OL",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 3,
+      "collapsed": true
+    },
+    {
+      "_id": "4nBqSaO84ly_HNIfmR0ks",
+      "_type": "request",
+      "name": "查詢發票工作主檔&發票工作明細檔",
+      "url": "http://localhost:8000/api/v1/getInvoiceWKMaster&InvoiceWKDetail/PartyName=SSS",
+      "method": "GET",
+      "body": {
+        "mimeType": "No Body"
+      },
+      "headers": [],
+      "parameters": [],
+      "parentId": "tPSUDnmJPqIQQXEnWUoiT",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 0
+    },
+    {
+      "_id": "OtSp9Bd9k-LW8QV7BKaKF",
+      "_type": "request",
+      "name": "產生發票工作主檔&發票工作明細檔",
+      "url": "http://localhost:8000/api/v1/generateInvoiceWKMaster&InvoiceWKDetail",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\r\n    \"InvoiceWKMaster\": {\r\n        \"InvoiceNo\": \"DT0170168-1\",\r\n        \"SupplierName\": \"NEC\",\r\n        \"SubmarineCable\": \"SJC2\",\r\n        \"WorkTitle\": \"Construction\",\r\n        \"ContractType\": \"SC\",\r\n        \"IssueDate\": \"2022-09-09 00:00:00\",\r\n        \"DueDate\": \"2022-11-08 00:00:00\",\r\n        \"PartyName\": \"\",\r\n        \"Status\": \"TEMPORARY\",\r\n        \"IsPro\": 0,\r\n        \"IsRecharge\": 0,\r\n        \"IsLiability\": 1,\r\n        \"TotalAmount\": 5582012.72,\r\n        \"CreateDate\": \"2023-01-13 00:00:00\"\r\n    },\r\n    \"InvoiceWKDetail\": [\r\n        {\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeAmount\": 1288822.32,\r\n            \"FeeItem\": \"BM9a Sea cable manufactured (except 8.5km spare cable))- Equipment\"\r\n        },\r\n        {\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeAmount\": 1178227.94,\r\n            \"FeeItem\": \"BM9a Sea cable manufactured (except 8.5km spare cable))- Service\"\r\n        },\r\n        {\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeAmount\": 1627300.92,\r\n            \"FeeItem\": \"BM12 Branching Units (100%)-Equipment\"\r\n        },\r\n        {\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeAmount\": 1487661.54,\r\n            \"FeeItem\": \"BM12 Branching Units (100%)-Service\"\r\n        }\r\n    ]\r\n}"
+      },
+      "headers": [],
+      "parameters": [],
+      "parentId": "tPSUDnmJPqIQQXEnWUoiT",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 2
+    },
+    {
+      "_id": "Q1iaIX_wQMRqnrD48G-l4",
+      "_type": "request",
+      "name": "發票重新立帳",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n    \"WKMasterID\": 1\n}"
+      },
+      "parentId": "tPSUDnmJPqIQQXEnWUoiT",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 3,
+      "url": "http://172.24.156.51:8000/api/v1/returnToValidated",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "_id": "otelx_u1Sj9UXPQzUdehZ",
+      "_type": "request",
+      "name": "發票作廢",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n    \"WKMasterID\": 1\n}"
+      },
+      "parentId": "tPSUDnmJPqIQQXEnWUoiT",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 4,
+      "url": "http://172.24.156.51:8000/api/v1/invalidInvoice/afterBilled",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "_id": "cD1c7MLato2c9SNo0KYvV",
+      "_type": "request_group",
+      "name": "水單上傳",
+      "parentId": "ONOo8iLv_lrPd_2Vqb2OL",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 4,
+      "collapsed": true
+    },
+    {
+      "_id": "N6Xk8EL5BdoVN1I6yXv1n",
+      "_type": "request",
+      "name": "upload",
+      "method": "POST",
+      "body": {
+        "mimeType": "No Body"
+      },
+      "parentId": "cD1c7MLato2c9SNo0KYvV",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 0,
+      "url": "http://localhost:8000/api/v1/uploadWaterBill"
+    },
+    {
+      "_id": "CD8WQteWNrDb2l3kr-7x-",
+      "_type": "request_group",
+      "name": "發票主檔&發票明細檔",
+      "parentId": "ONOo8iLv_lrPd_2Vqb2OL",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 5,
+      "collapsed": true
+    },
+    {
+      "_id": "v5iMDXtkfrCe2jNJviOBh",
+      "_type": "request",
+      "name": "擷取發票主檔&發票明細檔流",
+      "url": "http://localhost:8000/api/v1/getInvoiceMaster&InvoiceDetailStream/WKMasterID=1",
+      "method": "GET",
+      "body": {
+        "mimeType": "No Body"
+      },
+      "headers": [],
+      "parameters": [],
+      "parentId": "CD8WQteWNrDb2l3kr-7x-",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 0
+    },
+    {
+      "_id": "gJzyJidedsrAzsjysjfW4",
+      "_type": "request",
+      "name": "轉換帳單號碼",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n    \"SubmarineCable\": \"test\"\n}"
+      },
+      "parentId": "CD8WQteWNrDb2l3kr-7x-",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 1,
+      "url": "http://localhost:8000/api/v1/checkBillingNo/convert",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "_id": "q5qOEAaf4pOPCecdm72MD",
+      "_type": "request",
+      "name": "產生發票主檔&發票明細檔",
+      "url": "http://localhost:8000/api/v1/addInvoiceMaster&InvoiceDetail",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\r\n    \"TotalAmount\": 5582012.72,\r\n    \"InvoiceMaster\": [\r\n        {\r\n            \"InvMasterID\": 1,\r\n            \"WKMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"DHT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"IssueDate\": \"2022-09-09 12:00:00\",\r\n            \"DueDate\": \"2022-11-08 12:00:00\",\r\n            \"IsPro\": false,\r\n            \"ContractType\": \"SC\",\r\n            \"Status\": \"\"\r\n        },\r\n        {\r\n            \"InvMasterID\": 2,\r\n            \"WKMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Edge\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"IssueDate\": \"2022-09-09 12:00:00\",\r\n            \"DueDate\": \"2022-11-08 12:00:00\",\r\n            \"IsPro\": false,\r\n            \"ContractType\": \"SC\",\r\n            \"Status\": \"\"\r\n        },\r\n        {\r\n            \"InvMasterID\": 3,\r\n            \"WKMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"KDDI\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"IssueDate\": \"2022-09-09 12:00:00\",\r\n            \"DueDate\": \"2022-11-08 12:00:00\",\r\n            \"IsPro\": false,\r\n            \"ContractType\": \"SC\",\r\n            \"Status\": \"\"\r\n        },\r\n        {\r\n            \"InvMasterID\": 4,\r\n            \"WKMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"TRUE\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"IssueDate\": \"2022-09-09 12:00:00\",\r\n            \"DueDate\": \"2022-11-08 12:00:00\",\r\n            \"IsPro\": false,\r\n            \"ContractType\": \"SC\",\r\n            \"Status\": \"\"\r\n        },\r\n        {\r\n            \"InvMasterID\": 5,\r\n            \"WKMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"CHT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"IssueDate\": \"2022-09-09 12:00:00\",\r\n            \"DueDate\": \"2022-11-08 12:00:00\",\r\n            \"IsPro\": false,\r\n            \"ContractType\": \"SC\",\r\n            \"Status\": \"\"\r\n        },\r\n        {\r\n            \"InvMasterID\": 6,\r\n            \"WKMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"SKB\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"IssueDate\": \"2022-09-09 12:00:00\",\r\n            \"DueDate\": \"2022-11-08 12:00:00\",\r\n            \"IsPro\": false,\r\n            \"ContractType\": \"SC\",\r\n            \"Status\": \"\"\r\n        },\r\n        {\r\n            \"InvMasterID\": 7,\r\n            \"WKMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Singtel\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"IssueDate\": \"2022-09-09 12:00:00\",\r\n            \"DueDate\": \"2022-11-08 12:00:00\",\r\n            \"IsPro\": false,\r\n            \"ContractType\": \"SC\",\r\n            \"Status\": \"\"\r\n        },\r\n        {\r\n            \"InvMasterID\": 8,\r\n            \"WKMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"CMI\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"IssueDate\": \"2022-09-09 12:00:00\",\r\n            \"DueDate\": \"2022-11-08 12:00:00\",\r\n            \"IsPro\": false,\r\n            \"ContractType\": \"SC\",\r\n            \"Status\": \"\"\r\n        },\r\n        {\r\n            \"InvMasterID\": 9,\r\n            \"WKMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Telin\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"IssueDate\": \"2022-09-09 12:00:00\",\r\n            \"DueDate\": \"2022-11-08 12:00:00\",\r\n            \"IsPro\": false,\r\n            \"ContractType\": \"SC\",\r\n            \"Status\": \"\"\r\n        },\r\n        {\r\n            \"InvMasterID\": 10,\r\n            \"WKMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"VNPT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"IssueDate\": \"2022-09-09 12:00:00\",\r\n            \"DueDate\": \"2022-11-08 12:00:00\",\r\n            \"IsPro\": false,\r\n            \"ContractType\": \"SC\",\r\n            \"Status\": \"\"\r\n        }\r\n    ],\r\n    \"InvoiceDetail\": [\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 1,\r\n            \"InvMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"DHT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test3\",\r\n            \"LBRatio\": 3.5714285714,\r\n            \"FeeAmountPre\": 1627300.92,\r\n            \"FeeAmountPost\": 58117.89,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 2,\r\n            \"InvMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"DHT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test4\",\r\n            \"LBRatio\": 3.5714285714,\r\n            \"FeeAmountPre\": 1487661.54,\r\n            \"FeeAmountPost\": 53130.77,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 3,\r\n            \"InvMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"DHT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test2\",\r\n            \"LBRatio\": 3.5714285714,\r\n            \"FeeAmountPre\": 1178227.94,\r\n            \"FeeAmountPost\": 42079.57,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 4,\r\n            \"InvMasterID\": 1,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"DHT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test1\",\r\n            \"LBRatio\": 3.5714285714,\r\n            \"FeeAmountPre\": 1288822.32,\r\n            \"FeeAmountPost\": 46029.37,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 1,\r\n            \"InvMasterID\": 2,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Edge\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test3\",\r\n            \"LBRatio\": 28.5714285714,\r\n            \"FeeAmountPre\": 1627300.92,\r\n            \"FeeAmountPost\": 464943.12,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 2,\r\n            \"InvMasterID\": 2,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Edge\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test4\",\r\n            \"LBRatio\": 28.5714285714,\r\n            \"FeeAmountPre\": 1487661.54,\r\n            \"FeeAmountPost\": 425046.15,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 3,\r\n            \"InvMasterID\": 2,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Edge\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test2\",\r\n            \"LBRatio\": 28.5714285714,\r\n            \"FeeAmountPre\": 1178227.94,\r\n            \"FeeAmountPost\": 336636.55,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 4,\r\n            \"InvMasterID\": 2,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Edge\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test1\",\r\n            \"LBRatio\": 28.5714285714,\r\n            \"FeeAmountPre\": 1288822.32,\r\n            \"FeeAmountPost\": 368234.95,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 1,\r\n            \"InvMasterID\": 3,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"KDDI\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test3\",\r\n            \"LBRatio\": 0.0793650794,\r\n            \"FeeAmountPre\": 1627300.92,\r\n            \"FeeAmountPost\": 1291.51,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 2,\r\n            \"InvMasterID\": 3,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"KDDI\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test4\",\r\n            \"LBRatio\": 0.0793650794,\r\n            \"FeeAmountPre\": 1487661.54,\r\n            \"FeeAmountPost\": 1180.68,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 3,\r\n            \"InvMasterID\": 3,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"KDDI\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test2\",\r\n            \"LBRatio\": 0.0793650794,\r\n            \"FeeAmountPre\": 1178227.94,\r\n            \"FeeAmountPost\": 935.1,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 4,\r\n            \"InvMasterID\": 3,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"KDDI\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test1\",\r\n            \"LBRatio\": 0.0793650794,\r\n            \"FeeAmountPre\": 1288822.32,\r\n            \"FeeAmountPost\": 1022.87,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 1,\r\n            \"InvMasterID\": 4,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"TRUE\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test3\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1627300.92,\r\n            \"FeeAmountPost\": 116235.78,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 2,\r\n            \"InvMasterID\": 4,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"TRUE\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test4\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1487661.54,\r\n            \"FeeAmountPost\": 106261.54,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 3,\r\n            \"InvMasterID\": 4,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"TRUE\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test2\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1178227.94,\r\n            \"FeeAmountPost\": 84159.14,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 4,\r\n            \"InvMasterID\": 4,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"TRUE\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test1\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1288822.32,\r\n            \"FeeAmountPost\": 92058.74,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 1,\r\n            \"InvMasterID\": 5,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"CHT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test3\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1627300.92,\r\n            \"FeeAmountPost\": 116235.78,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 2,\r\n            \"InvMasterID\": 5,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"CHT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test4\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1487661.54,\r\n            \"FeeAmountPost\": 106261.54,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 3,\r\n            \"InvMasterID\": 5,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"CHT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test2\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1178227.94,\r\n            \"FeeAmountPost\": 84159.14,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 4,\r\n            \"InvMasterID\": 5,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"CHT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test1\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1288822.32,\r\n            \"FeeAmountPost\": 92058.74,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 1,\r\n            \"InvMasterID\": 6,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"SKB\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test3\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1627300.92,\r\n            \"FeeAmountPost\": 116235.78,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 2,\r\n            \"InvMasterID\": 6,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"SKB\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test4\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1487661.54,\r\n            \"FeeAmountPost\": 106261.54,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 3,\r\n            \"InvMasterID\": 6,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"SKB\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test2\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1178227.94,\r\n            \"FeeAmountPost\": 84159.14,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 4,\r\n            \"InvMasterID\": 6,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"SKB\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test1\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1288822.32,\r\n            \"FeeAmountPost\": 92058.74,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 1,\r\n            \"InvMasterID\": 7,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Singtel\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test3\",\r\n            \"LBRatio\": 7.0634920635,\r\n            \"FeeAmountPre\": 1627300.92,\r\n            \"FeeAmountPost\": 114944.27,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 2,\r\n            \"InvMasterID\": 7,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Singtel\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test4\",\r\n            \"LBRatio\": 7.0634920635,\r\n            \"FeeAmountPre\": 1487661.54,\r\n            \"FeeAmountPost\": 105080.85,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 3,\r\n            \"InvMasterID\": 7,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Singtel\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test2\",\r\n            \"LBRatio\": 7.0634920635,\r\n            \"FeeAmountPre\": 1178227.94,\r\n            \"FeeAmountPost\": 83224.04,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 4,\r\n            \"InvMasterID\": 7,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Singtel\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test1\",\r\n            \"LBRatio\": 7.0634920635,\r\n            \"FeeAmountPre\": 1288822.32,\r\n            \"FeeAmountPost\": 91035.86,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 1,\r\n            \"InvMasterID\": 8,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"CMI\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test3\",\r\n            \"LBRatio\": 28.5714285714,\r\n            \"FeeAmountPre\": 1627300.92,\r\n            \"FeeAmountPost\": 464943.12,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 2,\r\n            \"InvMasterID\": 8,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"CMI\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test4\",\r\n            \"LBRatio\": 28.5714285714,\r\n            \"FeeAmountPre\": 1487661.54,\r\n            \"FeeAmountPost\": 425046.15,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 3,\r\n            \"InvMasterID\": 8,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"CMI\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test2\",\r\n            \"LBRatio\": 28.5714285714,\r\n            \"FeeAmountPre\": 1178227.94,\r\n            \"FeeAmountPost\": 336636.55,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 4,\r\n            \"InvMasterID\": 8,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"CMI\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test1\",\r\n            \"LBRatio\": 28.5714285714,\r\n            \"FeeAmountPre\": 1288822.32,\r\n            \"FeeAmountPost\": 368234.95,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 1,\r\n            \"InvMasterID\": 9,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Telin\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test3\",\r\n            \"LBRatio\": 3.5714285714,\r\n            \"FeeAmountPre\": 1627300.92,\r\n            \"FeeAmountPost\": 58117.89,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 2,\r\n            \"InvMasterID\": 9,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Telin\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test4\",\r\n            \"LBRatio\": 3.5714285714,\r\n            \"FeeAmountPre\": 1487661.54,\r\n            \"FeeAmountPost\": 53130.77,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 3,\r\n            \"InvMasterID\": 9,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Telin\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test2\",\r\n            \"LBRatio\": 3.5714285714,\r\n            \"FeeAmountPre\": 1178227.94,\r\n            \"FeeAmountPost\": 42079.57,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 4,\r\n            \"InvMasterID\": 9,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"Telin\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test1\",\r\n            \"LBRatio\": 3.5714285714,\r\n            \"FeeAmountPre\": 1288822.32,\r\n            \"FeeAmountPost\": 46029.37,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 1,\r\n            \"InvMasterID\": 10,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"VNPT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test3\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1627300.92,\r\n            \"FeeAmountPost\": 116235.78,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 2,\r\n            \"InvMasterID\": 10,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"VNPT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM12\",\r\n            \"FeeItem\": \"test4\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1487661.54,\r\n            \"FeeAmountPost\": 106261.54,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 3,\r\n            \"InvMasterID\": 10,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"VNPT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test2\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1178227.94,\r\n            \"FeeAmountPost\": 84159.14,\r\n            \"Difference\": 0\r\n        },\r\n        {\r\n            \"WKMasterID\": 1,\r\n            \"WKDetailID\": 4,\r\n            \"InvMasterID\": 10,\r\n            \"InvoiceNo\": \"DT0170168-1\",\r\n            \"PartyName\": \"VNPT\",\r\n            \"SupplierName\": \"NEC\",\r\n            \"SubmarineCable\": \"SJC2\",\r\n            \"WorkTitle\": \"Construction\",\r\n            \"BillMilestone\": \"BM9a\",\r\n            \"FeeItem\": \"test1\",\r\n            \"LBRatio\": 7.1428571429,\r\n            \"FeeAmountPre\": 1288822.32,\r\n            \"FeeAmountPost\": 92058.74,\r\n            \"Difference\": 0\r\n        }\r\n    ]\r\n}"
+      },
+      "headers": [],
+      "parameters": [],
+      "parentId": "CD8WQteWNrDb2l3kr-7x-",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 2
+    },
+    {
+      "_id": "Xd1U05ZZ4-ylNNWVy5JFw",
+      "_type": "request_group",
+      "name": "帳單主檔&帳單明細檔",
+      "parentId": "ONOo8iLv_lrPd_2Vqb2OL",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 6,
+      "collapsed": true
+    },
+    {
+      "_id": "htY7Oj_TYloxxruFBnXK1",
+      "_type": "request",
+      "name": "查詢帳單及帳單明細",
+      "method": "GET",
+      "body": {
+        "mimeType": "No Body"
+      },
+      "parentId": "Xd1U05ZZ4-ylNNWVy5JFw",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 0,
+      "url": "http://localhost:8000/api/v1/getBillMaster&BillDetail/BillMasterID=1"
+    },
+    {
+      "_id": "wqtiAOqd8Ec73-7yjRIxs",
+      "_type": "request",
+      "name": "查詢帳單跟CB",
+      "method": "GET",
+      "body": {
+        "mimeType": "No Body"
+      },
+      "parentId": "Xd1U05ZZ4-ylNNWVy5JFw",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 1,
+      "url": "http://localhost:8000/api/v1/getBillMaster&BillDetailWithCBData/BillMasterID=3"
+    },
+    {
+      "_id": "Ipw_lClt0kLaaT2FBTtPr",
+      "_type": "request",
+      "name": "待合併(抓取InvoiceMaster、InvoiceDetail)",
+      "method": "GET",
+      "body": {
+        "mimeType": "No Body"
+      },
+      "parentId": "Xd1U05ZZ4-ylNNWVy5JFw",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 2,
+      "url": "http://localhost:8000/api/v1/getInvoiceMaster&InvoiceDetail/WKMasterID=1"
+    },
+    {
+      "_id": "5FsbAFGcXSYZhiEhtW3an",
+      "_type": "request",
+      "name": "查詢帳單",
+      "method": "GET",
+      "body": {
+        "mimeType": "No Body"
+      },
+      "parentId": "Xd1U05ZZ4-ylNNWVy5JFw",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 3,
+      "url": "http://localhost:8000/api/v1/BillMaster/BillMasterID=1"
+    },
+    {
+      "_id": "cbBTcfFp3ZnHCjB4tAAY-",
+      "_type": "request",
+      "name": "檢查帳單號碼是否存在",
+      "url": "http://localhost:8000/api/v1/checkBillingNo/testNo",
+      "method": "GET",
+      "body": {
+        "mimeType": "No Body"
+      },
+      "headers": [],
+      "parameters": [],
+      "parentId": "Xd1U05ZZ4-ylNNWVy5JFw",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 4
+    },
+    {
+      "_id": "3qIkR7uBYrCZTBqTI8Xra",
+      "_type": "request",
+      "name": "未抵扣帳單退回至待合併發票",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json"
+      },
+      "parentId": "Xd1U05ZZ4-ylNNWVy5JFw",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 5,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "url": "http://172.24.156.51:8000/api/v1/returnBillMaster/beforeduction"
+    },
+    {
+      "_id": "ccgGPDPtW3apuMn3_MhKS",
+      "_type": "request",
+      "name": "已抵扣帳單退回至未抵扣",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n    \"BillMasterID\": 1\n}"
+      },
+      "parentId": "Xd1U05ZZ4-ylNNWVy5JFw",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 6,
+      "url": "http://172.24.156.51:8000/api/v1/returnBillMaster/afterdeduction",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "_id": "P3vg7apxsNiM7qE_vzM-v",
+      "_type": "request",
+      "name": "已簽核作廢",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n    \"BillMasterID\": 5\n}"
+      },
+      "parentId": "Xd1U05ZZ4-ylNNWVy5JFw",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 7,
+      "url": "http://172.24.156.51:8000/api/v1/invalidBillMaster/signed",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "_id": "SGST7E3k2chDhwLaPpTxF",
+      "_type": "request",
+      "name": "帳單draft",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n    \"BillMasterID\": 1,\n    \"UserID\": \"chang_ty\",\n    \"GetTemplate\": true,\n    \"IssueDate\": \"2023/04/01\",\n    \"DueDate\": \"2023/04/30\",\n    \"WorkTitle\": \"Construction #11\",\n    \"InvoiceName\": \"\",\n    \"logo\": 1\n}"
+      },
+      "parentId": "Xd1U05ZZ4-ylNNWVy5JFw",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 8,
+      "url": "http://localhost:8000/api/v1/getBillMasterDraftStream",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "_id": "sksn5D2lvg47bB5l2mtzU",
+      "_type": "request",
+      "name": "進入待銷帳",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n    \"BillMasterID\": 1,\n    \"Status\": \"TO_WRITEOFF\"\n}"
+      },
+      "parentId": "Xd1U05ZZ4-ylNNWVy5JFw",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 9,
+      "url": "http://localhost:8000/api/v1/updateBillMaster",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "_id": "uK35XrbdQXrFVDphcYxe8",
+      "_type": "request_group",
+      "name": "付款",
+      "parentId": "ONOo8iLv_lrPd_2Vqb2OL",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 7,
+      "collapsed": true
+    },
+    {
+      "_id": "RP8qHJPL4oTzB2XMStmA2",
+      "_type": "request",
+      "name": "顯示狀態為PAYING的發票",
+      "method": "GET",
+      "body": {
+        "mimeType": "No Body"
+      },
+      "parentId": "uK35XrbdQXrFVDphcYxe8",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 0,
+      "url": "http://localhost:8000/api/v1/payment/datastream"
+    },
+    {
+      "_id": "_5uv1mmNO_r6_gUmlAhps",
+      "_type": "request_group",
+      "name": "使用者",
+      "parentId": "ONOo8iLv_lrPd_2Vqb2OL",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 9,
+      "collapsed": true
+    },
+    {
+      "_id": "wgLlNn_NEqqq_yBLhkrBn",
+      "_type": "request",
+      "name": "查詢使用者",
+      "url": "http://localhost:8000/api/v1/User/startCreateDate=20230303&endCreateDate=20230303",
+      "method": "GET",
+      "body": {
+        "mimeType": "No Body"
+      },
+      "headers": [],
+      "parameters": [],
+      "parentId": "_5uv1mmNO_r6_gUmlAhps",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 0
+    },
+    {
+      "_id": "971tulC7eUdNCa1Zsa5Mr",
+      "_type": "request",
+      "name": "刪除使用者",
+      "url": "http://localhost:8000/api/v1/deleteUser",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n    \"UserID\": 1\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "parameters": [],
+      "parentId": "_5uv1mmNO_r6_gUmlAhps",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 1
+    },
+    {
+      "_id": "9hve6QgBAp5ledjXwaWCJ",
+      "_type": "request",
+      "name": "新增使用者",
+      "url": "http://localhost:8000/api/v1/User",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n    \"UserName\": \"Test User 1\",\n    \"Password\": 1234,\n    \"CreateDate\": \"2023-03-08 00:00:00\",\n    \"Note\": \"Test Note\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "parameters": [],
+      "parentId": "_5uv1mmNO_r6_gUmlAhps",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 2
+    },
+    {
+      "_id": "1wegWui2-79GfWY7gQLTP",
+      "_type": "request",
+      "name": "更改使用者資訊",
+      "url": "http://localhost:8000/api/v1/updateUser",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n    \"UserID\": 1,\n    \"UserName\": \"Test User 1 Update\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "parameters": [],
+      "parentId": "_5uv1mmNO_r6_gUmlAhps",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 3
+    },
+    {
+      "_id": "NZmxQvd3twv9p4buXiNbi",
+      "_type": "request_group",
+      "name": "Contracts",
+      "parentId": "ONOo8iLv_lrPd_2Vqb2OL",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 10,
+      "collapsed": true
+    },
+    {
+      "_id": "hJvmUf26zolvJv6c2Zcpm",
+      "_type": "request",
+      "name": "TEST",
+      "url": "http://localhost:8000/api/v1/deleteContracts",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n    \"Test\": \"Test\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "parameters": [],
+      "parentId": "NZmxQvd3twv9p4buXiNbi",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 0
+    },
+    {
+      "_id": "T1dk-fV_3n7fZLF2xKuTR",
+      "_type": "request_group",
+      "name": "Corporates",
+      "parentId": "ONOo8iLv_lrPd_2Vqb2OL",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 11,
+      "collapsed": true
+    },
+    {
+      "_id": "UPxzo73JK4agDYG1qH7ZI",
+      "_type": "request",
+      "name": "查詢Corporates",
+      "url": "http://localhost:8000/api/v1/Corporates/startCreateDate=20230217&endCreateDate=20230217",
+      "method": "GET",
+      "body": {
+        "mimeType": "No Body"
+      },
+      "headers": [],
+      "parameters": [],
+      "parentId": "T1dk-fV_3n7fZLF2xKuTR",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 0
+    },
+    {
+      "_id": "6o49CP0U5VGYWzvfNU4rf",
+      "_type": "request",
+      "name": "刪除Corporates",
+      "url": "http://localhost:8000/api/v1/deleteCorporates",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n    \"CorpID\": 2\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "parameters": [],
+      "parentId": "T1dk-fV_3n7fZLF2xKuTR",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 1
+    },
+    {
+      "_id": "fDFwuB2fmMO8pFYyZDI4S",
+      "_type": "request",
+      "name": "更新Corporates",
+      "url": "http://localhost:8000/api/v1/updateCorporates",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n    \"CorpID\": 2,\n    \"CorpName\": \"TEST2Update\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "parameters": [],
+      "parentId": "T1dk-fV_3n7fZLF2xKuTR",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 2
+    },
+    {
+      "_id": "VCRPgIvdcWOjMrlm6o8ri",
+      "_type": "request",
+      "name": "新增Corporates",
+      "url": "http://localhost:8000/api/v1/Corporates",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n    \"CorpName\": \"TEST2\"   \n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "parameters": [],
+      "parentId": "T1dk-fV_3n7fZLF2xKuTR",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 3
+    },
+    {
+      "_id": "ZXCt1Lz7lsP8CW7L4nKNi",
+      "_type": "request_group",
+      "name": "CreditBalance",
+      "parentId": "ONOo8iLv_lrPd_2Vqb2OL",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 12,
+      "collapsed": true
+    },
+    {
+      "_id": "P-ZEofQNCNUtzwzPh202g",
+      "_type": "request",
+      "name": "CB歷程預覽",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n    \"CBID\": 1,\n    \"Download\": false\n}"
+      },
+      "parentId": "ZXCt1Lz7lsP8CW7L4nKNi",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 0,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "url": "http://127.0.0.1:8000/api/v1/CreditBalanceStatement/generateReport"
+    },
+    {
+      "_id": "GXmRzxKfbyH-iU-PacMFZ",
+      "_type": "request",
+      "name": "產製CBStatement報表",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n    \"CBID\": 9,\n    \"Download\": true\n}"
+      },
+      "parentId": "ZXCt1Lz7lsP8CW7L4nKNi",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 1,
+      "url": "http://localhost:8000/api/v1/CreditBalanceStatement/generateReport",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "_id": "6WzYbg19anlqLcKwDN3w7",
+      "_type": "request_group",
+      "name": "Liability",
+      "parentId": "ONOo8iLv_lrPd_2Vqb2OL",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 13,
+      "collapsed": true
+    },
+    {
+      "_id": "a8iTX73zlf03DFGh0ZTDW",
+      "_type": "request",
+      "name": "查詢會員",
+      "url": "http://localhost:8000/api/v1/dropdownmenuParties",
+      "method": "GET",
+      "body": {
+        "mimeType": "No Body"
+      },
+      "headers": [],
+      "parameters": [],
+      "parentId": "6WzYbg19anlqLcKwDN3w7",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 0
+    },
+    {
+      "_id": "dn9YIv6tCuXaBPMte-mvU",
+      "_type": "request",
+      "name": "查詢Liability",
+      "url": "http://127.0.0.1:8000/api/v1/searchLiability",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\r\n    \"startCreateDate\": \"20221227\",\r\n    \"endCreateDate\": \"20221227\"\r\n}"
+      },
+      "headers": [],
+      "parameters": [],
+      "parentId": "6WzYbg19anlqLcKwDN3w7",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 1
+    },
+    {
+      "_id": "y-0g4oolMZ-3kWYygUxIE",
+      "_type": "request_group",
+      "name": "記帳段號(BillMilestone)",
+      "parentId": "ONOo8iLv_lrPd_2Vqb2OL",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 14,
+      "collapsed": true
+    },
+    {
+      "_id": "f2PDGOaHXcjQNKcfeisTg",
+      "_type": "request",
+      "name": "查詢記帳段號",
+      "url": "http://localhost:8000/api/v1/BillMilestone/SubmarineCable=SJC2&WorkTitle=Construction",
+      "method": "GET",
+      "body": {
+        "mimeType": "No Body"
+      },
+      "headers": [],
+      "parameters": [],
+      "parentId": "y-0g4oolMZ-3kWYygUxIE",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 0
+    },
+    {
+      "_id": "mE2XIp0XC0jcV0kbvGqJB",
+      "_type": "request_group",
+      "name": "海纜名稱(SubmarineCable)",
+      "parentId": "ONOo8iLv_lrPd_2Vqb2OL",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 15,
+      "collapsed": true
+    },
+    {
+      "_id": "TmHAi4hm3Gb3smoSUXc1B",
+      "_type": "request",
+      "name": "查詢海纜名稱",
+      "url": "http://127.0.0.1:8000/api/v1/SubmarineCables/all",
+      "method": "GET",
+      "body": {
+        "mimeType": "No Body"
+      },
+      "headers": [],
+      "parameters": [],
+      "parentId": "mE2XIp0XC0jcV0kbvGqJB",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 0
+    },
+    {
+      "_id": "LNLq8sOMY56wa4oJZzgJN",
+      "_type": "request",
+      "name": "增加海纜名稱",
+      "url": "http://localhost:8000/api/v1/SubmarineCables",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\r\n    \"CableName\": \"SJC2\"\r\n}"
+      },
+      "headers": [],
+      "parameters": [],
+      "parentId": "mE2XIp0XC0jcV0kbvGqJB",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 1
+    },
+    {
+      "_id": "LYj7DGhJrpI_gKouptGa2",
+      "_type": "request_group",
+      "name": "供應商(Suppliers)",
+      "parentId": "ONOo8iLv_lrPd_2Vqb2OL",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 16,
+      "collapsed": true
+    },
+    {
+      "_id": "ziWsBiDix_QLyLJwX2H2S",
+      "_type": "request",
+      "name": "查詢供應商",
+      "url": "http://127.0.0.1:8000/api/v1/Suppliers/all",
+      "method": "GET",
+      "body": {
+        "mimeType": "No Body"
+      },
+      "headers": [],
+      "parameters": [],
+      "parentId": "LYj7DGhJrpI_gKouptGa2",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 0
+    },
+    {
+      "_id": "ZWDeaPGRpPlSLOBMkP7fL",
+      "_type": "request",
+      "name": "增加供應商",
+      "url": "http://localhost:8000/api/v1/Suppliers",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\r\n    \"SupplierName\": \"NEC\"\r\n}"
+      },
+      "headers": [],
+      "parameters": [],
+      "parentId": "LYj7DGhJrpI_gKouptGa2",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 1
+    },
+    {
+      "_id": "xuqFj1QASLWatR6bLnr8_",
+      "_type": "request_group",
+      "name": "會員",
+      "parentId": "ONOo8iLv_lrPd_2Vqb2OL",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 17,
+      "collapsed": true
+    },
+    {
+      "_id": "0FdpKRevth204GR03gjZp",
+      "_type": "request",
+      "name": "查詢會員",
+      "url": "http://localhost:8000/api/v1/Parties/all",
+      "method": "GET",
+      "body": {
+        "mimeType": "No Body"
+      },
+      "headers": [],
+      "parameters": [],
+      "parentId": "xuqFj1QASLWatR6bLnr8_",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 0
+    },
+    {
+      "_id": "eypmSmBofJJ8K2HDyyIOd",
+      "_type": "request",
+      "name": "新增會員",
+      "url": "http://localhost:8000/api/v1/Parties",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\r\n    \"PartyName\": \"CMI\"\r\n}"
+      },
+      "headers": [],
+      "parameters": [],
+      "parentId": "xuqFj1QASLWatR6bLnr8_",
+      "workspaceId": "VMFPjZ2CiRorfNKAjKtNA",
+      "sortOrder": 1
+    }
+  ]
+}
