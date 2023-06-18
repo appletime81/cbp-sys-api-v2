@@ -1,9 +1,7 @@
 import json
 
 
-a = {
-    "A": None
-}
+a = {"A": None}
 
 
 # convert to json
