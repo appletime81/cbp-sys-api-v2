@@ -17,7 +17,9 @@ class InvoiceWKMasterSchema(BaseModel):
     IsPro = Column(Boolean)
     IsRecharge = Column(Boolean)
     IsLiability = Column(Boolean)
+    IsCreditNote = Column(Boolean)
     TotalAmount = Column(Float)
+    DedAmount = Column(Float)
     PaidAmount = Column(Float)
     CreateDate = Column(String(20))
     PaidDate = Column(String(20))
@@ -36,7 +38,9 @@ class InvoiceWKMasterSchema(BaseModel):
     IsPro: bool
     IsRecharge: bool
     IsLiability: bool
+    IsCreditNote: Optional[bool]
     TotalAmount: float
+    DedAmount: Optional[float] = 0.0
     PaidAmount: Optional[float] = 0.0
     CreateDate: Optional[datetime]
     PaidDate: Optional[datetime]
@@ -403,6 +407,56 @@ class CreditBalanceStatementSchema(BaseModel):
     TransAmount: float
     Note: Optional[str]
     CreateDate: datetime
+
+
+class SuppliersCreditBalance(BaseModel):
+    """
+    CBID           int NOT NULL AUTO_INCREMENT,
+    WKMasterID     int,
+    CBType         varchar(20),
+    InvoiceNo      varchar(64),
+    SubmarineCable varchar(10),
+    WorkTitle      varchar(50),
+    SupplierName   varchar(100),
+    CurrAmount     decimal(12, 2),
+    CreateDate     datetime,
+    LastUpdDate    datetime,
+    Note           varchar(128),
+    """
+
+    CBID: Optional[int]
+    WKMasterID: Optional[int]
+    CBType: Optional[str]
+    InvoiceNo: Optional[str]
+    SubmarineCable: Optional[str]
+    WorkTitle: Optional[str]
+    SupplierName: Optional[str]
+    CurrAmount: Optional[float]
+    CreateDate: Optional[datetime]
+    LastUpdDate: Optional[datetime]
+    Note: Optional[str]
+
+
+class SuppliersCreditBalanceStatement(BaseModel):
+    """
+    CBStateID   int NOT NULL AUTO_INCREMENT,
+    CBID        int,
+    InvoiceNo   varchar(64),
+    TransItem   varchar(20),
+    OrgAmount   decimal(12, 2),
+    TransAmount decimal(12, 2),
+    CreateDate  datetime,
+    Note        varchar(128),
+    """
+
+    CBStateID: Optional[int]
+    CBID: Optional[int]
+    InvoiceNo: Optional[str]
+    TransItem: Optional[str]
+    OrgAmount: Optional[float]
+    TransAmount: Optional[float]
+    CreateDate: Optional[datetime]
+    Note: Optional[str]
 
 
 class CreditNoteSchema(BaseModel):

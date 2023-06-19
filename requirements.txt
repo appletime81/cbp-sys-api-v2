@@ -6,3 +6,4 @@ openpyxl==3.1.2
 docxtpl==0.16.6
 PyMySQL==1.0.3
 python-multipart==0.0.6
+urllib3==2.0.3

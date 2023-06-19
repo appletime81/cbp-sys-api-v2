@@ -540,3 +540,55 @@
 2023-06-17 03:12:19.278925: Eva Change paid to Supplier DT0170168-1 successfully.
 --------------------------------------------------
 2023-06-17 03:12:19.292996: Eva Change paid to Supplier DT0170168-2 successfully.
+--------------------------------------------------
+2023-06-19 11:56:31.755015: Eva Change created InvoiceWKMaster, the InvoiceNo is DT0170168-1
+--------------------------------------------------
+2023-06-19 11:56:31.774290: Eva Change created InvoiceWKMaster, the InvoiceNo is DT0170168-2
+--------------------------------------------------
+2023-06-19 12:03:31.806445: Eva Change created InvoiceWKMaster, the InvoiceNo is DT0170168-1
+--------------------------------------------------
+2023-06-19 12:03:31.837593: Eva Change created InvoiceWKMaster, the InvoiceNo is DT0170168-2
+--------------------------------------------------
+2023-06-19 13:34:57.142067: Eva Change update InvoiceWKMaster: {'WKMasterID': 1, 'Status': 'VALIDATED'}
+--------------------------------------------------
+2023-06-19 13:34:58.168430: Eva Change update InvoiceWKMaster: {'WKMasterID': 2, 'Status': 'VALIDATED'}
+--------------------------------------------------
+2023-06-19 13:35:02.821758: Eva Change add InvoiceMaster and InvoiceDetail, InvoiceNo: DT0170168-1
+--------------------------------------------------
+2023-06-19 13:35:06.879988: Eva Change add InvoiceMaster and InvoiceDetail, InvoiceNo: DT0170168-2
+--------------------------------------------------
+2023-06-19 13:35:30.390217: Eva Change initial BillMaster, BillingNo is 02CO-CI2306191335
+--------------------------------------------------
+2023-06-19 13:35:41.600631: Eva Change completed the deduction of the BillMaster: {'WorkTitle': 'Construction', 'BillingNo': '02CO-CI2306191335', 'PONo': '', 'IssueDate': '2023-06-19T13:35:30', 'FeeAmountSum': 208294.52, 'BankFees': None, 'Status': 'RATED', 'BillMasterID': 1, 'SubmarineCable': 'SJC2', 'PartyName': 'CHT', 'DueDate': '2023-06-19T13:35:30', 'ReceivedAmountSum': 0.0, 'IsPro': False, 'URI': None}
+--------------------------------------------------
+2023-06-19 13:36:36.309044: Eva Change downloaded 02CO-CI2306191335.docx, title is SJC2 Cable Network  Central Billing Party Invoice, logo is 1
+--------------------------------------------------
+2023-06-19 13:40:47.081045: Eva Change upload signed bill master, BillMasterID: 1
+--------------------------------------------------
+2023-06-19 13:43:08.607376: Eva Change update BillMaster, BillMasterID: 1 to TO_WRITEOFF
+--------------------------------------------------
+2023-06-19 13:45:25.272594: Eva Change writes off 02CO-CI2306191335 successfully.
+--------------------------------------------------
+2023-06-19 13:48:07.816420: Eva Change paid to Supplier DT0170168-1 successfully.
+--------------------------------------------------
+2023-06-19 13:48:07.832383: Eva Change paid to Supplier DT0170168-2 successfully.
+--------------------------------------------------
+2023-06-19 14:34:58.958763: Eva Change initial BillMaster, BillingNo is 02CO-CI2306191434
+--------------------------------------------------
+2023-06-19 14:39:13.317653: Eva Change completed the deduction of the BillMaster: {'WorkTitle': 'Construction', 'BillingNo': '02CO-CI2306191434', 'PONo': '', 'IssueDate': '2023-06-19T14:34:58', 'FeeAmountSum': 190280.68, 'BankFees': None, 'Status': 'RATED', 'BillMasterID': 2, 'SubmarineCable': 'SJC2', 'PartyName': 'CHT', 'DueDate': '2023-06-30T14:34:42', 'ReceivedAmountSum': 0.0, 'IsPro': False, 'URI': None}
+--------------------------------------------------
+2023-06-19 16:10:24.106666: Eva Change created InvoiceWKMaster, the InvoiceNo is DT0170168-1
+--------------------------------------------------
+2023-06-19 16:10:24.127486: Eva Change created InvoiceWKMaster, the InvoiceNo is DT0170168-2
+--------------------------------------------------
+2023-06-19 16:10:27.958708: Eva Change update InvoiceWKMaster: {'WKMasterID': 1, 'Status': 'VALIDATED'}
+--------------------------------------------------
+2023-06-19 16:10:28.847998: Eva Change update InvoiceWKMaster: {'WKMasterID': 2, 'Status': 'VALIDATED'}
+--------------------------------------------------
+2023-06-19 16:10:34.302619: Eva Change add InvoiceMaster and InvoiceDetail, InvoiceNo: DT0170168-1
+--------------------------------------------------
+2023-06-19 16:10:38.843640: Eva Change add InvoiceMaster and InvoiceDetail, InvoiceNo: DT0170168-2
+--------------------------------------------------
+2023-06-19 16:11:16.809705: Eva Change initial BillMaster, BillingNo is 02CO-CI2306191611
+--------------------------------------------------
+2023-06-19 16:11:27.383129: Eva Change completed the deduction of the BillMaster: {'WorkTitle': 'Construction', 'BillingNo': '02CO-CI2306191611', 'PONo': '', 'IssueDate': '2023-06-19T16:11:16', 'FeeAmountSum': 208294.52, 'BankFees': None, 'Status': 'RATED', 'BillMasterID': 1, 'SubmarineCable': 'SJC2', 'PartyName': 'CHT', 'DueDate': '2023-06-30T16:10:56', 'ReceivedAmountSum': 0.0, 'IsPro': False, 'URI': None}
