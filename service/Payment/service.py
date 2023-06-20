@@ -32,6 +32,18 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
         "TempSave": true,
         "Confirm": true,
     }
+
+    example:
+    {
+        "PayDraftID": 2,
+        "PayDraftCableInfo": "(使用者輸入CableInfo)",
+        "PayDraftSubject": "(使用者輸入Subject)",
+        "PayDraftChineseTotalFeeAmount": "二〇八四九四．五二",
+        "DownloadTemplate": true,
+        "Preview": false,
+        "TempSave": false,
+        "Confirm": false,
+    }
     """
     requestDictData = await request.json()
     pprint(requestDictData)
@@ -137,14 +149,33 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
         )
         return {"message": "temp save success", "PayDraft": newPayDraftData}
 
-
-# {
-#     "PayDraftID": 2,
-#     "PayDraftCableInfo": "(使用者輸入CableInfo)",
-#     "PayDraftSubject": "(使用者輸入Subject)",
-#     "PayDraftChineseTotalFeeAmount": "二〇八四九四．五二",
-#     "DownloadTemplate": true,
-#     "Preview": false,
-#     "TempSave": false,
-#     "Confirm": false,
-# }
+{
+    "PayDraftID": 2(int),
+    "PayMID": 2(int),
+    "Payee": "字串",
+    "InvoiceNo": "字串",
+    "SubmarineCable": "字串",
+    "WorkTitle": "字串",
+    "CableInfo": "字串",
+    "TotalFeeAmount": 208494.52(float),
+    "Subject": "字串",
+    "Address": "字串",
+    "CtactPerson": "字串",
+    "Tel": "字串",
+    "email": "字串",
+    "IssueDate": "字串",
+    "IssueNo": "字串",
+    "OriginalTo": "字串",
+    "CBPBankAcctNo": "字串",
+    "BankAcctName": "字串",
+    "BankName": "字串",
+    "BankAddress": "字串",
+    "BankAcctNo": "字串",
+    "IBAN": "字串",
+    "SWIFTCode": "字串",
+    "ACHNo": "字串",
+    "WireRouting": "字串",
+    "Status": "TEMPORARY"(字串),
+    "PayeeType": "SUPPLIER"(字串),
+    "URI": ""
+}

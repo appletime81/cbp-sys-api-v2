@@ -286,7 +286,7 @@ async def submitPayment(request: Request, db: Session = Depends(get_db)):
 # -----------------------------------------------------------------------
 
 
-# ------------------------------- 顯示付款函搞 -------------------------------
+# ------------------------------- 顯示付款函稿 -------------------------------
 @router.get("/paydraft/{urlCondition}")
 async def showPaymentData(
     request: Request, urlCondition: str, db: Session = Depends(get_db)
@@ -324,6 +324,33 @@ async def showPaymentData(
 
     # return process_data(PayDraftDataList)
     return PayDraftDataList
+
+
+# --------------------------------------------------------------------------
+
+
+# ------------------------------- 更新付款函稿狀態 -------------------------------
+@router.post("/paydraft")
+async def updatePayDraft(request: Request, db: Session = Depends(get_db)):
+    """
+    input data:
+    {
+        "PayDraftID": 1,
+        "Status": "COMPLETE",
+    }
+    """
+    PayDraftID = (await request.json()).get("PayDraftID")
+    Status = (await request.json()).get("Status")
+    crudPayDraft = CRUD(db, PayDraftDBModel)
+
+    PayDraftData = crudPayDraft.get_with_condition({"PayDraftID": PayDraftID})
+
+    newPayDraftData = deepcopy(PayDraftData)
+    newPayDraftData.Status = Status
+
+    newPayDraftData = crudPayDraft.update(PayDraftData, orm_to_dict(newPayDraftData))
+
+    return {"message": "success", "PayDraft": newPayDraftData}
 
 
 # --------------------------------------------------------------------------
