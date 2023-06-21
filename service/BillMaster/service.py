@@ -1332,6 +1332,7 @@ async def invlaidBillMasterAfterDeduction(
         "Note": str
     }
     """
+    crudInvoiceDetail = CRUD(db, InvoiceDetailDBModel)
     crudBillMaster = CRUD(db, BillMasterDBModel)
     crudBillDetail = CRUD(db, BillDetailDBModel)
     crudCreditBalance = CRUD(db, CreditBalanceDBModel)
@@ -1350,6 +1351,13 @@ async def invlaidBillMasterAfterDeduction(
     )
     CBStatementDataList = crudCreditBalanceStatement.get_value_if_in_a_list(
         CreditBalanceStatementDBModel.BLDetailID, BillDetailIDList
+    )
+
+    InvDetailIDList = list(
+        set([BillDetailData.InvDetialID for BillDetailData in BillDetailDataList])
+    )
+    InvoiceDetailDataList = crudInvoiceDetail.get_value_if_in_a_list(
+        InvoiceDetailDBModel.InvDetialID, InvDetailIDList
     )
 
     newDataCreateDate = convert_time_to_str(datetime.now())
@@ -1408,6 +1416,18 @@ async def invlaidBillMasterAfterDeduction(
             crudCreditBalance.update(CBData, newCBDictData)
 
     # =============================================
+    # 更新InvoiceDetail
+    # =============================================
+    newInvoiceDetailDataList = []
+    for InvoiceDetailData in InvoiceDetailDataList:
+        newInvoiceDetailData = deepcopy(InvoiceDetailData)
+        newInvoiceDetailData.Status = "TO_MERGE"
+        newInvoiceDetailData = crudInvoiceDetail.update(
+            InvoiceDetailData, orm_to_dict(newInvoiceDetailData)
+        )
+        newInvoiceDetailDataList.append(newInvoiceDetailData)
+
+    # =============================================
     # 更新BillDetail
     # =============================================
     newBillDetailDictDataList = []
@@ -1433,6 +1453,7 @@ async def invlaidBillMasterAfterDeduction(
     return {
         "CBStatement": newCBStatementDictDataList,
         "CB": newCBDictDataList,
+        "InvoiceDetail": newInvoiceDetailDataList,
         "BillDetail": newBillDetailDictDataList,
         "BillMaster": newBillMasterDictData,
     }
