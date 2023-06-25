@@ -38,7 +38,7 @@ class InvoiceWKMasterSchema(BaseModel):
     IsPro: bool
     IsRecharge: bool
     IsLiability: bool
-    IsCreditNote: Optional[bool]
+    IsCreditMemo: Optional[bool]
     TotalAmount: float
     DedAmount: Optional[float] = 0.0
     PaidAmount: Optional[float] = 0.0
@@ -409,38 +409,40 @@ class CreditBalanceStatementSchema(BaseModel):
     CreateDate: datetime
 
 
-class SuppliersCreditBalance(BaseModel):
+class CreditMemoSchema(BaseModel):
     """
-    CBID           int NOT NULL AUTO_INCREMENT,
+    CMID           int NOT NULL AUTO_INCREMENT,
     WKMasterID     int,
-    CBType         varchar(20),
+    CMType         varchar(20),
     InvoiceNo      varchar(64),
     SubmarineCable varchar(10),
     WorkTitle      varchar(50),
     SupplierName   varchar(100),
+    BillMilestone  varchar(20),
     CurrAmount     decimal(12, 2),
     CreateDate     datetime,
     LastUpdDate    datetime,
-    Note           varchar(128),
+    Note           varchar(128)
     """
 
-    CBID: Optional[int]
+    CMID: Optional[int]
     WKMasterID: Optional[int]
-    CBType: Optional[str]
+    CMType: Optional[str]
     InvoiceNo: Optional[str]
     SubmarineCable: Optional[str]
     WorkTitle: Optional[str]
     SupplierName: Optional[str]
+    BillMilestone: Optional[str]
     CurrAmount: Optional[float]
     CreateDate: Optional[datetime]
     LastUpdDate: Optional[datetime]
     Note: Optional[str]
 
 
-class SuppliersCreditBalanceStatement(BaseModel):
+class CreditMemoStatementSchema(BaseModel):
     """
-    CBStateID   int NOT NULL AUTO_INCREMENT,
-    CBID        int,
+    CMStateID   int NOT NULL AUTO_INCREMENT,
+    CMID        int,
     InvoiceNo   varchar(64),
     TransItem   varchar(20),
     OrgAmount   decimal(12, 2),
@@ -449,13 +451,13 @@ class SuppliersCreditBalanceStatement(BaseModel):
     Note        varchar(128),
     """
 
-    CBStateID: Optional[int]
-    CBID: Optional[int]
+    CMStateID: Optional[int]
+    CMID: Optional[int]
     InvoiceNo: Optional[str]
     TransItem: Optional[str]
     OrgAmount: Optional[float]
     TransAmount: Optional[float]
-    CreateDate: Optional[datetime]
+    CreateDate: datetime
     Note: Optional[str]
 
 

@@ -134,7 +134,7 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
         "PayDraftInvoiceNo": newPayDraftData.InvoiceNo,
         "PayDraftBankAddress": newPayDraftData.BankAddress,
     }
-
+    pprint(context)
     if requestDictData.get("DownloadTemplate"):
         fileName = "payment-supplier-letter-template-output"
         doc = DocxTemplate("templates/payment-supplier-letter-template.docx")

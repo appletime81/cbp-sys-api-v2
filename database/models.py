@@ -38,7 +38,7 @@ class InvoiceWKMasterDBModel(Base):
     IsPro = Column(Boolean)
     IsRecharge = Column(Boolean)
     IsLiability = Column(Boolean)
-    IsCreditNote = Column(Boolean)
+    IsCreditMemo = Column(Boolean)
     TotalAmount = Column(Float)
     DedAmount = Column(Float)
     PaidAmount = Column(Float)
@@ -480,52 +480,54 @@ class CreditBalanceStatementDBModel(Base):
     CreateDate = Column(String(20))
 
 
-class SuppliersCreditBalanceDBModel(Base):
+class CreditMemoDBModel(Base):
     """
-    CBID           int NOT NULL AUTO_INCREMENT,
+    CMID           int NOT NULL AUTO_INCREMENT,
     WKMasterID     int,
-    CBType         varchar(20),
+    CMType         varchar(20),
     InvoiceNo      varchar(64),
     SubmarineCable varchar(10),
     WorkTitle      varchar(50),
     SupplierName   varchar(100),
+    BillMilestone  varchar(20),
     CurrAmount     decimal(12, 2),
     CreateDate     datetime,
     LastUpdDate    datetime,
     Note           varchar(128),
-    PRIMARY KEY (CBID)
+    PRIMARY KEY (CMID)
     """
 
-    __tablename__ = "SupplierCB"
-    CBID = Column(Integer, primary_key=True, index=True)
+    __tablename__ = "CM"
+    CMID = Column(Integer, primary_key=True, index=True)
     WKMasterID = Column(Integer)
-    CBType = Column(String(20))
+    CMType = Column(String(20))
     InvoiceNo = Column(String(64))
     SubmarineCable = Column(String(10))
     WorkTitle = Column(String(50))
     SupplierName = Column(String(100))
+    BillMilestone = Column(String(20))
     CurrAmount = Column(Float)
     CreateDate = Column(String(20))
     LastUpdDate = Column(String(20))
     Note = Column(String(128))
 
 
-class SuppliersCreditBalanceStatementDBModel(Base):
+class CreditMemoStatementDBModel(Base):
     """
-    CBStateID   int NOT NULL AUTO_INCREMENT,
-    CBID        int,
+    CMStateID   int NOT NULL AUTO_INCREMENT,
+    CMID        int,
     InvoiceNo   varchar(64),
     TransItem   varchar(20),
     OrgAmount   decimal(12, 2),
     TransAmount decimal(12, 2),
     CreateDate  datetime,
     Note        varchar(128),
-    PRIMARY KEY (CBStateID)
+    PRIMARY KEY (CMStateID)
     """
 
-    __tablename__ = "SupCBStatement"
-    CBStateID = Column(Integer, primary_key=True, index=True)
-    CBID = Column(Integer)
+    __tablename__ = "CMStatement"
+    CMStateID = Column(Integer, primary_key=True, index=True)
+    CMID = Column(Integer)
     InvoiceNo = Column(String(64))
     TransItem = Column(String(20))
     OrgAmount = Column(Float)

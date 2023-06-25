@@ -34,3 +34,8 @@ sudo docker ps -a
 sudo docker run -d -p 8000:8000 appletime81/cbp-sys-api-v2
 ```
 
+# 刪除image
+
+```shell
+sudo docker image rm "image id"
+```
