@@ -246,7 +246,7 @@ async def invalidInvoiceAfterBilled(request: Request, db: Session = Depends(get_
         newInvoiceWKMasterData = deepcopy(InvoiceWKMasterData)
         newInvoiceWKMasterData.Status = "INVALID"
         newInvoiceWKMasterData = crudInvoiceWKMaster.update(
-            newInvoiceWKMasterData, orm_to_dict(newInvoiceWKMasterData)
+            InvoiceWKMasterData, orm_to_dict(newInvoiceWKMasterData)
         )
 
         return {

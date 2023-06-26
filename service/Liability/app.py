@@ -92,6 +92,7 @@ async def addLiability(
     LiabilityPydanticData: LiabilitySchema,
     db: Session = Depends(get_db),
 ):
+    LiabilityPydanticData.BillMilestone = LiabilityPydanticData.BillMilestone.strip()
     crud = CRUD(db, LiabilityDBModel)
 
     # give CreateDate

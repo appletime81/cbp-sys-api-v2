@@ -148,4 +148,3 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
             PayDraftData, orm_to_dict(newPayDraftData)
         )
         return {"message": "temp save success", "PayDraft": newPayDraftData}
-

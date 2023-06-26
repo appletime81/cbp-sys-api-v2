@@ -620,3 +620,23 @@
 2023-06-25 08:34:01.066954: Eva Change paid to Supplier DT0170168-1 successfully.
 --------------------------------------------------
 2023-06-25 08:34:01.137636: Eva Change paid to Supplier DT0170168-2 successfully.
+--------------------------------------------------
+2023-06-26 11:05:31.516913: Eva Change add Liability: [{'BillMilestone': 'ggg ', 'PartyName': 'CHT', 'LBRatio': '100', 'SubmarineCable': 'NCP', 'WorkTitle': 'Construction', 'Note': '', 'CreateDate': '2023-06-26 11:05:31'}]
+--------------------------------------------------
+2023-06-26 11:08:33.263152: Eva Change add Liability: [{'BillMilestone': 'FFFFF', 'PartyName': 'KT', 'LBRatio': '100', 'SubmarineCable': 'NCP', 'WorkTitle': 'Construction', 'Note': '', 'CreateDate': '2023-06-26 11:08:33'}]
+--------------------------------------------------
+2023-06-26 11:09:19.963366: Eva Change add Liability: [{'BillMilestone': 'FFFFF', 'PartyName': 'KT', 'LBRatio': '100', 'SubmarineCable': 'NCP', 'WorkTitle': 'Construction', 'Note': '', 'CreateDate': '2023-06-26 11:09:19'}]
+--------------------------------------------------
+2023-06-26 11:10:28.484900: Eva Change add Liability: [{'BillMilestone': 'FFFFF', 'PartyName': 'KT', 'LBRatio': '100', 'SubmarineCable': 'NCP', 'WorkTitle': 'Construction', 'Note': '', 'CreateDate': '2023-06-26 11:10:28'}]
+--------------------------------------------------
+2023-06-26 11:11:40.427613: Eva Change add Liability: [{'BillMilestone': 'FFFFF', 'PartyName': 'KT', 'LBRatio': '100', 'SubmarineCable': 'NCP', 'WorkTitle': 'Construction', 'Note': '', 'CreateDate': '2023-06-26 11:11:40'}]
+--------------------------------------------------
+2023-06-26 11:12:33.028236: Eva Change add Liability: [{'BillMilestone': 'FFFFF', 'PartyName': 'KT', 'LBRatio': '100', 'SubmarineCable': 'NCP', 'WorkTitle': 'Construction', 'Note': '', 'CreateDate': '2023-06-26 11:12:33'}]
+--------------------------------------------------
+2023-06-26 11:13:09.052059: Eva Change add Liability: [{'BillMilestone': 'FFFFF', 'PartyName': 'KT', 'LBRatio': '100', 'SubmarineCable': 'NCP', 'WorkTitle': 'Construction', 'Note': '', 'CreateDate': '2023-06-26 11:13:08'}]
+--------------------------------------------------
+2023-06-26 11:13:50.688526: Eva Change add Liability: [{'BillMilestone': 'FFFFF', 'PartyName': 'KT', 'LBRatio': '100', 'SubmarineCable': 'NCP', 'WorkTitle': 'Construction', 'Note': '', 'CreateDate': '2023-06-26 11:13:50'}]
+--------------------------------------------------
+2023-06-26 11:15:19.551994: Eva Change add Liability: [{'BillMilestone': 'FFFFF', 'PartyName': 'KT', 'LBRatio': '100', 'SubmarineCable': 'NCP', 'WorkTitle': 'Construction', 'Note': '', 'CreateDate': '2023-06-26 11:15:19'}]
+--------------------------------------------------
+2023-06-26 11:34:03.453983: Eva Change add Liability: [{'BillMilestone': 'hjghjjhjjjjhj    ', 'PartyName': 'CHT', 'LBRatio': '100', 'SubmarineCable': 'NCP', 'WorkTitle': 'Construction', 'Note': '', 'CreateDate': '2023-06-26 11:34:03'}]

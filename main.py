@@ -236,12 +236,20 @@ async def searchInvoiceWKMaster(
         )
 
     if BillMilestone:
+        print("-" * 100)
+        print(BillMilestone)
         newGetResult = []
         for element in getResult:
             for InvoiceWKDetailData in element["InvoiceWKDetail"]:
+                print("-" * 100)
+                # pprint(orm_to_dict(InvoiceWKDetailData))
+
                 if InvoiceWKDetailData.BillMilestone == BillMilestone:
+                    print(InvoiceWKDetailData.BillMilestone)
                     newGetResult.append(element)
                     break
+        print("-" * 100)
+        pprint(newGetResult)
         return newGetResult
 
     return getResult
@@ -510,15 +518,18 @@ async def compareLiability(request: Request, db: Session = Depends(get_db)):
 @app.post(ROOT_URL + "/batchAddLiability")
 async def batchAddLiability(request: Request, db: Session = Depends(get_db)):
     LiabilityDictDataList = await request.json()
+    newLiabilityDataList = []
     crud = CRUD(db, LiabilityDBModel)
     for LiabilityDictData in LiabilityDictDataList:
         LiabilityDictData["CreateDate"] = convert_time_to_str(datetime.now())
         LiabilityPydanticData = LiabilitySchema(**LiabilityDictData)
-        crud.create(LiabilityPydanticData)
+        LiabilityPydanticData.BillMilestone = LiabilityPydanticData.BillMilestone.strip()
+        newLiabilityData = crud.create(LiabilityPydanticData)
+        newLiabilityDataList.append(newLiabilityData)
 
     # 紀錄使用者操作log
     record_log(f"{user_name} add Liability: {LiabilityDictDataList}")
-    return {"message": "success add Liability"}
+    return {"message": "success add Liability", "Liability": newLiabilityDataList}
 
 
 # -----------------------------------------------------------------------
