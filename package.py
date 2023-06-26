@@ -45,7 +45,7 @@ def main():
         f.truncate()
 
     # compress the backend folder
-    subprocess.run(["tar", "-zcvf", "backend.tar.gz", "-C", "backend", "."], check=True)
+    # subprocess.run(["tar", "-zcvf", "backend.tar.gz", "-C", "backend", "."], check=True)
 
 
 if __name__ == "__main__":

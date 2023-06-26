@@ -83,7 +83,7 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
     )
     newPayDraftData.BankAcctName = SuppliersData.BankAcctName
     newPayDraftData.BankName = SuppliersData.BankName
-    newPayDraftData.AcctNo = (
+    newPayDraftData.BankAcctNo = (
         SuppliersData.BankAcctNo
         if SuppliersData.BankAcctNo
         else SuppliersData.SavingAcctNo
@@ -97,14 +97,10 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
         SuppliersData.WireRouting if SuppliersData.WireRouting else ""
     )
     newPayDraftData.Subject = (
-        requestDictData.get("PayDraftSubject")
-        if requestDictData.get("PayDraftSubject")
-        else ""
+        requestDictData.get("Subject") if requestDictData.get("Subject") else ""
     )
     newPayDraftData.CableInfo = (
-        requestDictData.get("PayDraftCableInfo")
-        if requestDictData.get("PayDraftCableInfo")
-        else ""
+        requestDictData.get("CableInfo") if requestDictData.get("CableInfo") else ""
     )
     newPayDraftData.BankAddress = (
         SuppliersData.BankAddress if SuppliersData.BankAddress else ""
@@ -116,17 +112,14 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
         "PayDraftOriginalTo": newPayDraftData.OriginalTo,
         "PayDraftPayee": newPayDraftData.Payee,
         "PayDraftSubject": newPayDraftData.Subject,
-        "PayDraftChineseTotalFeeAmount": requestDictData.get(
-            "PayDraftChineseTotalFeeAmount"
-        )
-        if requestDictData.get("PayDraftChineseTotalFeeAmount")
-        else "",
         "PayDraftCableInfo": newPayDraftData.CableInfo,
-        "PayDraftTotalFeeAmount": newPayDraftData.TotalFeeAmount,
+        "PayDraftTotalFeeAmount": convert_number_to_string(
+            str(newPayDraftData.TotalFeeAmount).split(".")
+        ),
         "PayDraftCBPBankAcctNo": newPayDraftData.CBPBankAcctNo,
         "PayDraftBankAcctName": newPayDraftData.BankAcctName,
         "PayDraftBankName": newPayDraftData.BankName,
-        "PayDraftAcctNo": newPayDraftData.AcctNo,
+        "PayDraftBankAcctNo": newPayDraftData.BankAcctNo,
         "PayDraftIBAN": newPayDraftData.IBAN,
         "PayDraftSWIFTCode": newPayDraftData.SWIFTCode,
         "PayDraftACHNo": newPayDraftData.ACHNo,
@@ -134,15 +127,38 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
         "PayDraftInvoiceNo": newPayDraftData.InvoiceNo,
         "PayDraftBankAddress": newPayDraftData.BankAddress,
     }
-    pprint(context)
+
     if requestDictData.get("DownloadTemplate"):
+        context["PayDraftSubject"] = PayDraftData.Subject
+        context["PayDraftCableInfo"] = PayDraftData.CableInfo
+        context["PayDraftBankAddress"] = PayDraftData.BankAddress
+        context["PayDraftBankAcctName"] = PayDraftData.BankAcctName
+        context["PayDraftCBPBankAcctNo"] = PayDraftData.CBPBankAcctNo
+        context["PayDraftOriginalTo"] = PayDraftData.OriginalTo
+        context["PayDraftBankName"] = PayDraftData.BankName
+        context["PayDraftBankAcctNo"] = PayDraftData.BankAcctNo
+        context["PayDraftIBAN"] = PayDraftData.IBAN
+        context["PayDraftSWIFTCode"] = PayDraftData.SWIFTCode
+        context["PayDraftWireRouting"] = PayDraftData.WireRouting
+        context["PayDraftACHNo"] = PayDraftData.ACHNo
+        context[
+            "PayDraftChineseTotalFeeAmount"
+        ] = convert_arabic_numerals_to_chinese_numerals(
+            convert_number_to_string(str(PayDraftData.TotalFeeAmount).split("."))
+        )
         fileName = "payment-supplier-letter-template-output"
         doc = DocxTemplate("templates/payment-supplier-letter-template.docx")
         doc.render(context)
         doc.save(f"{fileName}.docx")
         return FileResponse(path=f"{fileName}.docx", filename=f"{fileName}.docx")
     if requestDictData.get("Preview"):
-        return PayDraftData
+        PayDraftDictData = orm_to_dict(PayDraftData)
+        PayDraftDictData[
+            "PayDraftChineseTotalFeeAmount"
+        ] = convert_arabic_numerals_to_chinese_numerals(
+            convert_number_to_string(str(PayDraftData.TotalFeeAmount).split("."))
+        )
+        return PayDraftDictData
     if requestDictData.get("Save"):
         newPayDraftData = crudPayDraft.update(
             PayDraftData, orm_to_dict(newPayDraftData)

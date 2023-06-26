@@ -523,7 +523,9 @@ async def batchAddLiability(request: Request, db: Session = Depends(get_db)):
     for LiabilityDictData in LiabilityDictDataList:
         LiabilityDictData["CreateDate"] = convert_time_to_str(datetime.now())
         LiabilityPydanticData = LiabilitySchema(**LiabilityDictData)
-        LiabilityPydanticData.BillMilestone = LiabilityPydanticData.BillMilestone.strip()
+        LiabilityPydanticData.BillMilestone = (
+            LiabilityPydanticData.BillMilestone.strip()
+        )
         newLiabilityData = crud.create(LiabilityPydanticData)
         newLiabilityDataList.append(newLiabilityData)
 

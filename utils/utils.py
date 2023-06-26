@@ -160,13 +160,29 @@ def convert_number_to_string(numbers: List[str]):
     return result
 
 
-def parsing_file_name():
-    pass
+def convert_arabic_numerals_to_chinese_numerals(number: str):
+    chinese_numerals = {
+        "0": "\u3007",
+        "1": "一",
+        "2": "二",
+        "3": "三",
+        "4": "四",
+        "5": "五",
+        "6": "六",
+        "7": "七",
+        "8": "八",
+        "9": "九",
+        ".": "．",
+        ",": "、",
+    }
 
-
-if __name__ == "__main__":
-    a = "BillMilestone=2022.B_BM0"
-    urlList, value = re_search_url_condition_value(a, "BillMilestone")
-    print(urlList)
-    print(value)
-    print("&".join(urlList))
+    result = ""
+    for i in number:
+        if i.isdigit():
+            print(i)
+            result += chinese_numerals[str(i)]
+        elif i == ".":
+            result += chinese_numerals["."]
+        elif i == ",":
+            result += chinese_numerals[","]
+    return result
