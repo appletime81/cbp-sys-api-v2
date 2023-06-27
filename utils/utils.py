@@ -26,8 +26,9 @@ def convert_dict_data_date_to_normal_str(dict_data: Dict):
 
 def convert_url_condition_to_dict(url_condition):
     dict_condition = {}
-    print(f"url_condition: ?{url_condition}")
     list_ = urllib3.util.parse_url(f"?{url_condition}").query.split("&")
+    print(f"url_condition: ?{url_condition}")
+    pprint(list_)
     for sub_condition in list_:
         key, value = sub_condition.split("=")
         if "start" in key:

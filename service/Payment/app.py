@@ -319,7 +319,7 @@ async def showPaymentData(
             if InvoiceNo in PayDraftData.InvoiceNo
         ]
     else:
-        dictCondition = convert_url_condition_to_dict_ignore_date(urlCondition)
+        dictCondition = convert_url_condition_to_dict(urlCondition)
         PayDraftDataList = crudPayDraft.get_with_condition(dictCondition)
     return PayDraftDataList
 
