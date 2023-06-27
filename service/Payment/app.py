@@ -299,16 +299,6 @@ async def showPaymentData(
         {...},
     ]
     """
-
-    # def process_data(data_list):
-    #     result = []
-    #     for data in data_list:
-    #         detail_data_list = crudPayDraftDetail.get_with_condition(
-    #             {"PayDraftID": data.PayDraftID}
-    #         )
-    #         result.append({"PayDraft": data, "PayDraftDetail": detail_data_list})
-    #     return result
-
     crudPayDraft = CRUD(db, PayDraftDBModel)
     table_name = "PayDraft"
 
@@ -318,11 +308,19 @@ async def showPaymentData(
         dictCondition = convert_url_condition_to_dict(urlCondition)
         sqlCondition = convert_dict_to_sql_condition(dictCondition, table_name)
         PayDraftDataList = crudPayDraft.get_all_by_sql(sqlCondition)
+    elif "InvoiceNo" in urlCondition:
+        dictCondition = convert_url_condition_to_dict(urlCondition)
+        InvoiceNo = dictCondition.pop("InvoiceNo")
+        PayDraftDataList = crudPayDraft.get_with_condition(dictCondition)
+        PayDraftDataList = [
+            PayDraftData
+            for PayDraftData in PayDraftDataList
+            if PayDraftData.InvoiceNo
+            if InvoiceNo in PayDraftData.InvoiceNo
+        ]
     else:
         dictCondition = convert_url_condition_to_dict_ignore_date(urlCondition)
         PayDraftDataList = crudPayDraft.get_with_condition(dictCondition)
-
-    # return process_data(PayDraftDataList)
     return PayDraftDataList
 
 
