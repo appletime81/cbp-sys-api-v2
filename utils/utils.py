@@ -179,7 +179,6 @@ def convert_arabic_numerals_to_chinese_numerals(number: str):
     result = ""
     for i in number:
         if i.isdigit():
-            print(i)
             result += chinese_numerals[str(i)]
         elif i == ".":
             result += chinese_numerals["."]

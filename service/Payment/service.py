@@ -164,3 +164,11 @@ async def getPayDraftStream(request: Request, db: Session = Depends(get_db)):
             PayDraftData, orm_to_dict(newPayDraftData)
         )
         return {"message": "temp save success", "PayDraft": newPayDraftData}
+
+    if requestDictData.get("Status") == "COMPLETE":
+        PayDraftData.Status = "COMPLETE"
+        newPayDraftData = deepcopy(PayDraftData)
+        newPayDraftData = crudPayDraft.update(
+            PayDraftData, orm_to_dict(newPayDraftData)
+        )
+        return {"message": "complete success", "PayDraft": newPayDraftData}
