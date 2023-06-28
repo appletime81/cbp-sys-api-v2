@@ -833,7 +833,7 @@ async def getBillMasterDraftStream(
     # ----------- 先清空所有的docx文件 -----------
     docxFiles = os.listdir(os.getcwd())
     for docxFile in docxFiles:
-        if docxFile.endswith(".docx") and "Network" in docxFile:
+        if docxFile.endswith(".docx"):
             try:
                 os.system(f"rm -rf {docxFile}")
             except Exception as e:
