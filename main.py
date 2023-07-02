@@ -95,7 +95,7 @@ app.add_middleware(
 # ------------------------------ InvoiceWKMaster and InvoiceWKDetail and InvoiceMaster and InvoiceDetail ------------------------------
 # for InvoiceWKMaster
 @app.post(f"{ROOT_URL}/checkInvoiceNo")
-async def checkInoviceNo(request: Request, db: Session = Depends(get_db)):
+async def checkInvoiceNo(request: Request, db: Session = Depends(get_db)):
     """
     input:
     {"InvoiceNo": "1234567890"}
