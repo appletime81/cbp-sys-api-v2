@@ -36,20 +36,20 @@ async def getBillMilestone(
     LiabilityDataList = crudLiability.get_with_condition(BillMilestoneDictCondition)
     LiabilityDataList = [LiabilityData for LiabilityData in LiabilityDataList]
     if not end_condition:
-        LiabilityDictDataList = [
-            orm_to_dict(LiabilityData)
+        LiabilityDataList = [
+            LiabilityData
             for LiabilityData in LiabilityDataList
             if not LiabilityData.EndDate
         ]
-        BillMilestoneDictDataList = list(
-            set(
-                [
-                    LiabilityDictData["BillMilestone"]
-                    for LiabilityDictData in LiabilityDictDataList
-                ]
-            )
-        )
-        return BillMilestoneDictDataList
+
+        # 先透過時間排序
+        LiabilityDataList = sorted(LiabilityDataList, key=lambda x: x.CreateDate, reverse=True)
+
+        BillMilestoneDataList = []
+        for LiabilityData in LiabilityDataList:
+            if LiabilityData.BillMilestone not in BillMilestoneDataList:
+                BillMilestoneDataList.append(LiabilityData.BillMilestone)
+        return BillMilestoneDataList
     else:
         return []
 
