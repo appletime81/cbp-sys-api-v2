@@ -12,6 +12,12 @@ cd /path/to/Dockerfile
 sudo docker build -t "image name" .
 ```
 
+### 打包container
+
+```shell
+sudo docker save "image name" >"file_name.tar"
+```
+
 ### Step3. 建立docker container
 
 ```shell
