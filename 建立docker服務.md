@@ -15,7 +15,12 @@ sudo docker build -t "image name" .
 ### 打包container
 
 ```shell
-sudo docker save "image name" >"file_name.tar"
+sudo docker save "image name" > "file_name.tar"
+```
+### Load container
+
+```shell
+sudo docker load < "file_name.tar"
 ```
 
 ### Step3. 建立docker container
