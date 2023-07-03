@@ -1,37 +1,34 @@
-# 建立Dockerfile
+# 把包Docker
+
+### Step1. 建立Dockerfile
+
+### Step2. 建立docker image
 
 ```shell
-# 從Python 3.10基礎鏡像開始
-FROM python:3.10
+cd /path/to/Dockerfile
 
-# 設置工作目錄
-WORKDIR /app
-
-# 複製requirements.txt到工作目錄並安裝依賴項
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
-
-# 複製應用文件到工作目錄
-COPY ./backend /app
-
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# "image name" = "repository name:tag"
+# example: cbps-backend:2023070X
+sudo docker build -t "image name" .
 ```
 
-# 建立image
+### Step3. 建立docker container
 
 ```shell
-docker build -t cbp-backend .
+# "container name" = "image name"
+# example: cbps-backend:2023070X
+# example: sudo docker run -d -p 8000:80 cbps-backend:2023070X
+sudo docker run -d -p 8000:80 'container name'
 ```
 
-# 啟動服務
+### Step4. 查看container資訊
 
 ```shell
-docker run -d --name cbp-backend -p 80:8000 -p 33061:33061 cbp-backend
+sudo docker ps -a
 ```
 
-# 檢查log
+or
 
 ```shell
-docker logs -f cbp-backend  # -f: follow -> 顯示最新的log
-docker logs cbp-backend
+sudo docker container ls -a
 ```
