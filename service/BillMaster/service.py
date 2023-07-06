@@ -347,6 +347,9 @@ async def getBillMasterAndBillDetail(urlCondition: str, db: Session = Depends(ge
         pprint(dictCondition)
         if "BillingNo" in urlCondition:
             BillingNo = dictCondition.pop("BillingNo")
+        print("-" * 100)
+        print(BillingNo)
+        pprint(dictCondition)
         BillMasterDataList = crudBillMaster.get_with_condition(dictCondition)
         for BillMasterData in BillMasterDataList:
             BillDetailDataList = crudBillDetail.get_with_condition(
@@ -358,6 +361,13 @@ async def getBillMasterAndBillDetail(urlCondition: str, db: Session = Depends(ge
                     "BillDetail": BillDetailDataList,
                 }
             )
+
+    if BillingNo:
+        getResult = [
+            result
+            for result in getResult
+            if BillingNo in result["BillMaster"].BillingNo
+        ]
 
     return getResult
 
@@ -1178,7 +1188,11 @@ async def returnBillMasterAfterDeduction(
 
         # Filter TransItem is DEDUCT and sort by CreateDate
         tempCBStatementDictDataList = sorted(
-            [d for d in tempCBStatementDictDataList if d["TransItem"] == "DEDUCT"],
+            [
+                d
+                for d in tempCBStatementDictDataList
+                if d["TransItem"] in ["DEDUCT", "RETURN"]
+            ],
             key=lambda x: x["CreateDate"],
             reverse=True,
         )
@@ -1195,11 +1209,13 @@ async def returnBillMasterAfterDeduction(
                     ]
                 )
             )
-
-            tempCBStatementDataList = [
-                dict_to_orm(tempCBStatementDictData, CreditBalanceStatementDBModel)
-                for tempCBStatementDictData in tempCBStatementDictDataList
-            ]
+            if tempCBStatementDictDataList[0]["TransItem"] == "DEDUCT":
+                tempCBStatementDataList = [
+                    dict_to_orm(tempCBStatementDictData, CreditBalanceStatementDBModel)
+                    for tempCBStatementDictData in tempCBStatementDictDataList
+                ]
+            else:
+                tempCBStatementDataList = []
 
         # 抓取對應BillDetail的CreditBalance主檔(如果有找到該BillDetail對應的CreditBalanceStatement)
         if tempCBStatementDataList:

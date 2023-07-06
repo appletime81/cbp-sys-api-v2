@@ -43,7 +43,9 @@ async def getBillMilestone(
         ]
 
         # 先透過時間排序
-        LiabilityDataList = sorted(LiabilityDataList, key=lambda x: x.CreateDate, reverse=True)
+        LiabilityDataList = sorted(
+            LiabilityDataList, key=lambda x: x.CreateDate, reverse=True
+        )
 
         BillMilestoneDataList = []
         for LiabilityData in LiabilityDataList:
