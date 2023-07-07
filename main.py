@@ -38,6 +38,7 @@ from service.SuppliersByContract.app import router as SuppliersByContractRouter
 from service.UploadFile.app import router as UploadFileRouter
 from service.Users.app import router as UsersRouter
 from service.Payment.app import router as PaymentRouter
+from service.GlobalSearch.app import router as GlobalSearchRouter
 from utils.utils import *
 from utils.log import *
 from utils.orm_pydantic_convert import *
@@ -81,6 +82,7 @@ app.include_router(
     InvoiceWKMasterServiceRouter, prefix=ROOT_URL, tags=["InvoiceWKMasterService"]
 )
 app.include_router(PaymentServiceRouter, prefix=ROOT_URL, tags=["PaymentService"])
+app.include_router(GlobalSearchRouter, prefix=ROOT_URL, tags=["GlobalSearch"])
 
 # allow middlewares
 app.add_middleware(
