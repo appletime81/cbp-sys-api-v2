@@ -75,7 +75,6 @@ async def searchBillMasterByInvoiceWKMaster(
         ]
 
     WKMasterIDList = [
-        InvoiceWKMasterData.WKMasterID for InvoiceWKMasterData in InvoiceWKMasterDataList
+        InvoiceWKMasterData.WKMasterID
+        for InvoiceWKMasterData in InvoiceWKMasterDataList
     ]
-
-    
