@@ -40,6 +40,13 @@ async def searchBillMasterByInvoiceWKMaster(
         {...}
     ]
     """
+
+    def parse_date(date_string):
+        return datetime.strptime(date_string, "%Y%m%d") if date_string else None
+
+    def increment_day(date):
+        return date + timedelta(days=1) if date else None
+
     requestDictData = await request.json()
 
     crudInvoiceWKMaster = CRUD(db, InvoiceWKMasterDBModel)
@@ -50,32 +57,43 @@ async def searchBillMasterByInvoiceWKMaster(
     BillMilestone = requestDictData.pop("BillMilestone", None)
     Status = requestDictData.pop("Status", None)
     InvoiceNo = requestDictData.pop("InvoiceNo", None)
-    startDueDateString = requestDictData.pop("startDueDate", None)
-    endDueDateString = requestDictData.pop("endDueDate", None)
-    startDueDate = (
-        datetime.strptime(startDueDateString, "%Y%m%d") if startDueDateString else None
-    )
-    endDueDate = (
-        datetime.strptime(endDueDateString, "%Y%m%d") if endDueDateString else None
-    )
-    if startDueDate == endDueDate:
-        endDueDate = endDueDate + timedelta(days=1)
 
-    pprint(requestDictData)
+    date_fields = ["startDueDate", "endDueDate", "startIssueDate", "endIssueDate"]
+
+    startDueDate, endDueDate, startIssueDate, endIssueDate = (
+        parse_date(requestDictData.pop(field, None)) for field in date_fields
+    )
+
+    endDueDate, endIssueDate = increment_day(endDueDate), increment_day(endIssueDate)
+
+    date_ranges = [
+        (startDueDate, endDueDate, "DueDate"),
+        (startIssueDate, endIssueDate, "IssueDate"),
+    ]
 
     InvoiceWKMasterDataList = crudInvoiceWKMaster.get_with_condition(requestDictData)
+    InvoiceWKDetailDataList = None
 
-    if startDueDate and endDueDate:
-        InvoiceWKMasterDataList = [
-            InvoiceWKMasterData
-            for InvoiceWKMasterData in InvoiceWKMasterDataList
-            if startDueDate <= InvoiceWKMasterData.DueDate < endDueDate
-        ]
+    for start, end, attr in date_ranges:
+        if start and end:
+            InvoiceWKMasterDataList = [
+                data
+                for data in InvoiceWKMasterDataList
+                if start <= getattr(data, attr) < end
+            ]
+
     if Status:
         InvoiceWKMasterDataList = [
             InvoiceWKMasterData
             for InvoiceWKMasterData in InvoiceWKMasterDataList
             if InvoiceWKMasterData.Status in Status
+        ]
+    if InvoiceNo:
+        InvoiceWKMasterDataList = [
+            InvoiceWKMasterData
+            for InvoiceWKMasterData in InvoiceWKMasterDataList
+            if InvoiceNo in InvoiceWKMasterData.InvoiceNo
+            or InvoiceNo == InvoiceWKMasterData.InvoiceNo
         ]
 
     WKMasterIDList = [
@@ -97,9 +115,13 @@ async def searchBillMasterByInvoiceWKMaster(
             )
         )
 
-    InvoiceWKMasterDataList = list(
-        filter(lambda x: x.WKMasterID in WKMasterIDList, InvoiceWKMasterDataList)
-    )
+    if not WKMasterIDList:
+        return []
+
+    if not InvoiceWKDetailDataList:
+        InvoiceWKDetailDataList = crudInvoiceWKDetail.get_value_if_in_a_list(
+            InvoiceWKDetailDBModel.WKMasterID, WKMasterIDList
+        )
 
     # =============================================
     # 抓取 BillDetail(by WKMasterID)
@@ -127,19 +149,50 @@ async def searchBillMasterByInvoiceWKMaster(
                 ]
             )
         )
-        getResult.append(
-            {
-                "InvoiceWKMaster": InvoiceWKMasterData,
-                "BillMaster": crudBillMaster.get_value_if_in_a_list(
-                    BillMasterDBModel.BillMasterID, tempBillMasterIDList
-                ),
-            }
+        BillMilestoneList = list(
+            set(
+                [
+                    tempInvoiceWKDetailData.BillMilestone
+                    for tempInvoiceWKDetailData in list(
+                        filter(
+                            lambda x: x.WKMasterID == InvoiceWKMasterData.WKMasterID,
+                            InvoiceWKDetailDataList,
+                        )
+                    )
+                ]
+            )
+        )
+        BillMilestoneListString = ", ".join(BillMilestoneList)
+        InvoiceWKMasterDictData = orm_to_dict(deepcopy(InvoiceWKMasterData))
+        InvoiceWKMasterDictData["BillMilestone"] = BillMilestoneListString
+
+        BillMasterDataList = crudBillMaster.get_value_if_in_a_list(
+            BillMasterDBModel.BillMasterID, tempBillMasterIDList
         )
 
-    if InvoiceNo:
-        getResult = [
-            result
-            for result in getResult
-            if InvoiceNo in result["InvoiceWKMaster"].InvoiceNo
-        ]
+        BillMasterDictDataList = []
+        for BillMasterData in BillMasterDataList:
+            BillMasterDictData = orm_to_dict(deepcopy(BillMasterData))
+            BillDetailDataList = crudBillDetail.get_with_condition(
+                {"BillMasterID": BillMasterData.BillMasterID}
+            )
+            BillMilestoneString = ", ".join(
+                list(
+                    set(
+                        [
+                            BillDetailData.BillMilestone
+                            for BillDetailData in BillDetailDataList
+                        ]
+                    )
+                )
+            )
+            BillMasterDictData["BillMilestone"] = BillMilestoneString
+            BillMasterDictDataList.append(BillMasterDictData)
+
+        getResult.append(
+            {
+                "InvoiceWKMaster": InvoiceWKMasterDictData,
+                "BillMaster": BillMasterDictDataList,
+            }
+        )
     return getResult
