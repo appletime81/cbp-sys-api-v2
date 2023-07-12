@@ -72,8 +72,8 @@ async def searchBillMasterByInvoiceWKMaster(
     ]
 
     InvoiceWKMasterDataList = crudInvoiceWKMaster.get_with_condition(requestDictData)
-    InvoiceWKDetailDataList = None
 
+    InvoiceWKDetailDataList = None
     for start, end, attr in date_ranges:
         if start and end:
             InvoiceWKMasterDataList = [
@@ -141,6 +141,7 @@ async def searchBillMasterByInvoiceWKMaster(
                 BillDetailDataList,
             )
         )
+
         tempBillMasterIDList = list(
             set(
                 [
@@ -149,6 +150,7 @@ async def searchBillMasterByInvoiceWKMaster(
                 ]
             )
         )
+
         BillMilestoneList = list(
             set(
                 [
@@ -173,15 +175,15 @@ async def searchBillMasterByInvoiceWKMaster(
         BillMasterDictDataList = []
         for BillMasterData in BillMasterDataList:
             BillMasterDictData = orm_to_dict(deepcopy(BillMasterData))
-            BillDetailDataList = crudBillDetail.get_with_condition(
+            tempBillDetailDataList = crudBillDetail.get_with_condition(
                 {"BillMasterID": BillMasterData.BillMasterID}
             )
             BillMilestoneString = ", ".join(
                 list(
                     set(
                         [
-                            BillDetailData.BillMilestone
-                            for BillDetailData in BillDetailDataList
+                            tempBillDetailData.BillMilestone
+                            for tempBillDetailData in tempBillDetailDataList
                         ]
                     )
                 )
@@ -195,4 +197,5 @@ async def searchBillMasterByInvoiceWKMaster(
                 "BillMaster": BillMasterDictDataList,
             }
         )
+
     return getResult
