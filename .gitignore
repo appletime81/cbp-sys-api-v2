@@ -8,3 +8,4 @@ cbps-docker-folder
 dbinfo.ini
 temp_clip_board.txt
 test.json
+*.tar.gz
