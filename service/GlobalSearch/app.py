@@ -334,8 +334,19 @@ async def searchInvoiceWKMasterByBillMaster(
             )
         )
         InvoiceWKMasterDictIncludeBillMasterIDList.append(tempInvoiceWKMasterDictData)
-    pprint(InvoiceWKMasterDictIncludeBillMasterIDList)
+
     getResult = []
+    InvoiceWKDetailDataList = crudInvoiceWKDetail.get_value_if_in_a_list(
+        InvoiceWKDetailDBModel.WKMasterID,
+        list(
+            set(
+                [
+                    InvoiceWKMasterData.WKMasterID
+                    for InvoiceWKMasterData in InvoiceWKMasterDataList
+                ]
+            )
+        ),
+    )
     for BillMasterData in BillMasterDataList:
         tempInvoiceWKMasterDictDataList = list(
             filter(
@@ -344,7 +355,29 @@ async def searchInvoiceWKMasterByBillMaster(
             )
         )
 
-        tempBillDetailDataString = ", ".join(
+        tempInvoiceWKMasterDictDataWithBillMilestoneList = list()
+        for tempInvoiceWKMasterDictData in tempInvoiceWKMasterDictDataList:
+            tempInvoiceWKMasterDictData["BillMilestone"] = ", ".join(
+                list(
+                    set(
+                        [
+                            InvoiceWKDetailData.BillMilestone
+                            for InvoiceWKDetailData in list(
+                                filter(
+                                    lambda x: x.WKMasterID
+                                    == tempInvoiceWKMasterDictData["WKMasterID"],
+                                    InvoiceWKDetailDataList,
+                                )
+                            )
+                        ]
+                    )
+                )
+            )
+            tempInvoiceWKMasterDictDataWithBillMilestoneList.append(
+                tempInvoiceWKMasterDictData
+            )
+
+        tempBillMilestoneString = ", ".join(
             list(
                 set(
                     [
@@ -359,10 +392,12 @@ async def searchInvoiceWKMasterByBillMaster(
                 )
             )
         )
+        BillMasterDictData = orm_to_dict(deepcopy(BillMasterData))
+        BillMasterDictData["BillMilestone"] = tempBillMilestoneString
         getResult.append(
             {
-                "BillMaster": orm_to_dict(deepcopy(BillMasterData)),
-                "InvoiceWKMaster": tempInvoiceWKMasterDictDataList,
+                "BillMaster": BillMasterDictData,
+                "InvoiceWKMaster": tempInvoiceWKMasterDictDataWithBillMilestoneList,
             }
         )
 
